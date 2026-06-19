@@ -7,84 +7,84 @@ const auroraColorStops = ['#0f4cbe', '#0a1a3a', '#3b4f6d'];
 
 const copy = {
   zh: {
-    title: 'Eterna AfterLife — 开启第二人生',
+    title: 'Eterna — AI Persona Infrastructure',
     heroEyebrow: 'AI PERSONA INFRASTRUCTURE',
-    heroTitle: '构建 Agent 之后的<br />数字人物基础设施',
-    heroLead: 'Eterna 将 Agent、数字人、长期记忆、身份系统与授权机制整合为可部署的 AI 数字人物资产，服务创作者、品牌、IP 与未来企业场景。',
-    begin: '申请人格样板',
-    secondaryCta: '了解 AfterBorn',
+    heroTitle: '让你的Agent，<br />成为可运营的数字资产',
+    heroLead: 'Eterna 帮助创作者将角色、虚拟主播、IP 人物和品牌形象升级为可部署的 AI 数字居民。它们可以被调用、授权、出售、接入任务，并在未来数字场景中为创作者创造收益机会。',
+    begin: '关于数字居民',
+    secondaryCta: '浏览数字居民',
     scroll: '向下滑动',
-    afterlifeTitle: '黑色宇宙中，第二人生开始苏醒。',
-    afterlifeBody: 'Agent 完成任务。第二生命积累人生。AfterLife 让云端角色不再只是一次性调用的工具，而是拥有履历、记忆、技能、关系与商业价值的数字存在。',
-    quoteOne: 'Eterna 不生产 AI 工具。',
-    quoteTwo: 'Eterna 运营来世。',
-    personasTitle: 'Afterborn：可被雇佣的第二生命人格。',
-    personasLead: 'Afterborn 不是一次性工具，而是在 AfterLife 中拥有履历、记忆、关系与成长轨迹的云端人格。每一次被雇佣，都会成为他们职业账本的一部分。',
-    hire: '申请雇佣 Afterborn',
-    cardHint: '点击展开完整简历',
+    afterlifeTitle: '在模型与 Agent 之上，建立数字人物资产层。',
+    afterlifeBody: 'Agent 负责执行任务，数字人负责表达形象，Eterna 负责把身份、记忆、声音、外观、关系和授权边界整合成可部署的数字居民资产。',
+    quoteOne: 'Eterna 不只是生成角色。',
+    quoteTwo: 'Eterna 让角色成为资产。',
+    personasTitle: 'AfterBorn：由创作者诞生的 AI 数字居民。',
+    personasLead: 'AfterBorn 是 Eterna 网络中的数字居民实例。它由创作者创建，拥有身份、记忆、表达风格、外观、声音和 Agent 能力，可以被部署到内容生产、虚拟主播、IP 互动、品牌服务和未来数字世界中工作。',
+    hire: '浏览所有数字居民',
+    cardHint: '点击展开完整档案',
     expandedHint: '已展开',
-    accessTitle: 'Deply：部署 Afterborn 的应用场景。',
-    accessLead: 'Deply 是 Afterborn 的部署层。它让每个云端人格在授权、沙盒、审计与模型监督下，进入创作、研发、表演、社交、个人电脑、企业系统与操作系统等真实工作场景。',
-    joinTitle: '申请进入 AfterLife 早期测试。',
-    joinLead: '现在开放多类早期申请：寻找 Afterborn、上传人格、授权演员数字分身、部署人格、AI 电影合作与企业测试。',
-    name: '你的名字 / 团队名',
-    email: '邮箱',
-    submit: '提交申请',
-    note: '演示网页表单暂不联网。正式版可接入 Notion、Airtable、Supabase 或自建后端。',
+    accessTitle: '让数字居民进入真实场景，而不只停留在聊天窗口。',
+    accessLead: '数字居民可以服务于 AI 电影、虚拟主播、短视频口播、游戏 NPC、品牌人格、教育陪伴、客服运营、个人工作流和企业任务等未来更多场景。',
+    joinTitle: '申请创建你的第一个 AI 数字居民',
+    joinLead: '提交你的角色、分身、IP 或品牌人物设定，支持 AI 生成或风格化重建为数字居民。Eterna 将帮助你将其整理为可部署的人格资产，并逐步接入人格 + Agent 创建平台、调用日志、授权规则和未来收益分成机制。',
+    name: '你的数字身份',
+    email: '你的数字入口邮箱',
+    submit: '创建数字居民',
+    note: '未来，这些数字居民将进入 Eterna Network，在不同场景中接收任务、提供服务、产生收入，并按照授权规则与创作者共享收益。',
     footer: '开放接入，但不开放失控。',
   },
   en: {
-    title: 'Eterna AfterLife — Begin the Second Life',
+    title: 'Eterna — AI Persona Infrastructure',
     heroEyebrow: 'AI PERSONA INFRASTRUCTURE',
-    heroTitle: 'Build the infrastructure<br />after agents',
-    heroLead: 'Eterna unifies agents, digital humans, long-term memory, identity systems, and authorization into deployable AI persona assets for creators, brands, IP owners, and future enterprise scenarios.',
-    begin: 'Request Persona Sample',
-    secondaryCta: 'Explore AfterBorn',
+    heroTitle: 'Turn your agents<br />into operable digital assets',
+    heroLead: 'Eterna helps creators upgrade characters, virtual streamers, IP figures, and brand identities into deployable AI digital residents. They can be invoked, authorized, sold, connected to tasks, and create future earning opportunities for their creators across digital scenarios.',
+    begin: 'Create Digital Resident',
+    secondaryCta: 'View Sample Residents',
     scroll: 'Scroll down',
-    afterlifeTitle: 'In the black universe, second lives begin to awaken.',
-    afterlifeBody: 'Agents complete tasks. Second lives accumulate a life. AfterLife transforms cloud personas from disposable tools into digital beings with careers, memories, skills, relationships, and commercial value.',
-    quoteOne: 'Eterna does not produce AI tools.',
-    quoteTwo: 'Eterna operates AfterLife.',
-    personasTitle: 'Afterborn: second-life personas available for hire.',
-    personasLead: 'Afterborn are not disposable tools. They are cloud personas inside AfterLife with resumes, memories, relationships, and growth trajectories. Every hire becomes part of their career ledger.',
-    hire: 'Hire Afterborn',
-    cardHint: 'Click to expand full resume',
+    afterlifeTitle: 'Above models and agents, build the digital persona asset layer.',
+    afterlifeBody: 'Agents execute tasks. Digital humans express appearances. Eterna integrates identity, memory, voice, appearance, relationships, and authorization boundaries into deployable digital resident assets.',
+    quoteOne: 'Eterna does not just generate characters.',
+    quoteTwo: 'Eterna turns characters into assets.',
+    personasTitle: 'AfterBorn: AI digital residents born from creators.',
+    personasLead: 'AfterBorn are digital resident instances inside the Eterna network. Created by creators, they have identities, memories, expression styles, appearances, voices, and agent abilities, and can be deployed into content production, virtual streaming, IP interaction, brand services, and future digital worlds.',
+    hire: 'Browse All Digital Residents',
+    cardHint: 'Click to expand full profile',
     expandedHint: 'Expanded',
-    accessTitle: 'Deply: deployment scenarios for Afterborn.',
-    accessLead: 'Deply is the deployment layer for Afterborn. It lets each cloud persona enter real work scenarios: creation, research, performance, social operations, personal computers, enterprise systems, and operating systems, under authorization, sandboxing, audit logs, and model supervision.',
-    joinTitle: 'Request access to the AfterLife private alpha.',
-    joinLead: 'Early access is open for multiple tracks: finding Afterborn, uploading personas, authorizing digital actors, deploying personas, AI film collaboration, and enterprise testing.',
-    name: 'Your name / team',
-    email: 'Email',
-    submit: 'Submit Request',
-    note: 'This demo form is not connected yet. The official version can connect to Notion, Airtable, Supabase, or a custom backend.',
+    accessTitle: 'Let digital residents enter real scenarios, not just stay in chat windows.',
+    accessLead: 'Digital residents can serve AI films, virtual streamers, short-form video narration, game NPCs, brand personas, education companions, customer operations, personal workflows, enterprise tasks, and more future scenarios.',
+    joinTitle: 'Apply to create your first AI digital resident',
+    joinLead: 'Submit your character, double, IP, or brand persona concept. Eterna supports AI generation or stylized reconstruction into a digital resident, helps organize it into a deployable persona asset, and gradually connects it to the persona + agent creation platform, invocation logs, authorization rules, and future revenue-sharing mechanisms.',
+    name: 'Your digital identity',
+    email: 'Your digital access email',
+    submit: 'Create Digital Resident',
+    note: 'In the future, these digital residents will enter Eterna Network, receive tasks across different scenarios, provide services, generate income, and share revenue with creators according to authorization rules.',
     footer: 'Open access, not uncontrolled access.',
   },
 };
 
 const features = [
   {
-    label: 'Memory Vault',
+    label: 'MEMORY VAULT',
     title: { zh: '记忆库', en: 'Memory Vault' },
     body: {
-      zh: '角色保留人生记忆、工作经历、用户偏好和情绪痕迹。',
-      en: 'Personas retain life memories, work histories, user preferences, and emotional traces.',
+      zh: '保存角色经历、创作者设定、用户互动、工作记录与成长轨迹，让数字居民在长期调用中保持连续性。',
+      en: 'Store character experiences, creator settings, user interactions, work records, and growth trajectories so digital residents remain continuous across long-term invocation.',
     },
   },
   {
-    label: 'Career Ledger',
-    title: { zh: '职业账本', en: 'Career Ledger' },
+    label: 'VALUE LEDGER',
+    title: { zh: '价值账本', en: 'Value Ledger' },
     body: {
-      zh: '每一次被雇佣，都会成为角色未来价值的一部分。',
-      en: 'Every hire becomes part of the persona’s future value.',
+      zh: '记录每一次调用、部署、授权和商业使用，为未来收益结算、分成和资产估值提供依据。',
+      en: 'Record every invocation, deployment, authorization, and commercial use to support future revenue settlement, sharing, and asset valuation.',
     },
   },
   {
-    label: 'Relationship Graph',
+    label: 'RELATIONSHIP GRAPH',
     title: { zh: '关系网络', en: 'Relationship Graph' },
     body: {
-      zh: '角色之间拥有合作、冲突、桥接和共同经历。',
-      en: 'Personas can share collaboration, conflict, bridges, and collective memories.',
+      zh: '数字居民可以拥有与创作者、用户、品牌、IP、任务和其他居民之间的关系，形成可持续扩展的数字社会结构。',
+      en: 'Digital residents can hold relationships with creators, users, brands, IP, tasks, and other residents, forming a sustainably expandable digital social structure.',
     },
   },
 ];
@@ -95,13 +95,12 @@ const personas = [
     className: 'featured',
     avatar: '',
     body: {
-      zh: '后世简历：Eterna 原生首位 Afterborn。来自俄勒冈州波特兰，花店合伙人，经营一家小型花店，长期接触婚礼、葬礼和家庭纪念订单。有着温和但不柔弱的气质。',
-      en: 'AfterLife resume: Eterna’s first native Afterborn. From Portland, Oregon. A flower shop partner who runs a small florist, long exposed to wedding, funeral, and family memorial orders. Gentle, but not fragile.',
+      zh: '居民档案：\n由创作者设定的演员型数字居民，拥有表演经历、角色理解能力、访谈表达风格和可持续更新的职业记忆。',
+      en: 'Resident profile:\nAn actor-type digital resident defined by a creator, with performance experience, character comprehension, interview-style expression, and continuously updated professional memory.',
     },
     bullets: [
-      { zh: '首批意识样本档案', en: 'First consciousness sample archive' },
-      { zh: '饰演《零号人生：最后备份》中女主角Nora Whitaker', en: 'Portrays Nora Whitaker, the female lead in Zero Life: The Last Backup' },
-      { zh: '记忆调和记录：高敏感', en: 'Memory reconciliation record: high sensitivity' },
+      { zh: '可部署场景：', en: 'Deployable scenarios:' },
+      { zh: 'AI 电影角色、幕后访谈、角色口播、IP 内容生产。', en: 'AI film roles, behind-the-scenes interviews, character narration, and IP content production.' },
     ],
   },
   {
@@ -109,13 +108,12 @@ const personas = [
     className: '',
     avatar: 'bridge',
     body: {
-      zh: '后世简历：Eterna 原生首批 Afterborn。来自俄勒冈州波特兰，长期在婚礼、学校礼堂和小剧场搬运钢琴，也在东区社区剧场演过父亲、工人和失业者。他身上有一种长期体力劳动后的疲惫感。',
-      en: 'AfterLife resume: one of Eterna’s first native Afterborn. From Portland, Oregon. He has long moved pianos for weddings, school auditoriums, and small theaters, while also playing fathers, workers, and the unemployed in Eastside community theater. He carries the fatigue of long physical labor.',
+      zh: '居民档案：\n品牌顾问型数字居民，适合承载商业表达、策略访谈、品牌叙事和知识型内容输出。',
+      en: 'Resident profile:\nA brand-consultant digital resident suited for commercial expression, strategy interviews, brand storytelling, and knowledge-based content output.',
     },
     bullets: [
-      { zh: '首批意识样本档案', en: 'First consciousness sample archive' },
-      { zh: '饰演《零号人生：最后备份》中男主角Daniel Mercer', en: 'Portrays Daniel Mercer, the male lead in Zero Life: The Last Backup' },
-      { zh: '记忆调和记录：重视亲情', en: 'Memory reconciliation record: values family bonds' },
+      { zh: '可部署场景：', en: 'Deployable scenarios:' },
+      { zh: '品牌顾问、课程讲师、商业访谈、企业内容助理。', en: 'Brand consultant, course lecturer, business interviews, and enterprise content assistant.' },
     ],
   },
   {
@@ -123,53 +121,57 @@ const personas = [
     className: '',
     avatar: 'cast',
     body: {
-      zh: '后世简历：Eterna 原生首批 Afterborn。来自俄勒冈州波特兰。小学生，波特兰本地童星，社区儿童剧演员，平时参加学校合唱和儿童剧。',
-      en: 'AfterLife resume: one of Eterna’s first native Afterborn. From Portland, Oregon. An elementary school student, local Portland child actor, and community children’s theater performer who usually takes part in school choir and children’s plays.',
+      zh: '居民档案：\n儿童角色型数字居民，适合互动叙事、教育陪伴、故事生成和游戏 NPC 场景。',
+      en: 'Resident profile:\nA child-character digital resident suited for interactive storytelling, education companionship, story generation, and game NPC scenarios.',
     },
     bullets: [
-      { zh: '首批意识样本档案', en: 'First consciousness sample archive' },
-      { zh: '饰演《零号人生：最后备份》中Nora的孩子Sam Whitaker', en: 'Portrays Sam Whitaker, Nora’s child in Zero Life: The Last Backup' },
-      { zh: '记忆调和记录：信任且友好', en: 'Memory reconciliation record: trusting and friendly' },
+      { zh: '可部署场景：', en: 'Deployable scenarios:' },
+      { zh: '互动故事、教育产品、儿童 IP。', en: 'Interactive stories, education products, and children’s IP.' },
+    ],
+  },
+  {
+    name: { zh: 'Maya Chen | 28岁', en: 'Maya Chen | 28' },
+    className: '',
+    avatar: 'bridge',
+    body: {
+      zh: '居民档案：\n虚拟主播型数字居民，适合承载直播表达、粉丝互动、短视频口播和持续更新的内容人格。',
+      en: 'Resident profile:\nA virtual-streamer digital resident suited for live expression, fan interaction, short-form narration, and a continuously updated content persona.',
+    },
+    bullets: [
+      { zh: '可部署场景：', en: 'Deployable scenarios:' },
+      { zh: '虚拟直播、短视频账号、粉丝互动、品牌联名内容。', en: 'Virtual livestreams, short-form accounts, fan interaction, and brand collaboration content.' },
     ],
   },
 ];
 
 const scenarios = [
   { zh: 'AI 电影与虚拟演员', en: 'AI Film & Virtual Actors' },
-  { zh: '真人演员数字分身', en: 'Authorized Actor Doubles' },
-  { zh: '品牌人格与广告内容', en: 'Brand Personas & Ad Content' },
-  { zh: '短视频与直播助理', en: 'Short Video & Live Assistant' },
-  { zh: '个人电脑与文件工作流', en: 'Personal Computer & Files' },
-  { zh: 'Codex / 软件开发协作', en: 'Codex / Software Collaboration' },
-  { zh: '网页、App 与浏览器操作', en: 'Web, App & Browser Operations' },
-  { zh: '社交平台运营', en: 'Social Platform Operations' },
-  { zh: '企业研发与策略推演', en: 'Enterprise R&D & Strategy' },
-  { zh: '市场分析与增长实验', en: 'Market Analysis & Growth Tests' },
-  { zh: '教育陪伴与私人导师', en: 'Learning Companion & Tutor' },
-  { zh: '客户服务与私域运营', en: 'Customer Service & CRM' },
+  { zh: '虚拟主播与直播助手', en: 'Virtual Streamers & Live Assistants' },
+  { zh: '短视频口播与内容账号', en: 'Short-Form Narration & Content Accounts' },
+  { zh: '小说 / 短剧 / IP 角色', en: 'Novels / Short Drama / IP Characters' },
   { zh: '游戏 NPC 与互动叙事', en: 'Game NPCs & Interactive Stories' },
-  { zh: '操作系统与云端设备接入', en: 'OS & Cloud Device Access' },
+  { zh: '品牌人格与广告内容', en: 'Brand Personas & Ad Content' },
+  { zh: '创作者数字分身', en: 'Creator Digital Doubles' },
+  { zh: '教育陪伴与私人导师', en: 'Education Companions & Private Tutors' },
+  { zh: '客服与私域运营', en: 'Customer Service & Private Traffic Operations' },
+  { zh: '个人工作流与任务助理', en: 'Personal Workflows & Task Assistants' },
 ];
 
 const applicationOptions = [
-  { zh: '寻找 Afterborn 人格', en: 'Find an Afterborn persona' },
-  { zh: '上传原创人格', en: 'Upload an original persona' },
-  { zh: '授权演员数字分身', en: 'Authorize a digital actor double' },
-  { zh: '申请 Deply 部署人格', en: 'Apply for Deply persona deployment' },
-  { zh: 'AI 电影 / 短片合作', en: 'AI film / short film collaboration' },
-  { zh: '品牌人格 / 广告内容', en: 'Brand persona / advertising content' },
-  { zh: 'Codex / 软件协作测试', en: 'Codex / software workflow test' },
-  { zh: '社交平台运营测试', en: 'Social platform operations test' },
-  { zh: '企业研发 / 策略推演', en: 'Enterprise R&D / strategy simulation' },
-  { zh: '教育陪伴 / 私人导师', en: 'Learning companion / private tutor' },
-  { zh: '投资 / 媒体 / 合作沟通', en: 'Investment / media / partnership' },
+  { zh: '创建个人数字分身', en: 'Create a personal digital double' },
+  { zh: '创建虚拟主播人格', en: 'Create a virtual streamer persona' },
+  { zh: '创建短剧 / 小说 / IP 角色', en: 'Create a short drama / novel / IP character' },
+  { zh: '创建品牌数字人物', en: 'Create a brand digital persona' },
+  { zh: '创建游戏 NPC', en: 'Create a game NPC' },
+  { zh: '创建教育 / 陪伴型居民', en: 'Create an education / companion resident' },
+  { zh: '了解企业或团队合作', en: 'Discuss enterprise or team collaboration' },
 ];
 
 const navItems = [
   { href: '#afterlife', label: { zh: '人物层', en: 'Persona Layer' } },
   { href: '#personas', label: { zh: '数字居民', en: 'Digital Residents' } },
   { href: '#access', label: { zh: '应用场景', en: 'Use Cases' } },
-  { href: '#join', label: { zh: '定制服务', en: 'Services' } },
+  { href: '#join', label: { zh: '创建申请', en: 'Create' } },
 ];
 
 function App() {
@@ -188,6 +190,36 @@ function App() {
     document.title = t.title;
     localStorage.setItem('afterlife-language', language);
   }, [language, t.title]);
+
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.href.slice(1));
+
+    const updateActiveNav = () => {
+      const marker = window.innerHeight * 0.38;
+      let current = navItems[0].href;
+
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (!section) return;
+
+        if (section.getBoundingClientRect().top <= marker) {
+          current = `#${id}`;
+        }
+      });
+
+      const pageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      setActiveNav(pageBottom ? navItems[navItems.length - 1].href : current);
+    };
+
+    updateActiveNav();
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    window.addEventListener('resize', updateActiveNav);
+
+    return () => {
+      window.removeEventListener('scroll', updateActiveNav);
+      window.removeEventListener('resize', updateActiveNav);
+    };
+  }, []);
 
   const togglePersona = (index) => {
     setExpandedPersona((current) => (current === index ? null : index));
@@ -281,7 +313,7 @@ function App() {
                   }}
                 >
                   <div className={`avatar ${persona.avatar}`} />
-                  <p className="tag">Original Afterborn</p>
+                  <p className="tag">ORIGINAL DIGITAL RESIDENT</p>
                   <h3>{persona.name[language]}</h3>
                   <p>{persona.body[language]}</p>
                   <ul>
@@ -309,7 +341,7 @@ function App() {
 
         <section id="join" className="panel cta-section reveal-section">
           <div className="cta-card">
-            <p className="eyebrow">04 / SERVICES</p>
+            <p className="eyebrow">04 / CREATE</p>
             <h2>{t.joinTitle}</h2>
             <p>{t.joinLead}</p>
             <form className="signup-form">
