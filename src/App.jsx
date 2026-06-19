@@ -421,14 +421,15 @@ function App() {
         body: JSON.stringify({ name, email }),
       });
 
-      if (!response.ok) {
-        const detail = await response.json().catch(() => ({}));
+      const detail = await response.json().catch(() => ({}));
+
+      if (response.status < 200 || response.status >= 300) {
         throw new Error(detail.error || detail.detail || 'Create request failed');
       }
 
       event.currentTarget.reset();
       setSubmitStatus('success');
-      window.setTimeout(() => setSubmitStatus('idle'), 1800);
+      window.setTimeout(() => setSubmitStatus('idle'), 2400);
     } catch (error) {
       console.error('Create application failed:', error);
       setSubmitStatus('error');
@@ -606,7 +607,9 @@ function App() {
                   disabled={submitStatus === 'submitting'}
                   aria-busy={submitStatus === 'submitting'}
                 >
-                  {page.join.submit}
+                  <span className="submit-button-label">
+                    {submitStatus === 'success' ? '已申请' : page.join.submit}
+                  </span>
                 </button>
               </form>
               <small className="i18n-safe">{page.join.note}</small>
