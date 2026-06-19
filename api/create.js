@@ -40,6 +40,15 @@ export default async function handler(req, res) {
   const nameField = process.env.AIRTABLE_NAME_FIELD;
   const emailField = process.env.AIRTABLE_EMAIL_FIELD;
 
+  console.log('Airtable env status:', {
+    hasApiKey: Boolean(apiKey),
+    apiKeyLength: apiKey?.length ?? 0,
+    hasBaseId: Boolean(baseId),
+    tableName,
+    nameField,
+    emailField,
+  });
+
   const missing = missingEnv({
     AIRTABLE_API_KEY: apiKey,
     AIRTABLE_BASE_ID: baseId,
