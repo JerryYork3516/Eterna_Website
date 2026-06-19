@@ -441,84 +441,12 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   place-items: center;
 }
 .cta-card {
-  position: relative;
-  isolation: isolate;
   width: min(780px, 100%);
   padding: clamp(28px, 6vw, 64px);
   text-align: center;
-  overflow: visible;
-  transition: border-color .34s ease, background .34s ease, box-shadow .34s ease, filter .34s ease;
-}
-.cta-card > * {
-  position: relative;
-  z-index: 1;
-}
-.cta-card::before,
-.cta-card::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .34s ease;
-}
-.cta-card::before {
-  background:
-    radial-gradient(circle at 18% 16%, var(--submit-glow-a, rgba(137,247,255,0.16)), transparent 34%),
-    radial-gradient(circle at 82% 86%, var(--submit-glow-b, rgba(93,124,255,0.14)), transparent 42%);
-}
-.cta-card::after {
-  background:
-    linear-gradient(90deg, transparent, var(--submit-sweep, rgba(137,247,255,0.22)), transparent);
-  transform: translateX(-130%);
 }
 .cta-card.text-block {
   max-width: min(780px, 100%);
-}
-.cta-card.submit-state-submitting {
-  --submit-glow-a: rgba(137,247,255,0.24);
-  --submit-glow-b: rgba(93,124,255,0.22);
-  --submit-sweep: rgba(137,247,255,0.24);
-  border-color: rgba(137,247,255,0.2);
-  background: rgba(15, 76, 190, 0.055);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.055), 0 0 44px rgba(93,124,255,0.12);
-}
-.cta-card.submit-state-success {
-  --submit-glow-a: rgba(184,255,217,0.28);
-  --submit-glow-b: rgba(137,247,255,0.18);
-  --submit-sweep: rgba(184,255,217,0.28);
-  border-color: rgba(184,255,217,0.26);
-  background: rgba(24, 116, 74, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 0 58px rgba(184,255,217,0.16);
-  animation: cta-success-settle 1.15s ease both;
-}
-.cta-card.submit-state-error {
-  --submit-glow-a: rgba(255,109,126,0.26);
-  --submit-glow-b: rgba(192,140,255,0.12);
-  --submit-sweep: rgba(255,109,126,0.24);
-  border-color: rgba(255,109,126,0.28);
-  background: rgba(136, 31, 48, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 44px rgba(255,109,126,0.12);
-  animation: cta-error-tilt .46s ease both;
-}
-.cta-card.submit-state-submitting::before,
-.cta-card.submit-state-success::before,
-.cta-card.submit-state-error::before {
-  opacity: 1;
-}
-.cta-card.submit-state-submitting::after {
-  opacity: 1;
-  animation: cta-progress-sweep 1.35s cubic-bezier(.45, 0, .2, 1) infinite;
-}
-.cta-card.submit-state-success::after {
-  opacity: 1;
-  animation: cta-success-sweep 1.05s cubic-bezier(.16, 1, .3, 1) both;
-}
-.cta-card.submit-state-error::after {
-  opacity: .9;
-  animation: cta-error-flash .46s ease both;
 }
 .signup-form {
   display: grid;
@@ -692,19 +620,22 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   cursor: wait;
 }
 .submit-button.is-submitting {
-  background: linear-gradient(135deg, rgba(15,76,190,0.52), rgba(93,124,255,0.42));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 0 32px rgba(93,124,255,0.16);
+  background: linear-gradient(135deg, rgba(15,76,190,0.56), rgba(93,124,255,0.46));
+  border-color: rgba(137,247,255,0.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 0 32px rgba(93,124,255,0.18);
 }
 .submit-button.is-submitting::before {
   opacity: 1;
   animation: button-progress-sweep 1.05s cubic-bezier(.45, 0, .2, 1) infinite;
 }
 .submit-button.is-success {
-  background: linear-gradient(135deg, rgba(24,116,74,0.62), rgba(184,255,217,0.3));
+  background: linear-gradient(135deg, rgba(24,116,74,0.72), rgba(184,255,217,0.34));
+  border-color: rgba(184,255,217,0.28);
   animation: submit-success-pulse 1.05s ease both;
 }
 .submit-button.is-error {
-  background: linear-gradient(135deg, rgba(136,31,48,0.58), rgba(255,109,126,0.26));
+  background: linear-gradient(135deg, rgba(136,31,48,0.66), rgba(255,109,126,0.3));
+  border-color: rgba(255,109,126,0.28);
   animation: submit-error-shake .46s ease both;
 }
 .submit-button.is-success::after {
@@ -714,30 +645,6 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
 .submit-button.is-error::after {
   background: radial-gradient(circle at 50% 50%, rgba(255,109,126,0.28), transparent 62%);
   animation: submit-error-glow .46s ease both;
-}
-@keyframes cta-progress-sweep {
-  0% { transform: translateX(-130%); }
-  100% { transform: translateX(130%); }
-}
-@keyframes cta-success-sweep {
-  0% { transform: translateX(-130%); opacity: 0; }
-  36% { opacity: 1; }
-  100% { transform: translateX(130%); opacity: 0; }
-}
-@keyframes cta-success-settle {
-  0% { transform: scale(1); }
-  42% { transform: scale(1.008); }
-  100% { transform: scale(1); }
-}
-@keyframes cta-error-tilt {
-  0%, 100% { transform: translateX(0); }
-  24% { transform: translateX(-4px); }
-  48% { transform: translateX(3px); }
-  72% { transform: translateX(-2px); }
-}
-@keyframes cta-error-flash {
-  0%, 100% { transform: translateX(-130%); opacity: 0; }
-  42% { transform: translateX(0); opacity: .9; }
 }
 @keyframes button-progress-sweep {
   0% { transform: translateX(-120%); }

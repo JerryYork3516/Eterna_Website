@@ -566,7 +566,7 @@ function App() {
         </SectionLayout>
 
         <SectionLayout id="join" className="cta-section">
-            <TextBlock className={`cta-card submit-state-${submitStatus}`}>
+            <TextBlock className="cta-card">
               <p className="eyebrow i18n-safe">{page.join.kicker}</p>
               <h2 className="i18n-safe">{page.join.title}</h2>
               <p className="i18n-safe">{page.join.lead}</p>

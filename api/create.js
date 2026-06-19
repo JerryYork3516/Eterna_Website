@@ -109,8 +109,11 @@ export default async function handler(req, res) {
       });
     }
 
-    const result = await airtableResponse.json();
-    return sendJson(res, 200, { ok: true, id: result.records?.[0]?.id });
+    const result = await airtableResponse.json().catch(() => null);
+    return sendJson(res, 200, {
+      ok: true,
+      id: result?.records?.[0]?.id,
+    });
   } catch (error) {
     console.log('Airtable request error:', error);
     return sendJson(res, 500, {
