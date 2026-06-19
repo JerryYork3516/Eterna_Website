@@ -404,7 +404,8 @@ function App() {
   const submitCreatorApplication = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const name = String(formData.get('name') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
 
@@ -427,7 +428,7 @@ function App() {
         throw new Error(detail.error || detail.detail || 'Create request failed');
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setSubmitStatus('success');
       window.setTimeout(() => setSubmitStatus('idle'), 2400);
     } catch (error) {
