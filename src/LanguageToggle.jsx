@@ -1,9 +1,11 @@
-const LanguageToggle = ({ language, onChange }) => (
+const LanguageToggle = ({ language, ariaLabel, onChange, hidden = false }) => (
   <button
-    className={`language-toggle ${language === 'en' ? 'is-en' : 'is-zh'}`}
+    className={`language-toggle ${language === 'en' ? 'is-en' : 'is-zh'} ${hidden ? 'is-hidden' : ''}`}
     type="button"
-    aria-label={language === 'zh' ? 'Switch to English' : '切换到中文'}
-    onClick={() => onChange(language === 'zh' ? 'en' : 'zh')}
+    aria-label={ariaLabel}
+    aria-hidden={hidden}
+    tabIndex={hidden ? -1 : 0}
+    onClick={() => onChange(language === 'cn' ? 'en' : 'cn')}
   >
     <span className="language-icon" aria-hidden="true" />
   </button>

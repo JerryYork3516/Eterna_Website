@@ -17,7 +17,8 @@ npm run build
 
 ## Notes
 
-- The page is implemented in `src/App.jsx`.
-- The original visual style is kept in `styles.css`.
-- The animated aurora background lives in `src/Aurora.jsx` and uses `ogl`.
-- The bilingual switch, starfield canvas, scroll progress, reveal animations, and expandable Afterborn cards are now managed by React.
+- Main page content and layout live in `src/App.jsx` (bilingual `cn` / `en` copy).
+- Global styles are in `styles.css`; the aurora background is in `src/Aurora.jsx` (WebGL via `ogl`).
+- Navigation, language toggle, and expandable persona cards are React components under `src/`.
+- Language preference is persisted in `localStorage` under `afterlife-language`.
+- `src/GlassSurface.jsx` is currently unused and kept for a future glass UI effect.
