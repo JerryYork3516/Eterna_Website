@@ -126,7 +126,7 @@ const content = {
       lead: '提交你的角色、分身、IP 或品牌人物设定，支持 AI 生成或风格化重建为数字居民。Eterna 将帮助你将其整理为可部署的人格资产，并逐步接入人格 + Agent 创建平台、调用日志、授权规则和未来收益分成机制。',
       name: '你的数字身份',
       email: '你的数字入口邮箱',
-      submit: '创建数字居民',
+      submit: '申请创建数字居民',
       note: '未来，这些数字居民将进入 Eterna Network，在不同场景中接收任务、提供服务、产生收入，并按照授权规则与创作者共享收益。',
       applicationOptions: [
         '创建个人数字分身',
@@ -309,6 +309,7 @@ function App() {
   const [selectedApplication, setSelectedApplication] = useState(0);
   const [isApplicationOpen, setIsApplicationOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('idle');
   const page = content[language];
   const navItems = page.nav;
 
@@ -398,6 +399,41 @@ function App() {
 
   const togglePersona = (index) => {
     setExpandedPersona((current) => (current === index ? null : index));
+  };
+
+  const submitCreatorApplication = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get('name') ?? '').trim();
+    const email = String(formData.get('email') ?? '').trim();
+
+    if (!name || !email || submitStatus === 'submitting') return;
+
+    setSubmitStatus('submitting');
+
+    try {
+      const response = await fetch('/api/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email }),
+      });
+
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.error || detail.detail || 'Create request failed');
+      }
+
+      event.currentTarget.reset();
+      setSubmitStatus('success');
+      window.setTimeout(() => setSubmitStatus('idle'), 1800);
+    } catch (error) {
+      console.error('Create application failed:', error);
+      setSubmitStatus('error');
+      window.setTimeout(() => setSubmitStatus('idle'), 1800);
+    }
   };
 
   return (
@@ -534,9 +570,9 @@ function App() {
               <p className="eyebrow i18n-safe">{page.join.kicker}</p>
               <h2 className="i18n-safe">{page.join.title}</h2>
               <p className="i18n-safe">{page.join.lead}</p>
-              <form className="signup-form">
-                <input type="text" placeholder={page.join.name} aria-label={page.join.name} />
-                <input type="email" placeholder={page.join.email} aria-label={page.join.email} />
+              <form className="signup-form" onSubmit={submitCreatorApplication}>
+                <input type="text" name="name" placeholder={page.join.name} aria-label={page.join.name} required />
+                <input type="email" name="email" placeholder={page.join.email} aria-label={page.join.email} required />
                 <div className={`custom-select ${isApplicationOpen ? 'open' : ''}`}>
                   <button
                     className="custom-select-trigger"
@@ -564,7 +600,13 @@ function App() {
                     ))}
                   </div>
                 </div>
-                <button className="submit-button" type="button">{page.join.submit}</button>
+                <button
+                  className={`submit-button ${submitStatus === 'success' ? 'is-success' : ''} ${submitStatus === 'error' ? 'is-error' : ''}`}
+                  type="submit"
+                  disabled={submitStatus === 'submitting'}
+                >
+                  {page.join.submit}
+                </button>
               </form>
               <small className="i18n-safe">{page.join.note}</small>
             </TextBlock>

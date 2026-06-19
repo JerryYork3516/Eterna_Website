@@ -580,6 +580,7 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 4px rgba(15,76,190,0.12);
 }
 .submit-button {
+  position: relative;
   grid-column: 1 / -1;
   min-height: 62px;
   border: 1px solid rgba(255,255,255,0.065);
@@ -592,11 +593,46 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   letter-spacing: .02em;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.055);
   transition: background .28s ease, box-shadow .28s ease, transform .28s ease;
+  overflow: hidden;
 }
 .submit-button:hover {
   background: rgba(15,76,190,0.5);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 0 28px rgba(15,76,190,0.16);
   transform: translateY(-1px);
+}
+.submit-button:disabled {
+  cursor: wait;
+}
+.submit-button.is-success {
+  animation: submit-success-pulse .9s ease both;
+}
+.submit-button.is-error {
+  animation: submit-error-shake .42s ease both;
+}
+.submit-button.is-success::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(184,255,217,0.26), transparent 62%);
+  opacity: 0;
+  animation: submit-success-glow .9s ease both;
+  pointer-events: none;
+}
+@keyframes submit-success-pulse {
+  0% { transform: scale(1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.055); }
+  42% { transform: scale(1.018); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 34px rgba(184,255,217,0.18); }
+  100% { transform: scale(1); box-shadow: inset 0 1px 0 rgba(255,255,255,0.055); }
+}
+@keyframes submit-success-glow {
+  0% { opacity: 0; transform: scale(0.75); }
+  42% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+@keyframes submit-error-shake {
+  0%, 100% { transform: translateX(0); }
+  24% { transform: translateX(-6px); }
+  48% { transform: translateX(5px); }
+  72% { transform: translateX(-3px); }
 }
 .cta-card small { display: block; margin-top: 18px; color: rgba(245,247,255,0.42); }
 .cta-card { overflow: visible; }
