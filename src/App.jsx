@@ -449,6 +449,7 @@ function App() {
           speed={0.9}
         />
       </div>
+      <div className="mobile-safe-area-bg" aria-hidden="true" />
 
       <NavigationTabs
         items={navItems}

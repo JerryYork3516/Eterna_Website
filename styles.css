@@ -29,6 +29,7 @@
 * { box-sizing: border-box; }
 html {
   min-height: 100%;
+  background: #020207;
   scroll-behavior: smooth;
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
@@ -50,12 +51,19 @@ body {
   isolation: isolate;
   min-height: 100svh;
   min-height: 100dvh;
+  background: #020207;
 }
 
 a { color: inherit; text-decoration: none; }
 button, input, select {
   font: inherit;
   -webkit-tap-highlight-color: transparent;
+}
+
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: 0;
+  }
 }
 
 .aurora-backdrop {
@@ -67,6 +75,10 @@ button, input, select {
   overflow: hidden;
   pointer-events: none;
   background: #111017;
+}
+
+.mobile-safe-area-bg {
+  display: none;
 }
 
 .hero-chrome {
@@ -841,10 +853,6 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
 }
 
 @media (max-width: 768px) {
-  html {
-    background: #1e2c52;
-  }
-
   html,
   body {
     width: 100%;
@@ -856,14 +864,15 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
     -webkit-overflow-scrolling: touch;
   }
 
-  body::before {
-    content: "";
+  .mobile-safe-area-bg {
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: max(var(--safe-top), 20px);
-    z-index: 2;
+    height: var(--safe-top);
+    min-height: var(--safe-top);
+    z-index: 9998;
     pointer-events: none;
     background:
       radial-gradient(circle at 12% 0%, rgba(15,76,190,0.72), transparent 58%),
@@ -873,6 +882,7 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   #root {
     min-height: 100svh;
     min-height: 100dvh;
+    padding-bottom: var(--safe-bottom);
     overflow-x: hidden;
     overflow-x: clip;
   }
