@@ -841,6 +841,10 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
 }
 
 @media (max-width: 768px) {
+  html {
+    background: #1e2c52;
+  }
+
   html,
   body {
     width: 100%;
@@ -850,6 +854,20 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: max(var(--safe-top), 20px);
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(15,76,190,0.72), transparent 58%),
+      linear-gradient(180deg, #263a68 0%, rgba(31,44,78,0.96) 100%);
   }
 
   #root {
@@ -968,23 +986,28 @@ p { color: var(--muted); font-size: 17px; line-height: 1.85; }
   }
 
   .custom-select-menu {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(100% + 8px);
-    bottom: auto;
+    position: fixed;
+    left: max(16px, var(--safe-left));
+    right: max(16px, var(--safe-right));
+    top: auto;
+    bottom: calc(18px + var(--safe-bottom));
     z-index: 10000;
     max-height: 0;
-    transform: translateY(-6px);
+    transform: translateY(14px);
   }
 
   .custom-select.open .custom-select-menu {
-    max-height: min(48svh, 360px);
-    max-height: min(48dvh, 360px);
+    max-height: min(58svh, 420px);
+    max-height: min(58dvh, 420px);
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     transform: translateY(0);
+  }
+
+  .custom-select-menu button {
+    min-height: 52px;
+    font-size: 16px;
   }
 
   .site-footer {
