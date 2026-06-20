@@ -39,6 +39,7 @@ export default async function handler(req, res) {
   const tableName = process.env.AIRTABLE_TABLE_NAME;
   const nameField = process.env.AIRTABLE_NAME_FIELD;
   const emailField = process.env.AIRTABLE_EMAIL_FIELD;
+  const purposeField = process.env.AIRTABLE_PURPOSE_FIELD;
 
   console.log('Airtable env status:', {
     hasApiKey: Boolean(apiKey),
@@ -47,6 +48,7 @@ export default async function handler(req, res) {
     tableName,
     nameField,
     emailField,
+    purposeField,
   });
 
   const missing = missingEnv({
@@ -55,6 +57,7 @@ export default async function handler(req, res) {
     AIRTABLE_TABLE_NAME: tableName,
     AIRTABLE_NAME_FIELD: nameField,
     AIRTABLE_EMAIL_FIELD: emailField,
+    AIRTABLE_PURPOSE_FIELD: purposeField,
   });
 
   if (missing.length) {
@@ -67,9 +70,10 @@ export default async function handler(req, res) {
   console.log('create request body:', req.body);
 
   const body = readBody(req.body);
-  const { name, email } = body;
+  const { name, email, purpose } = body;
   const trimmedName = typeof name === 'string' ? name.trim() : '';
   const trimmedEmail = typeof email === 'string' ? email.trim() : '';
+  const trimmedPurpose = typeof purpose === 'string' ? purpose.trim() : '';
 
   if (!trimmedName || !trimmedEmail) {
     return sendJson(res, 400, {
@@ -94,6 +98,7 @@ export default async function handler(req, res) {
             fields: {
               [nameField]: trimmedName,
               [emailField]: trimmedEmail,
+              [purposeField]: trimmedPurpose,
             },
           },
         ],

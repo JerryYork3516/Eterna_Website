@@ -408,6 +408,7 @@ function App() {
     const formData = new FormData(form);
     const name = String(formData.get('name') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
+    const purpose = page.join.applicationOptions[selectedApplication];
 
     if (!name || !email || submitStatus === 'submitting') return;
 
@@ -419,7 +420,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email, purpose }),
       });
 
       const detail = await response.json().catch(() => ({}));
