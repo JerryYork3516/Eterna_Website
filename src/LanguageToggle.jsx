@@ -7,7 +7,9 @@ const LanguageToggle = ({ language, ariaLabel, onChange, hidden = false }) => (
     tabIndex={hidden ? -1 : 0}
     onClick={() => onChange(language === 'cn' ? 'en' : 'cn')}
   >
-    <span className="language-icon" aria-hidden="true" />
+    <span className="language-label" aria-hidden="true">
+      {language === 'cn' ? 'EN' : '中'}
+    </span>
   </button>
 );
 

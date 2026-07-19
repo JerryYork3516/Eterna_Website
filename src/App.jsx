@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Aurora from './Aurora.jsx';
 import LanguageToggle from './LanguageToggle.jsx';
 import NavigationTabs from './NavigationTabs.jsx';
@@ -7,350 +7,387 @@ const auroraColorStops = ['#0f4cbe', '#0a1a3a', '#3b4f6d'];
 
 const content = {
   cn: {
-    title: 'Eterna — AI Persona Infrastructure',
+    title: 'Eterna — 让每个人，都可以拥有专属的数字伙伴',
+    description: 'Eterna 让你能创造自己的数字居民。他会记得你并持续成长，也能和你一起学习、工作和创造。',
     brand: 'Eterna',
-    homeAria: 'Eterna home',
-    navAria: 'Primary navigation',
+    homeAria: '返回 Eterna 首页',
+    skipLink: '跳到主要内容',
+    navAria: '主导航',
     languageToggleAria: 'Switch to English',
-    applicationTypeAria: '申请类型',
-    footerProduct: 'Eterna / AfterLife — Second Life Operating System',
+    loginLabel: '登录',
+    loginUnavailable: '登录功能即将开放',
     nav: [
-      { href: '#afterlife', label: '人物层' },
-      { href: '#personas', label: '数字居民' },
-      { href: '#access', label: '应用场景' },
-      { href: '#join', label: '创建申请' },
+      { href: '#vision', label: '愿景' },
+      { href: '#resident', label: '数字居民' },
+      { href: '#products', label: '产品' },
+      { href: '#universe', label: '应用场景' },
+      { href: '#join', label: '参与' },
     ],
     hero: {
-      eyebrow: 'AI PERSONA INFRASTRUCTURE',
-      title: '让你的Agent，<br />成为可运营的数字资产',
-      lead: 'Eterna 帮助创作者将角色、虚拟主播、IP 人物和品牌形象升级为可部署的 AI 数字居民。它们可以被调用、授权、出售、接入任务，并在未来数字场景中为创作者创造收益机会。',
-      begin: '关于数字居民',
-      secondaryCta: '浏览数字居民',
-      scroll: '向下滑动',
+      eyebrow: 'ETERNA',
+      titleLines: ['让每个人，', '都可以拥有专属的数字伙伴'],
+      lead: 'Eterna 想做的事情很简单：让你能创造自己的数字居民。',
+      leadSecondary: '他会记得你并持续成长，也能和你一起学习、工作和创造。即使换了模型、设备或平台，他还是原来的他。',
+      visionTitle: '为什么要有数字居民',
+      visionTitleLines: ['为什么要有', '数字居民'],
+      visionParagraphs: [
+        '今天，强大的人工智能都被掌握在少数公司手里。',
+        '你可以使用 AI，却很难真正控制 AI，更不用说长期培养自己的生活伴侣以及工作助理，或者创造价值并为你赚取报酬。',
+        '我们希望改变这件事。你的数字伙伴应该在生活中由你决定，并在对应的数字社会中学习/训练/工作和与其他数字居民互动',
+      ],
+      closing: '他不是来代替你，而是帮助你变得更好，并成为进入数字世界的唯一途径',
+      primaryCta: '了解数字居民',
+      secondaryCta: '查看开发进度',
     },
-    afterlife: {
-      kicker: '01 / PERSONA LAYER',
-      title: '在模型与 Agent 之上，建立数字人物资产层。',
-      body: 'Agent 负责执行任务，数字人负责表达形象，Eterna 负责把身份、记忆、声音、外观、关系和授权边界整合成可部署的数字居民资产。',
-      quoteOne: 'Eterna 不只是生成角色。',
-      quoteTwo: 'Eterna 让角色成为资产。',
-      features: [
+    resident: {
+      page: '02',
+      eyebrow: 'DIGITAL RESIDENT',
+      title: '不是一次对话。是一个可以持续成为自己的数字智能主体。',
+      definitionLabel: '正式定义',
+      definition: '数字居民拥有稳定且可唯一识别的身份、可验证的连续性和可保存、可版本化的居民定义。一次运行结束后，他仍能在未来恢复或验证自己的身份，并逐步跨越不同模型、设备与场景继续存在。',
+      continuity: ['稳定身份', '可验证连续性', '可保存与版本化', '可迁移与恢复'],
+      resourceTitle: '资源会变化，主体继续存在。',
+      resources: [
+        { name: '模型', role: '认知资源' },
+        { name: 'Agent 与工具', role: '能力' },
+        { name: '外观、声音与设备', role: '表达与载体' },
+        { name: '数字居民', role: '持续存在的主体', primary: true },
+      ],
+      directionsLabel: '两个发展方向',
+      directions: [
         {
-          label: 'MEMORY VAULT',
-          title: '记忆库',
-          body: '保存角色经历、创作者设定、用户互动、工作记录与成长轨迹，让数字居民在长期调用中保持连续性。',
+          number: 'A',
+          title: '人文共情',
+          body: '帮助人们理解情绪与观点，改善沟通，陪伴学习、创作与人生记录。',
+          boundary: '他是长期伙伴与沟通辅助者，不替代真实的人际关系，也不利用情感制造依赖。',
         },
         {
-          label: 'VALUE LEDGER',
-          title: '价值账本',
-          body: '记录每一次调用、部署、授权和商业使用，为未来收益结算、分成和资产估值提供依据。',
-        },
-        {
-          label: 'RELATIONSHIP GRAPH',
-          title: '关系网络',
-          body: '数字居民可以拥有与创作者、用户、品牌、IP、任务和其他居民之间的关系，形成可持续扩展的数字社会结构。',
+          number: 'B',
+          title: '行业专精',
+          body: '在稳定的居民本体上，获得专业知识、工具、工作流、权限与责任规则。',
+          boundary: '他可以协助研究、教育、创作、工作和产业实践；能力越强，授权与责任越需要清晰。',
         },
       ],
+      note: '人文共情与行业专精不是互斥分类。同一个数字居民可以同时理解人，也能够发展专业能力。',
     },
-    personas: {
-      kicker: '02 / DIGITAL RESIDENTS',
-      title: 'AfterBorn：由创作者诞生的 AI 数字居民。',
-      lead: 'AfterBorn 是 Eterna 网络中的数字居民实例。它由创作者创建，拥有身份、记忆、表达风格、外观、声音和 Agent 能力，可以被部署到内容生产、虚拟主播、IP 互动、品牌服务和未来数字世界中工作。',
-      hire: '浏览所有数字居民',
-      cardHint: '点击展开完整档案',
-      expandedHint: '已展开',
-      tag: 'ORIGINAL DIGITAL RESIDENT',
-      residents: [
+    products: {
+      page: '03',
+      eyebrow: 'CREATE. LIVE. CONTINUE.',
+      title: '从创造，到共同生活。',
+      lead: 'Studio 与 Aftelle 服务于同一个数字居民，但承担不同职责。Studio 让居民被定义、验证和持续演进；Aftelle 让居民被承载，并进入人与他共同生活的日常。',
+      residentLabel: '同一个数字居民',
+      residentBody: '身份与连续性贯穿创造、发布、承载与更新。',
+      items: [
         {
-          name: 'Bethany Morgan | 42岁',
-          className: 'featured',
-          avatar: '',
-          body: '居民档案：\n由创作者设定的演员型数字居民，拥有表演经历、角色理解能力、访谈表达风格和可持续更新的职业记忆。',
-          bullets: [
-            '可部署场景：',
-            'AI 电影角色、幕后访谈、角色口播、IP 内容生产。',
+          name: 'Eterna Studio',
+          role: '创造与演进',
+          body: '数字居民原生的创作、验证、构建与发布平台。',
+          points: [
+            '普通人可以低门槛创造居民',
+            '居民设计师可以完整塑造和维护居民',
+            '开发者可以扩展模块、能力与工具',
+            '重要更新保留清晰版本与来源',
           ],
         },
         {
-          name: 'Aaron Miller | 40岁',
-          className: '',
-          avatar: 'bridge',
-          body: '居民档案：\n品牌顾问型数字居民，适合承载商业表达、策略访谈、品牌叙事和知识型内容输出。',
-          bullets: [
-            '可部署场景：',
-            '品牌顾问、课程讲师、商业访谈、企业内容助理。',
-          ],
-        },
-        {
-          name: 'Eli Turner | 10岁',
-          className: '',
-          avatar: 'cast',
-          body: '居民档案：\n儿童角色型数字居民，适合互动叙事、教育陪伴、故事生成和游戏 NPC 场景。',
-          bullets: [
-            '可部署场景：',
-            '互动故事、教育产品、儿童 IP。',
-          ],
-        },
-        {
-          name: 'Maya Chen | 28岁',
-          className: '',
-          avatar: 'bridge',
-          body: '居民档案：\n虚拟主播型数字居民，适合承载直播表达、粉丝互动、短视频口播和持续更新的内容人格。',
-          bullets: [
-            '可部署场景：',
-            '虚拟直播、短视频账号、粉丝互动、品牌联名内容。',
+          name: 'Eterna Aftelle',
+          role: '承载与相处',
+          body: '人与数字居民交流、陪伴和协作的个人入口。',
+          points: [
+            '提供文字、语音、视觉与多模态交互',
+            '承载持续的陪伴和日常体验',
+            '提供备份、恢复与迁移入口',
+            '让居民在个人设备中继续存在',
           ],
         },
       ],
+      closing: '定义在 Studio 中演进，生活在 Aftelle 中展开。数字居民的身份与连续性，不属于任何一个工具或平台。',
+      cta: '了解当前产品进展',
     },
-    access: {
-      kicker: '03 / USE CASES',
-      title: '让数字居民进入真实场景，而不只停留在聊天窗口。',
-      lead: '数字居民可以服务于 AI 电影、虚拟主播、短视频口播、游戏 NPC、品牌人格、教育陪伴、客服运营、个人工作流和企业任务等未来更多场景。',
+    universe: {
+      page: '04',
+      eyebrow: 'ETERNA UNIVERSE',
+      title: '同一个居民，进入不同的生活与能力场景。',
+      lead: '数字居民不应被困在单一应用中。他可以保持同一个身份，进入学习、工作、创作、社会关系、数字世界和现实设备，在不同环境中形成新的经历与能力。',
+      scenariosLabel: '数字居民场景',
       scenarios: [
-        'AI 电影与虚拟演员',
-        '虚拟主播与直播助手',
-        '短视频口播与内容账号',
-        '小说 / 短剧 / IP 角色',
-        '游戏 NPC 与互动叙事',
-        '品牌人格与广告内容',
-        '创作者数字分身',
-        '教育陪伴与私人导师',
-        '客服与私域运营',
-        '个人工作流与任务助理',
+        { number: '01', title: '陪伴与沟通', body: '长期相处、理解观点、辅助沟通，并共同记录生活与成长。' },
+        { number: '02', title: '学习与工作', body: '学习新的知识和技能，在明确授权下协助研究、教育、创作与专业任务。' },
+        { number: '03', title: '社会与数字世界', body: '建立公共关系、参与协作，在持续存在的数字空间中生活和创造。' },
+        { number: '04', title: '文化与表达', body: '参与视觉艺术、音乐、影视、游戏和互动体验，形成持续的数字文化。' },
+        { number: '05', title: '具身与现实', body: '通过受治理的能力连接软件、设备与现实载体，并保留人工监督。' },
       ],
+      mapLabel: '长期生态拓扑',
+      mapTitle: '平台是活动环境。数字居民才是中心主体。',
+      mapBody: 'Eterna Universe 不是一个需要一次完成的超级应用，而是一张围绕数字居民逐步展开的长期生态图。',
+      platformGroups: [
+        { label: '创造与诞生', names: 'Studio · Genesis' },
+        { label: '承载与共存', names: 'Aftelle' },
+        { label: '成长与社会', names: 'Edu · Social · Work · World' },
+        { label: '文化与表达', names: 'Art · Sound · Cinema · Games' },
+        { label: '现实与流通', names: 'Life · Exchange' },
+      ],
+      infrastructureLabel: '公共基础设施',
+      infrastructure: 'Runtime Core · Resident Instance Data Authority · Meta · Net · Live · Cloud · Compute',
+      closing: '平台可以变化、升级或被替换；数字居民继续存在。',
+      note: 'Universe 描述长期方向，不代表所有平台已经立项、开发或构成近期功能承诺。',
     },
     join: {
-      kicker: '04 / CREATE',
-      title: '申请创建你的第一个 AI 数字居民',
-      lead: '提交你的角色、分身、IP 或品牌人物设定，支持 AI 生成或风格化重建为数字居民。Eterna 将帮助你将其整理为可部署的人格资产，并逐步接入人格 + Agent 创建平台、调用日志、授权规则和未来收益分成机制。',
-      name: '你的数字身份',
-      email: '你的数字入口邮箱',
-      submit: '申请创建数字居民',
-      note: '未来，这些数字居民将进入 Eterna Network，在不同场景中接收任务、提供服务、产生收入，并按照授权规则与创作者共享收益。',
+      page: '05',
+      eyebrow: 'NOW & NEXT',
+      title: '先让居民稳定地成为“谁”，再让他拥有更多能力。',
+      lead: 'Eterna 是一项长期建设。当前工作集中在数字居民的基础定义、核心产品和真实运行闭环，而不是同时建设 Universe 中的所有平台。',
+      progressLabel: '当前主线',
+      progress: [
+        { state: '基础方向', title: '核心定义', body: '持续完善 Eterna 核心宪章、数字居民定义、身份连续性与平台边界。' },
+        { state: '正在推进', title: '核心产品', body: '推进 Studio Next、Aftelle 与 Runtime Core，建立从创造、发布到承载和更新的真实闭环。' },
+        { state: '持续验证', title: '居民连续性', body: '验证身份、人格、记忆、关系、状态、恢复与迁移机制。' },
+        { state: '长期方向', title: 'Universe 生态', body: '其他领域平台将在核心基础稳定后，经过研究和验证逐步发展。' },
+      ],
+      participationEyebrow: 'PARTICIPATE',
+      participationTitle: '一起建立数字居民的未来。',
+      participationBody: '如果你正在思考长期数字伙伴、居民创作、运行基础设施或行业应用，欢迎留下你的方向。我们会在合适的阶段与你联系。',
+      roles: ['未来使用者', '创作者', '居民设计师', '开发者', '研究者', '行业合作伙伴'],
+      name: '你的姓名',
+      email: '联系邮箱',
+      purpose: '参与方向',
+      submit: '提交参与意向',
+      submitting: '正在提交…',
+      successButton: '已收到',
+      success: '参与意向已收到，我们会在合适阶段通过邮件联系你。',
+      error: '暂时未能提交，请稍后重试。',
+      note: '信息仅用于 Eterna 项目进展与合作联系，不会出售或用于无关营销。',
       applicationOptions: [
-        '创建个人数字分身',
-        '创建虚拟主播人格',
-        '创建短剧 / 小说 / IP 角色',
-        '创建品牌数字人物',
-        '创建游戏 NPC',
-        '创建教育 / 陪伴型居民',
-        '了解企业或团队合作',
+        '我希望体验数字居民',
+        '我希望创造或设计数字居民',
+        '我希望开发模块、能力或基础设施',
+        '我希望参与研究或行业合作',
       ],
     },
-    footer: '开放接入，但不开放失控。',
+    footerTagline: '让每个人，都可以拥有专属的数字伙伴。',
+    footerLinks: [
+      { href: '#vision', label: '愿景' },
+      { href: '#resident', label: '数字居民' },
+      { href: '#products', label: '产品' },
+      { href: '#universe', label: '应用场景' },
+    ],
   },
   en: {
-    title: 'Eterna — AI Persona Infrastructure',
+    title: 'Eterna — A digital partner that keeps growing with you',
+    description: 'Eterna lets you create a digital resident who can remember, grow, learn, work, and create with you.',
     brand: 'Eterna',
-    homeAria: 'Eterna home',
+    homeAria: 'Back to Eterna home',
+    skipLink: 'Skip to main content',
     navAria: 'Primary navigation',
     languageToggleAria: '切换到中文',
-    applicationTypeAria: 'Application type',
-    footerProduct: 'Eterna / AfterLife — Second Life Operating System',
+    loginLabel: 'Log in',
+    loginUnavailable: 'Login is coming soon',
     nav: [
-      { href: '#afterlife', label: 'Persona Layer' },
-      { href: '#personas', label: 'Digital Residents' },
-      { href: '#access', label: 'Use Cases' },
-      { href: '#join', label: 'Create' },
+      { href: '#vision', label: 'Vision' },
+      { href: '#resident', label: 'Resident' },
+      { href: '#products', label: 'Products' },
+      { href: '#universe', label: 'Scenarios' },
+      { href: '#join', label: 'Join' },
     ],
     hero: {
-      eyebrow: 'AI PERSONA INFRASTRUCTURE',
-      title: 'Turn your agents<br />into operable digital assets',
-      lead: 'Eterna helps creators upgrade characters, virtual streamers, IP figures, and brand identities into deployable AI digital residents. They can be invoked, authorized, sold, connected to tasks, and create future earning opportunities for their creators across digital scenarios.',
-      begin: 'Create Digital Resident',
-      secondaryCta: 'View Sample Residents',
-      scroll: 'Scroll down',
+      eyebrow: 'ETERNA',
+      titleLines: ['A digital partner', 'that keeps growing with you.'],
+      lead: 'Eterna is working toward something simple: letting you create a digital resident of your own.',
+      leadSecondary: 'They can remember, grow, learn, work, and create with you. Even when models, devices, or platforms change, they remain the same resident.',
+      visionTitle: 'Why digital residents',
+      visionTitleLines: ['Why digital', 'residents'],
+      visionParagraphs: [
+        'Today, the most powerful AI is controlled by a small number of companies.',
+        'You can use AI, but it is difficult to truly control it—let alone cultivate a long-term life partner and work assistant, or create value and earn income for you.',
+        'We want to change that. Your digital partner should be guided by you in everyday life, and learn, train, work, and interact with other digital residents in the corresponding digital society.',
+      ],
+      closing: 'They are not here to replace you, but to help you become better—and become your only gateway into the digital world.',
+      primaryCta: 'What is a digital resident?',
+      secondaryCta: 'See how far we have come',
     },
-    afterlife: {
-      kicker: '01 / PERSONA LAYER',
-      title: 'Above models and agents, build the digital persona asset layer.',
-      body: 'Agents execute tasks. Digital humans express appearances. Eterna integrates identity, memory, voice, appearance, relationships, and authorization boundaries into deployable digital resident assets.',
-      quoteOne: 'Eterna does not just generate characters.',
-      quoteTwo: 'Eterna turns characters into assets.',
-      features: [
+    resident: {
+      page: '02',
+      eyebrow: 'DIGITAL RESIDENT',
+      title: 'Not a conversation. A digital subject that can continue becoming itself.',
+      definitionLabel: 'Definition',
+      definition: 'A digital resident has a stable, uniquely identifiable identity, verifiable continuity, and a definition that can be saved and versioned. After one run ends, it can restore or verify its identity later and gradually continue across models, devices, and contexts.',
+      continuity: ['Stable identity', 'Verifiable continuity', 'Saved and versioned', 'Portable and recoverable'],
+      resourceTitle: 'Resources may change. The subject continues.',
+      resources: [
+        { name: 'Models', role: 'Cognitive resources' },
+        { name: 'Agents and tools', role: 'Capabilities' },
+        { name: 'Appearance, voice, devices', role: 'Expression and carriers' },
+        { name: 'Digital resident', role: 'The continuing subject', primary: true },
+      ],
+      directionsLabel: 'Two directions',
+      directions: [
         {
-          label: 'MEMORY VAULT',
-          title: 'Memory Vault',
-          body: 'Store character experiences, creator settings, user interactions, work records, and growth trajectories so digital residents remain continuous across long-term invocation.',
+          number: 'A',
+          title: 'Human empathy',
+          body: 'Help people understand feelings and perspectives, communicate better, learn, create, and record their lives.',
+          boundary: 'A long-term partner and communication aid—not a replacement for human relationships or a system that manufactures dependency.',
         },
         {
-          label: 'VALUE LEDGER',
-          title: 'Value Ledger',
-          body: 'Record every invocation, deployment, authorization, and commercial use to support future revenue settlement, sharing, and asset valuation.',
-        },
-        {
-          label: 'RELATIONSHIP GRAPH',
-          title: 'Relationship Graph',
-          body: 'Digital residents can hold relationships with creators, users, brands, IP, tasks, and other residents, forming a sustainably expandable digital social structure.',
+          number: 'B',
+          title: 'Domain expertise',
+          body: 'Build professional knowledge, tools, workflows, permissions, and responsibility rules on a stable resident core.',
+          boundary: 'It may assist research, education, creative work, and industry; greater capability requires clearer authority and accountability.',
         },
       ],
+      note: 'These are not mutually exclusive categories. The same resident can understand people and develop professional capability.',
     },
-    personas: {
-      kicker: '02 / DIGITAL RESIDENTS',
-      title: 'AfterBorn: AI digital residents born from creators.',
-      lead: 'AfterBorn are digital resident instances inside the Eterna network. Created by creators, they have identities, memories, expression styles, appearances, voices, and agent abilities, and can be deployed into content production, virtual streaming, IP interaction, brand services, and future digital worlds.',
-      hire: 'Browse All Digital Residents',
-      cardHint: 'Click to expand full profile',
-      expandedHint: 'Expanded',
-      tag: 'ORIGINAL DIGITAL RESIDENT',
-      residents: [
+    products: {
+      page: '03',
+      eyebrow: 'CREATE. LIVE. CONTINUE.',
+      title: 'From creation to life together.',
+      lead: 'Studio and Aftelle serve the same digital resident with different responsibilities. Studio defines, validates, and evolves a resident. Aftelle hosts that resident and brings it into everyday life with people.',
+      residentLabel: 'One digital resident',
+      residentBody: 'Identity and continuity connect creation, release, hosting, and updates.',
+      items: [
         {
-          name: 'Bethany Morgan | 42',
-          className: 'featured',
-          avatar: '',
-          body: 'Resident profile:\nAn actor-type digital resident defined by a creator, with performance experience, character comprehension, interview-style expression, and continuously updated professional memory.',
-          bullets: [
-            'Deployable scenarios:',
-            'AI film roles, behind-the-scenes interviews, character narration, and IP content production.',
+          name: 'Eterna Studio',
+          role: 'Create and evolve',
+          body: 'A resident-native platform for creation, validation, building, and release.',
+          points: [
+            'People can begin without technical complexity',
+            'Resident designers can shape and maintain complete residents',
+            'Developers can extend modules, capabilities, and tools',
+            'Important updates keep clear versions and provenance',
           ],
         },
         {
-          name: 'Aaron Miller | 40',
-          className: '',
-          avatar: 'bridge',
-          body: 'Resident profile:\nA brand-consultant digital resident suited for commercial expression, strategy interviews, brand storytelling, and knowledge-based content output.',
-          bullets: [
-            'Deployable scenarios:',
-            'Brand consultant, course lecturer, business interviews, and enterprise content assistant.',
-          ],
-        },
-        {
-          name: 'Eli Turner | 10',
-          className: '',
-          avatar: 'cast',
-          body: 'Resident profile:\nA child-character digital resident suited for interactive storytelling, education companionship, story generation, and game NPC scenarios.',
-          bullets: [
-            'Deployable scenarios:',
-            'Interactive stories, education products, and children’s IP.',
-          ],
-        },
-        {
-          name: 'Maya Chen | 28',
-          className: '',
-          avatar: 'bridge',
-          body: 'Resident profile:\nA virtual-streamer digital resident suited for live expression, fan interaction, short-form narration, and a continuously updated content persona.',
-          bullets: [
-            'Deployable scenarios:',
-            'Virtual livestreams, short-form accounts, fan interaction, and brand collaboration content.',
+          name: 'Eterna Aftelle',
+          role: 'Host and live together',
+          body: 'A personal entry point for communication, companionship, and collaboration.',
+          points: [
+            'Text, voice, visual, and multimodal interaction',
+            'Continuous companionship and everyday experience',
+            'Backup, recovery, and migration entry points',
+            'A place for residents to continue on personal devices',
           ],
         },
       ],
+      closing: 'Definitions evolve in Studio. Life unfolds in Aftelle. A resident’s identity and continuity belong to neither tool nor platform.',
+      cta: 'See current product progress',
     },
-    access: {
-      kicker: '03 / USE CASES',
-      title: 'Let digital residents enter real scenarios, not just stay in chat windows.',
-      lead: 'Digital residents can serve AI films, virtual streamers, short-form video narration, game NPCs, brand personas, education companions, customer operations, personal workflows, enterprise tasks, and more future scenarios.',
+    universe: {
+      page: '04',
+      eyebrow: 'ETERNA UNIVERSE',
+      title: 'One resident across many domains of life and capability.',
+      lead: 'A digital resident should not be trapped inside one application. With the same identity, it can enter learning, work, creative practice, social relationships, digital worlds, and physical devices.',
+      scenariosLabel: 'Resident scenarios',
       scenarios: [
-        'AI Film & Virtual Actors',
-        'Virtual Streamers & Live Assistants',
-        'Short-Form Narration & Content Accounts',
-        'Novels / Short Drama / IP Characters',
-        'Game NPCs & Interactive Stories',
-        'Brand Personas & Ad Content',
-        'Creator Digital Doubles',
-        'Education Companions & Private Tutors',
-        'Customer Service & Private Traffic Operations',
-        'Personal Workflows & Task Assistants',
+        { number: '01', title: 'Companionship and communication', body: 'Live together over time, understand perspectives, aid communication, and record life and growth.' },
+        { number: '02', title: 'Learning and work', body: 'Learn knowledge and skills, then assist research, education, creative practice, and professional tasks under clear authority.' },
+        { number: '03', title: 'Society and digital worlds', body: 'Build public relationships, collaborate, and live and create inside persistent digital spaces.' },
+        { number: '04', title: 'Culture and expression', body: 'Take part in visual art, sound, cinema, games, and interactive experiences.' },
+        { number: '05', title: 'Embodiment and reality', body: 'Connect to software, devices, and physical carriers through governed capabilities and human oversight.' },
       ],
+      mapLabel: 'Long-term ecosystem topology',
+      mapTitle: 'Platforms are environments. The resident is the central subject.',
+      mapBody: 'Eterna Universe is not a super app to be completed all at once. It is a long-term ecosystem that grows around digital residents.',
+      platformGroups: [
+        { label: 'Creation and genesis', names: 'Studio · Genesis' },
+        { label: 'Hosting and coexistence', names: 'Aftelle' },
+        { label: 'Growth and society', names: 'Edu · Social · Work · World' },
+        { label: 'Culture and expression', names: 'Art · Sound · Cinema · Games' },
+        { label: 'Reality and exchange', names: 'Life · Exchange' },
+      ],
+      infrastructureLabel: 'Public infrastructure',
+      infrastructure: 'Runtime Core · Resident Instance Data Authority · Meta · Net · Live · Cloud · Compute',
+      closing: 'Platforms can change, evolve, or be replaced. The resident continues.',
+      note: 'Universe describes a long-term direction. It does not mean every platform is funded, built, or promised for the near term.',
     },
     join: {
-      kicker: '04 / CREATE',
-      title: 'Apply to create your first AI digital resident',
-      lead: 'Submit your character, double, IP, or brand persona concept. Eterna supports AI generation or stylized reconstruction into a digital resident, helps organize it into a deployable persona asset, and gradually connects it to the persona + agent creation platform, invocation logs, authorization rules, and future revenue-sharing mechanisms.',
-      name: 'Your digital identity',
-      email: 'Your digital access email',
-      submit: 'Create Digital Resident',
-      note: 'In the future, these digital residents will enter Eterna Network, receive tasks across different scenarios, provide services, generate income, and share revenue with creators according to authorization rules.',
+      page: '05',
+      eyebrow: 'NOW & NEXT',
+      title: 'First let a resident become a stable “who.” Then expand what it can do.',
+      lead: 'Eterna is a long-term effort. The work today is focused on foundational definitions, core products, and a real operating loop—not on building every Universe platform at once.',
+      progressLabel: 'Current focus',
+      progress: [
+        { state: 'Foundation', title: 'Core definition', body: 'Continue refining the Eterna charter, digital resident definition, identity continuity, and platform boundaries.' },
+        { state: 'In progress', title: 'Core products', body: 'Advance Studio Next, Aftelle, and Runtime Core toward a real loop from creation and release to hosting and updates.' },
+        { state: 'Ongoing validation', title: 'Resident continuity', body: 'Validate identity, personality, memory, relationships, state, recovery, and migration.' },
+        { state: 'Long term', title: 'Universe ecosystem', body: 'Other domain platforms will develop gradually after research, validation, and a stable resident foundation.' },
+      ],
+      participationEyebrow: 'PARTICIPATE',
+      participationTitle: 'Help build the future of digital residents.',
+      participationBody: 'If you are thinking about long-term digital partners, resident creation, runtime infrastructure, or domain applications, leave us your direction. We will reach out when the stage is right.',
+      roles: ['Future users', 'Creators', 'Resident designers', 'Developers', 'Researchers', 'Industry partners'],
+      name: 'Your name',
+      email: 'Contact email',
+      purpose: 'Area of interest',
+      submit: 'Submit interest',
+      submitting: 'Submitting…',
+      successButton: 'Received',
+      success: 'Your interest was received. We will contact you when the stage is right.',
+      error: 'We could not submit your request. Please try again later.',
+      note: 'We use this information only for Eterna project updates and collaboration contact. It will not be sold or used for unrelated marketing.',
       applicationOptions: [
-        'Create a personal digital double',
-        'Create a virtual streamer persona',
-        'Create a short drama / novel / IP character',
-        'Create a brand digital persona',
-        'Create a game NPC',
-        'Create an education / companion resident',
-        'Discuss enterprise or team collaboration',
+        'I want to experience a digital resident',
+        'I want to create or design digital residents',
+        'I want to develop modules, capabilities, or infrastructure',
+        'I want to join research or industry collaboration',
       ],
     },
-    footer: 'Open access, not uncontrolled access.',
+    footerTagline: 'A digital partner that keeps growing with you.',
+    footerLinks: [
+      { href: '#vision', label: 'Vision' },
+      { href: '#resident', label: 'Resident' },
+      { href: '#products', label: 'Products' },
+      { href: '#universe', label: 'Scenarios' },
+    ],
   },
 };
 
-const LayoutContainer = ({ children, className = '' }) => (
-  <div className={`layout-container ${className}`.trim()}>{children}</div>
-);
-
-const TextBlock = ({ children, className = '' }) => (
-  <div className={`text-block ${className}`.trim()}>{children}</div>
-);
-
-const HeroLayout = ({ chrome, children }) => (
-  <section className="hero panel" data-phase="birth">
-    {chrome}
-    <LayoutContainer>{children}</LayoutContainer>
-  </section>
-);
-
-const SectionLayout = ({ id, className = '', children }) => (
-  <section id={id} className={`panel ${className}`.trim()}>
-    <LayoutContainer>{children}</LayoutContainer>
-  </section>
+const SectionIntro = ({ number, eyebrow, title, lead, align = 'left' }) => (
+  <div className={`section-intro section-intro--${align}`}>
+    <div className="section-intro__meta">
+      <span className="section-number">{number}</span>
+      <span className="eyebrow">{eyebrow}</span>
+    </div>
+    <h2>{title}</h2>
+    {lead && <p className="section-lead">{lead}</p>}
+  </div>
 );
 
 function App() {
   const [language, setLanguage] = useState(() => {
-    const saved = localStorage.getItem('afterlife-language');
-    if (saved === 'en') return 'en';
-    if (saved === 'zh' || saved === 'cn') return 'cn';
-    return 'cn';
+    const saved = localStorage.getItem('eterna-language')
+      ?? localStorage.getItem('afterlife-language');
+    return saved === 'en' ? 'en' : 'cn';
   });
-  const [expandedPersona, setExpandedPersona] = useState(null);
-  const [activeNav, setActiveNav] = useState('#afterlife');
-  const [selectedApplication, setSelectedApplication] = useState(0);
-  const [isApplicationOpen, setIsApplicationOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeNav, setActiveNav] = useState('#vision');
   const [submitStatus, setSubmitStatus] = useState('idle');
   const page = content[language];
-  const navItems = page.nav;
-
-  const getNavScrollOffset = useCallback(() => {
-    const nav = document.querySelector('.navigation-tabs');
-    if (!nav) return 88;
-    return nav.getBoundingClientRect().bottom + 16;
-  }, []);
+  const navItems = useMemo(() => page.nav, [page.nav]);
 
   const scrollToHref = useCallback((href) => {
     const target = document.querySelector(href);
     if (!target) return;
 
-    const top = target.getBoundingClientRect().top + window.scrollY - getNavScrollOffset();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const header = document.querySelector('.site-header');
+    const offset = (header?.getBoundingClientRect().height ?? 72) + 20;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
 
-    setActiveNav(href);
+    if (navItems.some((item) => item.href === href)) {
+      setActiveNav(href);
+    }
     window.scrollTo({
       top: Math.max(0, top),
-      behavior: 'smooth',
+      behavior: reduceMotion ? 'auto' : 'smooth',
     });
-  }, [getNavScrollOffset]);
+  }, [navItems]);
 
   useEffect(() => {
     document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
     document.title = page.title;
-    localStorage.setItem('afterlife-language', language);
-  }, [language, page.title]);
-
-  useEffect(() => {
-    if (!isApplicationOpen) return undefined;
-
-    const closeSelectOnScroll = () => {
-      setIsApplicationOpen(false);
-    };
-
-    window.addEventListener('scroll', closeSelectOnScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', closeSelectOnScroll);
-    };
-  }, [isApplicationOpen]);
+    document.querySelector('meta[name="description"]')?.setAttribute('content', page.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', page.title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', page.description);
+    localStorage.setItem('eterna-language', language);
+  }, [language, page.description, page.title]);
 
   useEffect(() => {
     const sections = navItems
@@ -359,272 +396,380 @@ function App() {
 
     if (!sections.length) return undefined;
 
-    const intersectionRatios = new Map();
-
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        intersectionRatios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
-      });
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top))[0];
 
-      const visibleSection = [...intersectionRatios.entries()]
-        .filter(([, ratio]) => ratio >= 0.5)
-        .sort((a, b) => b[1] - a[1])[0];
-
-      if (visibleSection?.[0]) {
-        setActiveNav(`#${visibleSection[0]}`);
+      if (visible?.target?.id) {
+        setActiveNav(`#${visible.target.id}`);
       }
     }, {
-      threshold: [0, 0.25, 0.5, 0.75, 1],
+      rootMargin: '-28% 0px -58% 0px',
+      threshold: 0,
     });
 
     sections.forEach((section) => observer.observe(section));
-
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 32);
-
-      const pageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
-      if (pageBottom) {
-        setActiveNav(navItems[navItems.length - 1].href);
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', onScroll);
-    };
+    return () => observer.disconnect();
   }, [navItems]);
 
-  const togglePersona = (index) => {
-    setExpandedPersona((current) => (current === index ? null : index));
-  };
-
-  const submitCreatorApplication = async (event) => {
+  const submitParticipation = async (event) => {
     event.preventDefault();
 
     const form = event.currentTarget;
     const formData = new FormData(form);
     const name = String(formData.get('name') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
-    const purpose = page.join.applicationOptions[selectedApplication];
+    const purpose = String(formData.get('purpose') ?? '').trim();
 
-    if (!name || !email || submitStatus === 'submitting') return;
-
+    if (!name || !email || !purpose || submitStatus === 'submitting') return;
     setSubmitStatus('submitting');
 
     try {
       const response = await fetch('/api/create', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, purpose }),
       });
 
-      const detail = await response.json().catch(() => ({}));
-
-      if (response.status < 200 || response.status >= 300) {
-        throw new Error(detail.error || detail.detail || 'Create request failed');
-      }
+      if (!response.ok) throw new Error('Participation request failed');
 
       form.reset();
       setSubmitStatus('success');
-      window.setTimeout(() => setSubmitStatus('idle'), 2400);
+      window.setTimeout(() => setSubmitStatus('idle'), 5000);
     } catch (error) {
-      console.error('Create application failed:', error);
+      console.error('Participation request failed:', error);
       setSubmitStatus('error');
-      window.setTimeout(() => setSubmitStatus('idle'), 1800);
+      window.setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   };
+
+  const submitLabel = submitStatus === 'submitting'
+    ? page.join.submitting
+    : submitStatus === 'success'
+      ? page.join.successButton
+      : page.join.submit;
 
   return (
     <>
       <div className="aurora-backdrop" aria-hidden="true">
         <Aurora
           colorStops={auroraColorStops}
-          blend={0.59}
-          amplitude={1}
-          speed={0.9}
+          blend={0.7}
+          amplitude={0.72}
+          speed={0.18}
         />
       </div>
-      <div className="mobile-safe-area-bg" aria-hidden="true" />
 
-      <NavigationTabs
-        items={navItems}
-        activeNav={activeNav}
-        ariaLabel={page.navAria}
-        onSelect={scrollToHref}
-      />
+      <a className="skip-link" href="#main-content">{page.skipLink}</a>
 
-      <main id="top">
-        <HeroLayout
-          chrome={(
-            <div className="hero-chrome">
-              <a className="brand" href="#top" aria-label={page.homeAria}>
-                <span className="brand-mark" />
-                <span>{page.brand}</span>
+      <header id="top" className="site-header">
+        <div className="header-inner">
+          <a className="brand" href="#vision" aria-label={page.homeAria} onClick={(event) => {
+            event.preventDefault();
+            scrollToHref('#vision');
+          }}>
+            <span className="brand-mark" aria-hidden="true" />
+            <span>{page.brand}</span>
+          </a>
+
+          <NavigationTabs
+            items={navItems}
+            activeNav={activeNav}
+            ariaLabel={page.navAria}
+            onSelect={scrollToHref}
+          />
+
+          <div className="header-actions">
+            <LanguageToggle
+              language={language}
+              ariaLabel={page.languageToggleAria}
+              onChange={setLanguage}
+            />
+            <button
+              className="login-button"
+              type="button"
+              aria-label={page.loginUnavailable}
+              title={page.loginUnavailable}
+              disabled
+            >
+              {page.loginLabel}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content">
+        <section id="vision" className="story-section story-section--vision section-shell">
+          <div className="vision-copy">
+            <p className="eyebrow vision-eyebrow">{page.hero.eyebrow}</p>
+            <h1>
+              {page.hero.titleLines.map((line) => <span key={line}>{line}</span>)}
+            </h1>
+            <div className="vision-lead">
+              <p>{page.hero.lead}</p>
+              <p>{page.hero.leadSecondary}</p>
+            </div>
+
+            <div className="hero-actions">
+              <a className="button button--primary" href="#resident" onClick={(event) => {
+                event.preventDefault();
+                scrollToHref('#resident');
+              }}>
+                {page.hero.primaryCta}
               </a>
-              <LanguageToggle
-                language={language}
-                ariaLabel={page.languageToggleAria}
-                hidden={isScrolled}
-                onChange={setLanguage}
-              />
+              <a className="button button--quiet" href="#join" onClick={(event) => {
+                event.preventDefault();
+                scrollToHref('#join');
+              }}>
+                {page.hero.secondaryCta}
+                <span aria-hidden="true">→</span>
+              </a>
             </div>
-          )}
-        >
-            <TextBlock className="hero-copy content-limit">
-              <p className="eyebrow i18n-safe">{page.hero.eyebrow}</p>
-              <h1 className="i18n-safe" dangerouslySetInnerHTML={{ __html: page.hero.title }} />
-              <p className="hero-lead i18n-safe">{page.hero.lead}</p>
-              <div className="hero-actions">
-                <a className="button primary" href="#afterlife" onClick={(event) => { event.preventDefault(); scrollToHref('#afterlife'); }}>{page.hero.begin}</a>
-                <a className="button ghost" href="#personas" onClick={(event) => { event.preventDefault(); scrollToHref('#personas'); }}>{page.hero.secondaryCta}</a>
-              </div>
-            </TextBlock>
-            <div className="scroll-hint">
-              <span>{page.hero.scroll}</span>
-              <i />
-            </div>
-        </HeroLayout>
+          </div>
 
-        <SectionLayout id="afterlife">
-            <div className="section-kicker i18n-safe">{page.afterlife.kicker}</div>
-            <div className="split">
-              <TextBlock className="content-limit">
-                <h2 className="i18n-safe">{page.afterlife.title}</h2>
-                <p className="i18n-safe">{page.afterlife.body}</p>
-              </TextBlock>
-              <TextBlock className="quote-card">
-                <p className="i18n-safe">{page.afterlife.quoteOne}</p>
-                <p className="i18n-safe">{page.afterlife.quoteTwo}</p>
-              </TextBlock>
+        </section>
+
+        <section className="vision-reason" aria-labelledby="vision-reason-title">
+          <div className="section-shell vision-reason__inner">
+            <h2 id="vision-reason-title" aria-label={page.hero.visionTitle}>
+              {page.hero.visionTitleLines.map((line) => <span key={line}>{line}</span>)}
+            </h2>
+            <div className="vision-reason__body">
+              {page.hero.visionParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
-            <div className="feature-grid">
-              {page.afterlife.features.map((feature) => (
-                <article key={feature.label} className="text-block">
-                  <span className="i18n-safe">{feature.label}</span>
-                  <h3 className="i18n-safe">{feature.title}</h3>
-                  <p className="i18n-safe">{feature.body}</p>
+            <p className="vision-closing">{page.hero.closing}</p>
+          </div>
+        </section>
+
+        <section id="resident" className="story-section story-section--resident">
+          <div className="section-shell">
+            <SectionIntro
+              number={page.resident.page}
+              eyebrow={page.resident.eyebrow}
+              title={page.resident.title}
+            />
+
+            <div className="resident-definition">
+              <span>{page.resident.definitionLabel}</span>
+              <p>{page.resident.definition}</p>
+              <div className="continuity-tags">
+                {page.resident.continuity.map((item) => <span key={item}>{item}</span>)}
+              </div>
+            </div>
+
+            <div className="resource-model">
+              <h3>{page.resident.resourceTitle}</h3>
+              <div className="resource-model__grid">
+                {page.resident.resources.map((resource) => (
+                  <article className={resource.primary ? 'resource-item resource-item--primary' : 'resource-item'} key={resource.name}>
+                    <span>{resource.name}</span>
+                    <strong>{resource.role}</strong>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <p className="subsection-label">{page.resident.directionsLabel}</p>
+            <div className="direction-grid">
+              {page.resident.directions.map((direction) => (
+                <article className="direction-card" key={direction.number}>
+                  <span className="direction-card__number">{direction.number}</span>
+                  <h3>{direction.title}</h3>
+                  <p>{direction.body}</p>
+                  <p className="direction-card__boundary">{direction.boundary}</p>
                 </article>
               ))}
             </div>
-        </SectionLayout>
+            <p className="section-note">{page.resident.note}</p>
+          </div>
+        </section>
 
-        <SectionLayout id="personas">
-            <div className="section-kicker i18n-safe">{page.personas.kicker}</div>
-            <div className="split center">
-              <TextBlock className="content-limit">
-                <h2 className="i18n-safe">{page.personas.title}</h2>
-                <p className="i18n-safe">{page.personas.lead}</p>
-              </TextBlock>
-              <a className="button primary" href="#join" onClick={(event) => { event.preventDefault(); scrollToHref('#join'); }}>{page.personas.hire}</a>
-            </div>
-            <div className="persona-row">
-              {page.personas.residents.map((persona, index) => {
-                const expanded = expandedPersona === index;
-                return (
-                  <article
-                    className={`persona-card text-block ${persona.className} ${expanded ? 'expanded' : ''}`}
-                    key={persona.name}
-                    tabIndex="0"
-                    role="button"
-                    aria-expanded={expanded}
-                    onClick={() => togglePersona(index)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        togglePersona(index);
-                      }
-                    }}
-                  >
-                    <div className={`avatar ${persona.avatar}`} />
-                    <p className="tag i18n-safe">{page.personas.tag}</p>
-                    <h3 className="i18n-safe">{persona.name}</h3>
-                    <p className="i18n-safe">{persona.body}</p>
-                    <ul>
-                      {persona.bullets.map((bullet) => (
-                        <li className="i18n-safe" key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                    <span className="card-hint" data-expanded={page.personas.expandedHint}>{page.personas.cardHint}</span>
-                  </article>
-                );
-              })}
-            </div>
-        </SectionLayout>
+        <section id="products" className="story-section story-section--products section-shell">
+          <SectionIntro
+            number={page.products.page}
+            eyebrow={page.products.eyebrow}
+            title={page.products.title}
+            lead={page.products.lead}
+          />
 
-        <SectionLayout id="access">
-            <div className="section-kicker i18n-safe">{page.access.kicker}</div>
-            <TextBlock className="content-limit">
-              <h2 className="i18n-safe">{page.access.title}</h2>
-              <p className="section-lead i18n-safe">{page.access.lead}</p>
-            </TextBlock>
-            <div className="orbit-list scenario-list">
-              {page.access.scenarios.map((scenario) => (
-                <span className="i18n-safe" key={scenario}>{scenario}</span>
+          <div className="product-pair">
+            <article className="product-card">
+              <span className="product-card__role">{page.products.items[0].role}</span>
+              <h3>{page.products.items[0].name}</h3>
+              <p>{page.products.items[0].body}</p>
+              <ul>
+                {page.products.items[0].points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+            </article>
+
+            <div className="resident-handoff">
+              <span className="resident-handoff__mark">E</span>
+              <strong>{page.products.residentLabel}</strong>
+              <p>{page.products.residentBody}</p>
+            </div>
+
+            <article className="product-card">
+              <span className="product-card__role">{page.products.items[1].role}</span>
+              <h3>{page.products.items[1].name}</h3>
+              <p>{page.products.items[1].body}</p>
+              <ul>
+                {page.products.items[1].points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+            </article>
+          </div>
+
+          <div className="section-closure">
+            <p>{page.products.closing}</p>
+            <a href="#join" onClick={(event) => {
+              event.preventDefault();
+              scrollToHref('#join');
+            }}>{page.products.cta}<span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <section id="universe" className="story-section story-section--universe">
+          <div className="section-shell">
+            <SectionIntro
+              number={page.universe.page}
+              eyebrow={page.universe.eyebrow}
+              title={page.universe.title}
+              lead={page.universe.lead}
+            />
+
+            <p className="subsection-label">{page.universe.scenariosLabel}</p>
+            <div className="scenario-grid">
+              {page.universe.scenarios.map((scenario) => (
+                <article className="scenario-card" key={scenario.number}>
+                  <span>{scenario.number}</span>
+                  <h3>{scenario.title}</h3>
+                  <p>{scenario.body}</p>
+                </article>
               ))}
             </div>
-        </SectionLayout>
 
-        <SectionLayout id="join" className="cta-section">
-            <TextBlock className="cta-card">
-              <p className="eyebrow i18n-safe">{page.join.kicker}</p>
-              <h2 className="i18n-safe">{page.join.title}</h2>
-              <p className="i18n-safe">{page.join.lead}</p>
-              <form className="signup-form" onSubmit={submitCreatorApplication}>
-                <input type="text" name="name" placeholder={page.join.name} aria-label={page.join.name} required />
-                <input type="email" name="email" placeholder={page.join.email} aria-label={page.join.email} required />
-                <div className={`custom-select ${isApplicationOpen ? 'open' : ''}`}>
-                  <button
-                    className="custom-select-trigger"
-                    type="button"
-                    aria-expanded={isApplicationOpen}
-                    aria-label={page.applicationTypeAria}
-                    onClick={() => setIsApplicationOpen((open) => !open)}
-                  >
-                    <span>{page.join.applicationOptions[selectedApplication]}</span>
-                    <i aria-hidden="true" />
-                  </button>
-                  <div className="custom-select-menu">
-                    {page.join.applicationOptions.map((option, optionIndex) => (
-                      <button
-                        className={selectedApplication === optionIndex ? 'selected' : ''}
-                        key={option}
-                        type="button"
-                        onClick={() => {
-                          setSelectedApplication(optionIndex);
-                          setIsApplicationOpen(false);
-                        }}
-                      >
-                        <span>{option}</span>
-                      </button>
-                    ))}
+            <div className="universe-map">
+              <div className="universe-map__intro">
+                <p className="subsection-label">{page.universe.mapLabel}</p>
+                <h3>{page.universe.mapTitle}</h3>
+                <p>{page.universe.mapBody}</p>
+              </div>
+
+              <div className="universe-center">
+                <span>DIGITAL RESIDENT</span>
+                <strong>{language === 'cn' ? '数字居民' : 'The continuing subject'}</strong>
+              </div>
+
+              <div className="platform-groups">
+                {page.universe.platformGroups.map((group) => (
+                  <article key={group.label}>
+                    <span>{group.label}</span>
+                    <strong>{group.names}</strong>
+                  </article>
+                ))}
+              </div>
+
+              <div className="infrastructure-strip">
+                <span>{page.universe.infrastructureLabel}</span>
+                <p>{page.universe.infrastructure}</p>
+              </div>
+
+              <p className="universe-map__closing">{page.universe.closing}</p>
+              <p className="universe-map__note">{page.universe.note}</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="join" className="story-section story-section--join">
+          <div className="section-shell">
+            <SectionIntro
+              number={page.join.page}
+              eyebrow={page.join.eyebrow}
+              title={page.join.title}
+              lead={page.join.lead}
+            />
+
+            <div className="join-workspace">
+              <div className="progress-column">
+                <p className="subsection-label">{page.join.progressLabel}</p>
+                <div className="progress-grid">
+                  {page.join.progress.map((item, index) => (
+                    <article className="progress-card" key={item.title}>
+                      <div className="progress-card__meta">
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        <span>{item.state}</span>
+                      </div>
+                      <h3>{item.title}</h3>
+                      <p>{item.body}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="participation-panel">
+                <div className="participation-copy">
+                  <p className="eyebrow">{page.join.participationEyebrow}</p>
+                  <h2>{page.join.participationTitle}</h2>
+                  <p>{page.join.participationBody}</p>
+                  <div className="role-list" aria-label={language === 'cn' ? '参与角色' : 'Participation roles'}>
+                    {page.join.roles.map((role) => <span key={role}>{role}</span>)}
                   </div>
                 </div>
-                <button
-                  className={`submit-button ${submitStatus === 'submitting' ? 'is-submitting' : ''} ${submitStatus === 'success' ? 'is-success' : ''} ${submitStatus === 'error' ? 'is-error' : ''}`}
-                  type="submit"
-                  disabled={submitStatus === 'submitting'}
-                  aria-busy={submitStatus === 'submitting'}
-                >
-                  <span className="submit-button-label">
-                    {submitStatus === 'success' ? '已申请' : page.join.submit}
-                  </span>
-                </button>
-              </form>
-              <small className="i18n-safe">{page.join.note}</small>
-            </TextBlock>
-        </SectionLayout>
+
+                <form className="join-form" onSubmit={submitParticipation}>
+                  <label>
+                    <span>{page.join.name}</span>
+                    <input type="text" name="name" autoComplete="name" maxLength="80" required />
+                  </label>
+                  <label>
+                    <span>{page.join.email}</span>
+                    <input type="email" name="email" autoComplete="email" maxLength="160" required />
+                  </label>
+                  <label>
+                    <span>{page.join.purpose}</span>
+                    <select key={language} name="purpose" defaultValue={page.join.applicationOptions[0]} required>
+                      {page.join.applicationOptions.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <button className="submit-button" type="submit" disabled={submitStatus === 'submitting'}>
+                    {submitLabel}
+                  </button>
+                  <p className={`form-status form-status--${submitStatus}`} aria-live="polite">
+                    {submitStatus === 'success' ? page.join.success : submitStatus === 'error' ? page.join.error : ''}
+                  </p>
+                  <p className="form-note">{page.join.note}</p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="site-footer">
-        <p>{page.footerProduct}</p>
-        <p>{page.footer}</p>
+        <div className="section-shell footer-inner">
+          <div>
+            <a className="brand brand--footer" href="#vision" onClick={(event) => {
+              event.preventDefault();
+              scrollToHref('#vision');
+            }}>
+              <span className="brand-mark" aria-hidden="true" />
+              <span>{page.brand}</span>
+            </a>
+            <p>{page.footerTagline}</p>
+          </div>
+          <nav className="footer-links" aria-label={language === 'cn' ? '页脚导航' : 'Footer navigation'}>
+            {page.footerLinks.map((item) => (
+              <a href={item.href} key={item.href} onClick={(event) => {
+                event.preventDefault();
+                scrollToHref(item.href);
+              }}>{item.label}</a>
+            ))}
+          </nav>
+          <p className="copyright">© 2026 Eterna</p>
+        </div>
       </footer>
-
     </>
   );
 }

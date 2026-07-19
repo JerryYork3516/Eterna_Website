@@ -19,15 +19,6 @@ const missingEnv = (env) => Object.entries(env)
 
 const sendJson = (res, status, payload) => res.status(status).json(payload);
 
-const readAirtableError = async (response) => {
-  const text = await response.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -40,16 +31,6 @@ export default async function handler(req, res) {
   const nameField = process.env.AIRTABLE_NAME_FIELD;
   const emailField = process.env.AIRTABLE_EMAIL_FIELD;
   const purposeField = process.env.AIRTABLE_PURPOSE_FIELD;
-
-  console.log('Airtable env status:', {
-    hasApiKey: Boolean(apiKey),
-    apiKeyLength: apiKey?.length ?? 0,
-    hasBaseId: Boolean(baseId),
-    tableName,
-    nameField,
-    emailField,
-    purposeField,
-  });
 
   const missing = missingEnv({
     AIRTABLE_API_KEY: apiKey,
@@ -67,21 +48,15 @@ export default async function handler(req, res) {
     });
   }
 
-  console.log('create request body:', req.body);
-
   const body = readBody(req.body);
   const { name, email, purpose } = body;
   const trimmedName = typeof name === 'string' ? name.trim() : '';
   const trimmedEmail = typeof email === 'string' ? email.trim() : '';
   const trimmedPurpose = typeof purpose === 'string' ? purpose.trim() : '';
 
-  if (!trimmedName || !trimmedEmail) {
+  if (!trimmedName || !trimmedEmail || !trimmedPurpose || trimmedName.length > 80 || trimmedEmail.length > 160 || trimmedPurpose.length > 160) {
     return sendJson(res, 400, {
-      error: 'Name and email are required',
-      detail: {
-        receivedName: Boolean(trimmedName),
-        receivedEmail: Boolean(trimmedEmail),
-      },
+      error: 'Invalid application fields',
     });
   }
 
@@ -106,11 +81,8 @@ export default async function handler(req, res) {
     });
 
     if (!airtableResponse.ok) {
-      const detail = await readAirtableError(airtableResponse);
-      console.log('Airtable create failed:', detail);
       return sendJson(res, airtableResponse.status, {
         error: 'Failed to create Airtable record',
-        detail,
       });
     }
 
@@ -119,11 +91,9 @@ export default async function handler(req, res) {
       ok: true,
       id: result?.records?.[0]?.id,
     });
-  } catch (error) {
-    console.log('Airtable request error:', error);
+  } catch {
     return sendJson(res, 500, {
       error: 'Airtable request failed',
-      detail: error instanceof Error ? error.message : String(error),
     });
   }
 }

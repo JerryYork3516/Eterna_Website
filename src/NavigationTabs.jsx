@@ -26,9 +26,10 @@ const NavigationTabs = ({ items, activeNav, ariaLabel, onSelect }) => {
     const tab = tabRefs.current[activeNav];
     if (!nav || !tab) return;
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     nav.scrollTo({
       left: tab.offsetLeft - (nav.clientWidth - tab.offsetWidth) / 2,
-      behavior: 'smooth',
+      behavior: reduceMotion ? 'auto' : 'smooth',
     });
   }, [activeNav, items]);
 
@@ -64,7 +65,7 @@ const NavigationTabs = ({ items, activeNav, ariaLabel, onSelect }) => {
       />
       {items.map((item) => (
         <a
-          aria-current={activeNav === item.href ? 'page' : undefined}
+          aria-current={activeNav === item.href ? 'location' : undefined}
           className={`navigation-tab nav-item i18n-safe ${activeNav === item.href ? 'active' : ''}`}
           href={item.href}
           key={item.href}

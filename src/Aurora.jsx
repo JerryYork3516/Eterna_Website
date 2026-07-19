@@ -172,9 +172,10 @@ export default function Aurora(props) {
     const mesh = new Mesh(gl, { geometry, program });
     container.appendChild(gl.canvas);
 
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let animationId = 0;
-    const update = (time) => {
-      animationId = requestAnimationFrame(update);
+
+    const renderFrame = (time = 0) => {
       const currentProps = propsRef.current;
       const stops = currentProps.colorStops ?? colorStops;
       program.uniforms.uTime.value = (currentProps.time ?? time * 0.01) * (currentProps.speed ?? 1.0) * 0.1;
@@ -187,12 +188,31 @@ export default function Aurora(props) {
       renderer.render({ scene: mesh });
     };
 
+    const update = (time) => {
+      renderFrame(time);
+      animationId = requestAnimationFrame(update);
+    };
+
+    const syncAnimation = () => {
+      cancelAnimationFrame(animationId);
+      if (motionQuery.matches || document.hidden) {
+        renderFrame(0);
+        return;
+      }
+      animationId = requestAnimationFrame(update);
+    };
+
     resize();
-    animationId = requestAnimationFrame(update);
+    renderFrame(0);
+    syncAnimation();
+    document.addEventListener('visibilitychange', syncAnimation);
+    motionQuery.addEventListener?.('change', syncAnimation);
 
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', syncAnimation);
+      motionQuery.removeEventListener?.('change', syncAnimation);
       if (gl.canvas.parentNode === container) {
         container.removeChild(gl.canvas);
       }
