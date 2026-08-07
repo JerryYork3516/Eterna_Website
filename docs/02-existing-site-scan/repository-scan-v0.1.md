@@ -4,7 +4,7 @@
 
 文档性质：Website 1.0 Node 2 旧网站、仓库与现有资产事实快照
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS`
 
 扫描日期：`2026-08-07`（Asia/Shanghai）
 
@@ -102,7 +102,7 @@ Eterna_Website/
 | UI Framework | React | `legacy/package.json`、`legacy/src/main.jsx` |
 | Build / Dev Runtime | Vite | `legacy/package.json`、`legacy/vite.config.js` |
 | Browser rendering | React DOM `createRoot`，外层使用 `StrictMode` | `legacy/src/main.jsx` |
-| WebGL library | OGL | `legacy/src/Aurora.jsx` |
+| 第三方运行时依赖 / WebGL 库 | OGL | `legacy/src/Aurora.jsx` |
 | Node requirement | Node.js `>=20` | `legacy/package.json` |
 | Module format | ES modules，`type: module` | `legacy/package.json` |
 | Languages | JavaScript、JSX、CSS、HTML；Aurora 中内嵌 GLSL ES 3.00 vertex / fragment shader | `legacy/` 源码 |
@@ -153,9 +153,11 @@ npm run preview  -> vite preview
 - 根组件：`legacy/src/App.jsx`
 - 本地构建入口：`legacy/dist/index.html`
 
-没有多个 HTML 页面，没有 pathname 路由定义，也没有 React Router。页面内部使用 hash anchor 和 JavaScript 平滑滚动。
+未发现 React Router 或基于 pathname 的多页面路由。当前页面内部使用 hash anchor 和 JavaScript 平滑滚动。
 
-### 4.2 路由与锚点
+### 4.2 Hash 导航锚点 / 页面 Section
+
+当前共有 5 个主要 hash 导航锚点 / 页面 Section：
 
 | 入口 | 中文导航标签 | 英文导航标签 | 对应内容 |
 | --- | --- | --- | --- |
@@ -302,12 +304,10 @@ CSS 使用 `safe-area-inset-*` 环境变量适配设备安全区。移动 Header
 | 服务 / 类型 | 用途 | 调用或声明位置 | 当前代码引用事实 |
 | --- | --- | --- | --- |
 | Airtable REST API | 保存参与意向表单记录 | `legacy/api/create.js` | 是；handler 直接 fetch `https://api.airtable.com/v0/...` |
-| OGL | Aurora WebGL renderer 与 shader program | `legacy/src/Aurora.jsx`、npm dependency | 是；由 `App` 渲染 |
-| npm registry | 安装 package-lock 中的依赖 | `legacy/package-lock.json` | 仅包安装元数据，不是页面运行时 API |
-| Analytics | 未发现 analytics SDK、script 或调用 | 全仓库源码与 HTML 搜索 | 否 |
-| Vercel | 未发现 `vercel.json`、Vercel dependency 或 Vercel 专有配置 | 全仓库配置扫描 | 无显式配置；API handler 使用常见 serverless `req` / `res` 形状 |
-| 外部字体 / CDN | 未发现 font link、`@font-face`、远程媒体 URL 或 CDN script | `legacy/index.html`、CSS、React 源码 | 否 |
-| 其他 SaaS | 未发现 Sentry、PostHog、Segment、Mixpanel、Stripe、Supabase、Firebase、Netlify 或 Cloudflare 调用 | 全仓库源码搜索 | 否 |
+
+除 Airtable REST API 外，当前代码中未发现其他实际 SaaS / API 调用。未发现 Analytics SDK、外部字体或媒体 CDN；未发现 Vercel 专有配置；未发现 Sentry、PostHog、Segment、Mixpanel、Stripe、Supabase、Firebase、Netlify 或 Cloudflare 调用。
+
+OGL 1.0.11 属于第三方运行时依赖 / WebGL 库，不属于外部服务。npm registry URL 只存在于 package-lock 安装元数据中，也不属于页面运行时外部服务。
 
 前端通过 `/api/create` 路径调用表单 API，但源码没有 import `legacy/api/create.js`；两者通过 HTTP 路径关联。
 
@@ -425,4 +425,4 @@ React 在语言切换时更新 document title、description、`og:title` 和 `og
 - 当前线上页面是否与 `legacy/` 源码相同；
 - `.DS_Store` 二进制内容的业务用途；源码没有引用这些文件。
 
-当前文档状态：`REVIEW_REQUIRED`
+Node 2 最终状态：`PASS`

@@ -4,7 +4,7 @@
 
 文档性质：Website 1.0 Node 2 内容与媒体资产事实清单
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS`
 
 扫描日期：`2026-08-07`（Asia/Shanghai）
 
@@ -185,4 +185,4 @@ Aurora 使用一个运行时创建的 `<canvas>`，没有对应的图片、视�
 - 当前线上部署是否加载仓库外 CDN 或平台注入资产无法从仓库确认；
 - `assets/` 与 `references/` 目录当前只有占位文件，未来用途不在 Node 2 中推定。
 
-当前文档状态：`REVIEW_REQUIRED`
+Node 2 最终状态：`PASS`
