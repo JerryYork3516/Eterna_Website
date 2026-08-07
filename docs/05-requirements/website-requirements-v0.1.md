@@ -4,7 +4,7 @@
 
 文档性质：Website 1.0 Node 5 需求规格
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS`
 
 编制日期：`2026-08-07`（Asia/Shanghai）
 
@@ -343,8 +343,8 @@ Node 1 已登记的 Aftelle Product North Star、品牌规范、当前产品能�
 | `AC-08` | GAP-01 与 GAP-02 保持登记，未被推测内容填补。 |
 | `AC-09` | 文档没有决定页面、导航、URL、视觉、技术栈、CMS、Hosting、Analytics、API 架构或开发计划。 |
 | `AC-10` | 未发现与 Node 1–4 的实质冲突；若人工审核发现冲突，以 Node 1 为最高优先级退回修正。 |
-| `AC-11` | 文档状态保持 `REVIEW_REQUIRED`，等待人工审核，不自行标记 PASS。 |
+| `AC-11` | 文档已经完成人工审核，状态同步为 `PASS`。 |
 
 ---
 
-Node 5 最终状态：`REVIEW_REQUIRED`
+Node 5 最终状态：`PASS`
