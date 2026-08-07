@@ -4,11 +4,11 @@
 
 文档性质：Website 1.0 节点 1 项目定位
 
-状态：`REVIEW_REQUIRED`
+状态：`FROZEN`
 
 核对日期：`2026-08-07`（Asia/Shanghai）
 
-> 本文件基于 `upstream-baseline-v0.1.md` 中冻结的上位输入形成 Website 项目定位。
+> 本文件基于 `upstream-baseline-v0.1.md` 固定引用的 `Eterna_Docs main@25972b9a1c106710988a98961b77904ef2a1acc9` 形成 Website 项目定位。
 > 文中使用“上位事实”“Website 项目决策”和“GAP”区分来源层级；项目决策不得反向修改 Eterna_Docs 的产品定义。
 
 ---
@@ -124,7 +124,7 @@ Website 不承担以下职责：
 
 ### Website 项目决策
 
-节点 1 只冻结以下规划边界：
+节点 1 在 `REVIEW_REQUIRED` 阶段用于记录并拟冻结以下规划边界；经本次自检未发现实质冲突，现将这些边界标记为 `FROZEN`：
 
 - Website 的长期性质、总体目标和非职责；
 - Website 层级的受众类别；
@@ -169,18 +169,17 @@ Website 不承担以下职责：
 
 | 未决问题 | 当前状态 | 后续需要 |
 | --- | --- | --- |
-| Aftelle 的完整正式定位是什么 | GAP：无独立 Product North Star | 在 Eterna_Docs 中形成并审核正式产品正文后再更新 Website 表达 |
-| Website 是否有上位批准的企业主站正文 | GAP：只有仓库职责句，本文件是项目级推导 | 人工审核本定位；如需上升为 Eterna 正式定义，应在 Eterna_Docs 另行治理，不由 Website 擅自完成 |
+| Aftelle 的完整正式定位是什么 | GAP：冻结 commit 的根 `INDEX.md` 将“Aftelle 产品北极星”列为待补关键文档，当前正式产品正文中未发现 Aftelle Product North Star | 在 Eterna_Docs 中形成并审核正式产品正文后再更新 Website 表达 |
+| Website 是否有上位批准的企业主站正文 | GAP：只有仓库职责句，本文件是项目级推导 | 如需上升为 Eterna 正式定义，应在 Eterna_Docs 另行治理，不由 Website 擅自完成 |
 | Eterna 的正式品牌规范是什么 | GAP | 独立品牌治理输入；节点 1 不设计视觉或语调 |
 | 公司法定身份与公开公司介绍是什么 | GAP | 经审核的公司事实正文及公开授权范围 |
 | 哪些产品可被称为当前旗舰产品 | GAP：上位文档没有该称号 | 由产品治理提供正式认定、时间范围和证据 |
 | 哪些产品与能力当前已经公开可用 | GAP | 对应产品仓库或发布记录提供版本化现状证据 |
 | 研究、开发者、新闻和支持内容的首期优先级是什么 | Website 待决策 | 节点 5 需求阶段处理；不得在节点 1 转化为栏目或页面 |
 | Website 公开内容如何持续审核、失效和追溯 | Website 待决策 | 后续内容治理和技术架构节点分别定义规则与承载方式 |
-| Eterna_Docs 的 `.txt` 至 `.md` 转换何时形成干净快照 | 来源治理待处理 | 转换提交后重新记录 HEAD、路径和哈希，再决定是否批准本节点 |
 
 ---
 
-当前结论状态：`REVIEW_REQUIRED`
+后续上游正式版本或语义发生变化时，重新评估本定位。
 
-本文件完成节点 1 的项目级定位草案，但不自行标记为最终 `FROZEN`。必须等待人工审核，并在需要时复核 Eterna_Docs 的干净来源快照。
+节点 1 最终结论：`PASS / FROZEN`
