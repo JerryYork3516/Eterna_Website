@@ -1,15 +1,16 @@
-# Eterna Website 1.0 技术架构 v0.1
+# Eterna Website 1.0 Node 9 — 技术架构组成文档 v0.1
 
 内部版本：`v0.1`
 
-文档性质：Website 1.0 Node 9.1 目标技术架构决策建议
+文档性质：Website 1.0 Node 9 — 技术架构组成文档
 
-状态：`REVIEW_REQUIRED`
+状态：`IN_PROGRESS / REVIEW_REQUIRED`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
 > 本文件基于 Node 1–8 正式文档、Legacy 扫描与技术债审计、当前仓库与 `legacy/` 实际结构，以及框架和部署平台官方资料，提出 Website 1.0 的推荐技术架构。
-> 本文件不创建正式网站代码，不修改 Legacy，不执行 Node 9.2、Node 9.3 或 Node 10。所有推荐等待人工审核；Node 9.1 不自行标记 `PASS`。
+> 本文件是 Node 9 的技术架构组成文档，与 `content-management-v0.1.md`、`migration-plan-v0.1.md` 共同构成 Node 9，不是独立子节点。
+> 本文件不创建正式网站代码，不修改 Legacy，不开始 Node 10。所有推荐等待人工审核；本文件与整个 Node 9 均不自行标记 `PASS`。
 
 ---
 
@@ -53,7 +54,7 @@
 | 项目 | 当前事实 |
 |---|---|
 | branch | `New` |
-| Node 9.1 编制前 HEAD | `2996465`（`docs: add Node 8.2 page specs and Home visual brief`） |
+| Node 9 本轮审核基线 HEAD | `db03f10` |
 | 新站根应用 | 尚不存在；根目录没有 `package.json`、框架配置或部署配置 |
 | Legacy 路径 | `legacy/` |
 | Legacy stack | React 19、Vite 6、OGL、JavaScript / JSX / CSS |
@@ -66,7 +67,18 @@
 
 本次没有读取或输出 `.env.local` 的 secret 值。只依据既有审计与源码确认旧 handler 使用的六个 Airtable 变量名称。
 
-### 2.2 Node 1–8 强约束
+### 2.2 Git 分支治理事实与风险
+
+- 当前 Eterna Website 1.0 正式规划工作位于 `New`；
+- GitHub default branch 仍为旧 `main`，本地 Git 证据为 `origin/HEAD -> origin/main`；
+- 历史分支 `Eternanet_v0.1` 仍存在，本地分支与 `origin/Eternanet_v0.1` 跟踪引用均可见；
+- `New`、旧 `main` 与 `Eternanet_v0.1` 并存，会产生默认入口、生产部署来源、PR 基线、文档发现和错误分支发布风险；
+- 该问题必须在 Node 9 的 `migration-plan-v0.1.md` 中正式决定 production branch、GitHub default branch、合并 / 归档顺序、部署绑定与回滚基线；
+- 当前不得自行 merge、删除、重命名、rebase 或修改上述分支，也不得调整 GitHub default branch。
+
+本节只记录分支治理事实与后续必须解决的风险，不执行任何 Git 分支治理操作。
+
+### 2.3 Node 1–8 强约束
 
 目标架构必须满足：
 
@@ -199,7 +211,9 @@ app/
 
 ### 5.3 根 `/` 决策建议
 
-推荐首版使用确定性 redirect：
+决策状态：`RECOMMENDED / OPEN_DECISION`
+
+当前推荐方案 A：首版使用确定性 redirect：
 
 ```text
 /  ->  /zh
@@ -212,7 +226,17 @@ app/
 - 不引入会改变静态路由边界的全局 request-time 语言中间件；
 - 用户仍可在任何页面明确切换到对应 `/en` 页面。
 
-是否在未来增加 `Accept-Language` 或语言偏好 redirect，留待有真实用户数据后重新评估。不得使用 IP 地理位置作为首版语言判断。
+同时保留可评估方案 B：根 `/` 只根据请求的 `Accept-Language` 判断进入 `/zh` 或 `/en`，无法确认或不匹配时 fallback 到 `/zh`。
+
+方案 B 的边界：
+
+- 只在根 `/` 执行语言入口判断，不改变 `/zh`、`/en` 的正式内容身份；
+- 不创建第三份根路径正文；
+- 不因 Cookie、账户状态或产品状态改变 canonical 页面；
+- 必须具有确定的测试矩阵、缓存策略和 fallback；
+- 禁止使用 IP 地理位置判断语言。
+
+方案 A 与方案 B 均满足 Node 6“根 `/` 只承担语言入口”的约束。等待人工选择后再冻结；Node 9 当前不得把 `/ -> /zh` 解释为最终决定。
 
 ### 5.4 URL 规范化
 
@@ -239,7 +263,7 @@ app/
 | 复杂 Motion 编排 | 局部 Client Component | 只对获批区域加载 |
 | Resident / WebGL / Canvas | 动态加载 Client Island | 浏览器 API 专属，必须可退出和降级 |
 | Contact / Participation | 未启用；未来表单 UI 为 Client Component，提交进入 server boundary | 当前 GAP 与合规条件未解决 |
-| Preview draft | Node 9.2 决定；如引入 CMS，可按需 SSR / Draft Mode | 不让生产页面默认动态化 |
+| Preview draft | 由 `content-management-v0.1.md` 决定；首版采用 repository branch Preview，未来引入 CMS 时才评估按需 SSR / Draft Mode | 不让生产页面默认动态化 |
 
 ### 6.2 SSR 使用条件
 
@@ -372,7 +396,7 @@ Tailwind 能提高通用界面的搭建速度，但当前 Website 的关键问�
 - 不诱导 Bento、Card-first 或通用 SaaS 组件化；
 - 与 CSS Custom Properties 的实时调参自然。
 
-Tailwind 不是技术上禁止；如果实施试验能证明它没有降低可读性、原创 Layout 和设计迭代速度，可以在人工审核前重新比较。但 Node 9.1 当前不推荐。
+Tailwind 不是技术上禁止；如果实施试验能证明它没有降低可读性、原创 Layout 和设计迭代速度，可以在人工审核前重新比较。但 Node 9 当前不推荐。
 
 ### 9.3 为什么不引入重型 Design System 工具
 
@@ -385,7 +409,7 @@ Tailwind 不是技术上禁止；如果实施试验能证明它没有降低可�
 - 过早抽象会使一次视觉调整需要修改多层 API；
 - Website Design System 不应被误升为全部 Eterna 产品设计系统。
 
-Storybook 可在共享组件数量和状态复杂度实际增长后再评估，不作为 Node 9.1 前置条件。
+Storybook 可在共享组件数量和状态复杂度实际增长后再评估，不作为 Node 9 前置条件。
 
 ---
 
@@ -490,7 +514,7 @@ ResidentPresence
 
 ### 12.4 3D
 
-- 当前没有正式 3D 资产，因此 Node 9.1 不建立 3D pipeline；
+- 当前没有正式 3D 资产，因此本技术架构组成文档不建立 3D pipeline；
 - 未来如启用，优先使用标准格式、压缩、渐进加载、静态 poster 和可取消渲染；
 - 3D 不得阻止文字、导航与 CTA，也不得成为 Resident 身份的唯一表达。
 
@@ -529,7 +553,7 @@ production 以真实用户第 75 百分位的 Core Web Vitals “Good” 阈值�
 - 第三方脚本默认 0，新增必须记录用途、数据、性能和失效影响；
 - 在 Mobile 中可以不加载 Desktop 专属高级视觉，而不是加载后再隐藏。
 
-Node 9.1 不伪造尚未实测的 KB 数值；实施后依据真实 bundle 与设备结果设定硬预算。
+Node 9 不伪造尚未实测的 KB 数值；实施后依据真实 bundle 与设备结果设定硬预算。
 
 ---
 
@@ -582,7 +606,7 @@ Node 9.1 不伪造尚未实测的 KB 数值；实施后依据真实 bundle 与�
 - handler 只负责协议、校验、授权和响应；第三方接收方通过独立 adapter 隔离；
 - secret 只在 server runtime；
 - 客户端不接收第三方 record id、配置名或内部错误；
-- Airtable、邮件、CRM 或其他接收方由 Node 9.2 / 9.3 的真实业务与数据治理决定。
+- Airtable、邮件、CRM 或其他接收方必须由 `content-management-v0.1.md` 的启用门禁与 `migration-plan-v0.1.md` 的部署事实共同决定。
 
 ---
 
@@ -654,7 +678,7 @@ Preview 和 production 使用不同凭据、不同接收目标和最小权限；
 | Visual | 关键 viewport 截图回归作为提示，不替代 Visual Quality Gate 人工裁决 |
 | Performance | Lighthouse CI / bundle report + production field metrics |
 
-工具的精确包、版本和配置在 Node 10 决定；Node 9.1 冻结的是门禁职责。
+工具的精确包、版本和配置在 Node 10 决定；Node 9 只提出门禁职责与推荐边界。
 
 ### 18.2 必须自动验证的 Website 特有规则
 
@@ -715,7 +739,7 @@ Cloudflare 当前官方路径可通过 OpenNext adapter 支持 Next.js App Route
 - Preview / production 配置差异；
 - 平台行为与 Next 原生能力的回归范围。
 
-如果域名、边缘策略、成本或组织基础设施明确偏向 Cloudflare，可在 Node 9.3 将其提升为首选。Node 9.1 暂不因为“全球边缘”宣传自动选 Cloudflare。
+如果域名、边缘策略、成本或组织基础设施明确偏向 Cloudflare，可在部署平台人工决策时将其提升为首选。Node 9 暂不因为“全球边缘”宣传自动选 Cloudflare。
 
 ### 19.3 可移植性原则
 
@@ -733,7 +757,7 @@ Cloudflare 当前官方路径可通过 OpenNext adapter 支持 Next.js App Route
 
 Website 1.0 应在根目录建立新应用，不在 `legacy/` 内原地重构。
 
-本轮不创建新应用，也不修改 `legacy/`。迁移实施等待 Node 9.3 / Node 10。
+本轮不创建新应用，也不修改 `legacy/`。迁移实施等待 Node 9 人工审核与 Node 10。
 
 ### 20.2 迁移分类
 
@@ -754,11 +778,11 @@ Website 1.0 应在根目录建立新应用，不在 `legacy/` 内原地重构。
 ### 20.3 URL 与上线影响
 
 - Legacy 主要是根页面与客户端 hash；服务端无法接收 URL fragment，因此 `#resident` 等旧 hash 不能通过普通 301 精确迁移；
-- Node 9.3 必须先确认真实生产域名、线上 URL、外部 backlinks 与当前 commit；
+- `migration-plan-v0.1.md` 要求实施前确认真实生产域名、线上 URL、外部 backlinks 与当前 commit；
 - 根域切换后 `/` 按新语言入口策略处理；
 - 如真实流量证明旧 hash 需要兼容，可在新 Home 的轻量客户端逻辑中提供明确映射，但不能让旧 hash 重新成为站点架构；
 - `/api/create` 在切换前必须确认是否有真实生产调用，不能把未知 handler 静默继续暴露；
-- Legacy 保留期、归档、回滚和删除策略由 Node 9.3 决定，本轮不删除。
+- Legacy 保留期、归档、回滚和后续处置由 `migration-plan-v0.1.md` 约束，本轮不删除。
 
 ### 20.4 不可直接迁移的内容风险
 
@@ -789,39 +813,23 @@ Website 1.0 应在根目录建立新应用，不在 `legacy/` 内原地重构。
 
 ---
 
-## 22. Node 9.2 / 9.3 待决事项
+## 22. Node 9 三份组成文档的接口
 
-### 22.1 Node 9.2 — 内容管理与发布治理
+Node 9 由三份平级组成文档共同形成，不存在正式的 `9.1 / 9.2 / 9.3` 子节点：
 
-仍需正式决定：
+| 组成文档 | 负责决定 | 不负责决定 |
+|---|---|---|
+| `technical-architecture-v0.1.md` | Framework、渲染、路由、组件、样式、Motion、SEO、性能、可访问性、API 技术边界与测试职责 | 不批准公开内容，不执行迁移或部署 |
+| `content-management-v0.1.md` | 内容源、schema、双语配对、事实与发布状态、来源、失效、Draft Preview、资产及发布门禁 | 不重新定义页面职责，不选择最终视觉或生产平台 |
+| `migration-plan-v0.1.md` | Legacy 处置、分支治理、Preview / Production、切换、回滚、DNS 与归档 | 不修改 Legacy，不执行分支或生产变更 |
 
-- 首版内容源是 repository files、headless CMS，还是分阶段方案；
-- 内容文件格式与 schema；
-- `pageId`、locale pair、事实来源、审核人、状态、更新时间、失效触发的具体字段；
-- `DRAFT` / `REVIEW_REQUIRED` / `PUBLISHED` / `WITHDRAWN` 如何落实到发布门禁；
-- 中文与英文配对、缺失翻译和同步复核流程；
-- 谁能编辑、谁能批准、谁能发布；
-- CMS draft preview 是否需要 request-time SSR / Draft Mode；
-- 图片、视频、social image 与权利信息如何入库；
-- Contact / Privacy / Legal 内容与业务何时满足启用条件；
-- 内容更新是否触发全量 build、增量 revalidation 或其他发布策略。
+共同接口规则：
 
-Node 9.1 只冻结“页面不能直接消费未校验内容，组件不能继续内嵌双语正文”的技术边界，不替 Node 9.2 选择 CMS。
-
-### 22.2 Node 9.3 — 迁移、部署与切换方案
-
-仍需正式决定：
-
-- 当前生产域名、平台、线上 commit 与真实流量基线；
-- Vercel 与 Cloudflare 的最终选择及费用 / 账户 / 区域约束；
-- production branch、Preview access、环境变量与 promotion 权限；
-- DNS、TLS、canonical host、www / apex、redirect 与 rollback；
-- Legacy hash、旧路径和 `/api/create` 的兼容 / 关闭方式；
-- 内容迁移清单、逐项来源审核和双语验收；
-- 资产迁移、CDN / object storage 与 cache policy；
-- 生产监控、错误告警、Core Web Vitals 和日志保留；
-- 灰度、切换窗口、回滚条件与 Legacy 保留期；
-- Analytics / Cookie 是否存在真实需求及合规条件。
+- Route 只消费通过内容 schema 与 production 发布门禁的内容；
+- 内容系统只描述事实与发布资格，不向页面强加通用布局或组件模板；
+- 迁移与部署必须使用本文件的静态优先、SEO、降级和可移植性边界；
+- 三份文档共同受 Node 6 页面职责、Node 7 / 8 Visual Quality Gate、Design in Browser 与 Resident degradation 约束；
+- 任一组成文档中的 `OPEN_DECISION` 都不得由另一份文档静默假定为已冻结。
 
 ---
 
@@ -834,18 +842,16 @@ Node 9.1 只冻结“页面不能直接消费未校验内容，组件不能继�
 ### 23.2 已识别的状态变化，但不构成冲突
 
 1. Node 8.1 已是 `PASS`，Home / Digital Residents 页面结构与 Home 视觉 Brief 原为 `REVIEW_REQUIRED`；`node8-freeze-v0.1.md` 已通过正式范围调整统一裁决 Node 8 为 `PASS / FROZEN`，只冻结 Narrative Arc、Section Architecture、交互、Presence 与质量门禁，不冻结最终视觉。
-2. Node 7 / 8 多处写明技术实现 `NOT_FROZEN`；Node 9.1 正是被授权评估并推荐技术架构，因此不是越权冻结视觉。
-3. Node 6 将根 `/` 行为留给 Node 9；本文件推荐确定性 `/ -> /zh` redirect，与 Node 6 的边界一致，等待人工审核。
+2. Node 7 / 8 多处写明技术实现 `NOT_FROZEN`；Node 9 被授权评估并推荐技术架构，因此不是越权冻结视觉。
+3. Node 6 将根 `/` 行为留给 Node 9；本文件将确定性 `/ -> /zh` 标记为 `RECOMMENDED / OPEN_DECISION`，并保留仅基于 `Accept-Language`、fallback `/zh` 的备选方案，等待人工冻结。
 4. Node 5 要求保留真实联系能力，但 GAP-02 与 Privacy / Legal 尚未解决；本文件保留 server boundary 而不启用 Form，符合“能力要求存在、虚假入口不得上线”的共同约束。
 
-### 23.3 需要人工审核的关键取舍
+### 23.3 本组成文档的 `OPEN_DECISION`
 
-- 是否接受 Next.js App Router 作为根架构；
-- 是否接受 `/` 固定 redirect 到 `/zh`，暂不做 Accept-Language；
-- 是否接受 CSS Modules 而非 Tailwind；
-- 是否接受 Vercel 首选、Cloudflare 备选；
-- 是否接受高级视觉技术推迟到浏览器设计证明需要之后；
-- 是否接受 Node 9.2 再正式选择 CMS 与内容发布流程。
+- 根 `/` 采用固定 `/ -> /zh`，还是只根据 `Accept-Language` 选择 `/zh` / `/en` 并以 `/zh` 为 fallback。
+- Vercel 与 Cloudflare 的最终生产平台选择仍取决于真实账户、域名、费用、区域和现网约束；Vercel 继续作为推荐首选。
+
+两种根语言方案都禁止 IP 地理判断。以上决策完成前，整个 Node 9 保持 `IN_PROGRESS / REVIEW_REQUIRED`，不得标记最终 `PASS / FROZEN`。
 
 ---
 
@@ -862,10 +868,12 @@ Node 9.1 只冻结“页面不能直接消费未校验内容，组件不能继�
 - [Next.js Lazy Loading](https://nextjs.org/docs/app/guides/lazy-loading)
 - [Vite SSR guide](https://vite.dev/guide/ssr.html)
 - [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs)
+- [Vercel Environments](https://vercel.com/docs/deployments/environments)
+- [Vercel Git Deployments](https://vercel.com/docs/git)
 - [Next.js on Cloudflare Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/)
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - [Core Web Vitals thresholds](https://web.dev/articles/defining-core-web-vitals-thresholds)
 
 ---
 
-Node 9.1 当前状态：`REVIEW_REQUIRED`
+Node 9 当前状态：`IN_PROGRESS / REVIEW_REQUIRED`

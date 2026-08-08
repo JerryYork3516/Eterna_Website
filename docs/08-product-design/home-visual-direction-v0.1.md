@@ -4,7 +4,9 @@
 
 文档性质：Website 1.0 Node 8.2B-R Home 视觉方向重校准与概念生成 Brief
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS（冻结范围与最终裁决以 node8-freeze-v0.1.md 为准）`
+
+视觉探索方向：`NOT_FROZEN / NOT_FINAL_VISUAL（不代表最终视觉已冻结）`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
@@ -784,4 +786,4 @@ Antigravity / Gemini 应对六个方向分别生成 **4–8 个完整 Desktop Ho
 - Gemini 获得六个结构差异明确的探索族群；
 - Aftelle 只提供状态诚实、Intent、可用性兜底与安静稳定等产品哲学，不提供 Website UI。
 
-Node 8.2B-R 状态：`REVIEW_REQUIRED`
+Node 8.2B-R 状态：`PASS（冻结范围与最终裁决以 node8-freeze-v0.1.md 为准；视觉探索方向不代表最终视觉已冻结）`

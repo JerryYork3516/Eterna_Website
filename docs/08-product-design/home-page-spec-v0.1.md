@@ -4,7 +4,9 @@
 
 文档性质：Website 1.0 Node 8.2A Home 页面叙事与结构设计
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS（冻结范围与最终裁决以 node8-freeze-v0.1.md 为准）`
+
+最终视觉：`NOT_FROZEN`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
@@ -281,4 +283,4 @@ Node 8.2B 只可基于本规格生成概念研究，不得把概念图直接标�
 
 ---
 
-Node 8.2A Home 状态：`REVIEW_REQUIRED`
+Node 8.2A Home 状态：`PASS（冻结范围与最终裁决以 node8-freeze-v0.1.md 为准）`

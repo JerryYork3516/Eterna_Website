@@ -107,6 +107,21 @@ DR-08  Studio / Aftelle around the Resident
 
 这些项目的 `NOT_FROZEN` 表示最终答案需要在真实浏览器中形成，不表示可以无记录地任意决定，也不表示可以绕过人工审核、质量门禁或上位事实边界。
 
+### 3.1 Products / Aftelle / Studio / About Eterna 的设计处理
+
+Products、Aftelle、Studio 与 About Eterna 的详细 Narrative Arc、Section Architecture、页面级交互和最终视觉，统一转入 `Design in Browser`。
+
+实施时必须同时受以下正式边界约束：
+
+- Node 6 已冻结的页面职责；
+- Node 8.1 已冻结的全站规则；
+- Node 7 / Node 8 Visual Quality Gate；
+- Anti-pattern / DEAD Gate。
+
+四个页面必须分别在真实路由、真实中英文内容、真实响应式与降级状态下接受逐页人工浏览器审核。任一页面未通过对应职责、产品边界、视觉质量、Accessibility、Responsive 或 Degradation 审核时，必须继续设计与收敛，不能因已经进入实现阶段而默认通过。
+
+这不代表取消 Products、Aftelle、Studio 或 About Eterna 的页面设计，只是不再要求在开发前冻结其完整高保真规格。其详细叙事、Section 组织、页面交互和最终视觉必须在真实网页中形成、记录并经人工裁决。
+
 ---
 
 ## 4. 正式范围调整
