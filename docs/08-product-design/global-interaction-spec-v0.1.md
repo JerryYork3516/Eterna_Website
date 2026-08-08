@@ -4,7 +4,13 @@
 
 文档性质：Website 1.0 Node 8.1 全站共性交互与页面设计规格
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS`
+
+Node 8.1：`PASS`
+
+全站共性交互与 Resident Presence 规则：`FROZEN`
+
+具体页面 Section、正式文案、Hero、最终字体 / 色值、Resident 最终形体、具体数值与技术实现：`NOT_FROZEN`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
@@ -19,7 +25,7 @@
 
 Node 8.1 只定义跨页面共同规则，确保后续具体页面设计不会各自发明导航、交互、Resident Presence、Motion、响应式或内容状态表达。
 
-本文件处于 `REVIEW_REQUIRED`。其中规则是待人工审核的 Node 8.1 基线，不自行标记为 `PASS` 或 `FROZEN`。
+本文件已完成人工审核并收口。全站共性交互与 Resident Presence 规则标记为 `FROZEN`；第 17 节所列具体设计与实现事项保持 `NOT_FROZEN`。
 
 ### 1.2 输入优先级
 
@@ -93,13 +99,13 @@ Page
 
 ### 3.1 冻结结构的继承
 
-全站主导航保持 Node 6 已确认的三个入口：
+Header 主导航严格保持 Node 6 已确认的三个入口：
 
-- `Digital Residents / 数字居民`；
-- `Products / 产品`；
-- `About / 关于 Eterna`。
+- `Digital Residents`；
+- `Products`；
+- `About`。
 
-“About Eterna”是该页面的完整职责名称；英文主导航显示标签继续遵循 Node 6 的 `About`。Home 不占用主导航项，通过 Eterna 品牌入口返回当前语言首页。
+中文正式版本对应使用 `数字居民 / 产品 / 关于 Eterna`。“About Eterna”只作为页面完整名称或职责描述；Header 英文主导航严格使用 `About`。Home 不占用主导航项，通过 Eterna 品牌入口返回当前语言首页。
 
 不得加入 Genesis、Edu、Social、Work、World、Art、Sound、Cinema、Games、Life、Exchange 或其他长期 Universe 平台作为 Website 1.0 当前主导航。
 
@@ -582,9 +588,9 @@ Node 8.1 不冻结以下事项：
 
 ---
 
-## 18. Node 8.1 审核条件
+## 18. Node 8.1 收口核对
 
-人工审核时至少确认：
+本次收口已确认：
 
 1. Global Page Framework 没有演变成具体页面模板；
 2. 主导航保持 Digital Residents、Products、About，Home 通过品牌入口返回；
@@ -600,4 +606,4 @@ Node 8.1 不冻结以下事项：
 
 ---
 
-Node 8.1 状态：`REVIEW_REQUIRED`
+Node 8.1 状态：`PASS`
