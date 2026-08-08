@@ -4,7 +4,7 @@
 
 文档性质：Website 1.0 Node 9 — Legacy 迁移、Repository 治理、部署与 Cutover 组成文档
 
-状态：`IN_PROGRESS / REVIEW_REQUIRED`
+状态：`PASS / FROZEN`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
@@ -36,13 +36,13 @@ Website 1.0 采用并行新建、逐项重写、Preview 验收、可回滚切换
 
 | 项目 | 当前事实 |
 |---|---|
-| 正式规划工作分支 | `New`；当前 HEAD 基线 `db03f10` |
+| 正式规划工作分支 | `New`；Node 9 最终审核前基线 `6638a71` |
 | GitHub default branch | 旧 `main`；本地 `origin/HEAD -> origin/main` |
 | 历史实现分支 | `Eternanet_v0.1` 本地与远端跟踪引用仍存在 |
 | Legacy 位置 | `legacy/`；当前工作区没有 Legacy 修改 |
 | 新站根应用 | 不存在；根目录没有 package、framework 或 deployment config |
-| 当前生产平台 / 域名 / commit | `UNVERIFIED` |
-| 当前 API 生产映射 | `UNVERIFIED` |
+| 当前生产平台 / 域名 / commit | `MIGRATION_PREFLIGHT`；尚未核实，不阻塞 Node 9 |
+| 当前 API 生产映射 | `MIGRATION_PREFLIGHT`；尚未核实，不阻塞 Node 9 |
 | 当前外部服务事实 | 代码只显示 Airtable handler；线上有效性未验证 |
 
 ---
@@ -147,7 +147,7 @@ Legacy 使用 `#vision`、`#resident`、`#products`、`#universe`、`#join`。UR
 6. `#join` 只有 Contact / Participation 正式启用后才能映射；未启用时不得跳到假表单或空页；
 7. 兼容层需要记录期限和访问量，稳定后经人工批准移除。
 
-根 `/` 的语言入口仍为 `OPEN_DECISION`；hash 映射必须在根语言确定后使用同一规则，禁止 IP 地理判断。
+根 `/` 已冻结为确定性进入 `/zh`，首版不使用 `Accept-Language` 或 IP 地理判断；hash 兼容映射必须遵守同一规则。用户进入正式页面后，通过 Header 的 `中 / EN` 手动切换到当前 `pageId` 的对应语言版本，最终按钮视觉仍由 `Design in Browser` 收敛。
 
 ---
 
@@ -199,15 +199,15 @@ migrationClass = REWRITE
 - `Eternanet_v0.1` 与 `main`、`New` 并存，职责和归档状态未正式说明；
 - 任何直接删除或强制改写都会破坏回滚和历史证据。
 
-### 9.2 最终治理建议
+### 9.2 冻结的最终治理原则
 
-推荐最终状态：
+正式冻结以下最终状态：
 
 | 分支 / 引用 | 推荐职责 |
 |---|---|
-| `main` | 唯一长期默认分支与 production branch；在人工审核和迁移完成前不得绑定新 production |
-| `New` | 当前规划与新站建设来源；通过 reviewed PR / 可审计 promotion 进入更新后的 `main`，完成后再决定是否保留为历史工作分支 |
-| `Eternanet_v0.1` | 旧网站历史实现基线；创建不可变 tag / release 记录后保留为只读历史，当前不删除 |
+| `main` | Website 1.0 最终 authoritative production branch；GitHub default branch 最终指向 `main` |
+| `New` | 当前规划与后续开发基线；Website 1.0 完成并通过审核后，通过 reviewed promotion / PR 进入 `main`；不作为长期 production branch |
+| `Eternanet_v0.1` | 旧网站历史实现基线，保留为历史证据，不删除 |
 
 推荐执行顺序（本轮不执行）：
 
@@ -220,7 +220,7 @@ migrationClass = REWRITE
 7. rollback window 结束前不删除任何历史分支；
 8. 后续是否删除或锁定 `New` / `Eternanet_v0.1` 需要单独人工批准。
 
-最终采用 `main` 作为 production branch 是本文件的推荐，不是本轮 Git 操作。实际 promotion、default branch 修改和分支归档仍为 `OPEN_DECISION`，必须在真实部署绑定确认后人工批准。
+以上是 Node 9 冻结的分支治理原则，不是本轮 Git 操作。具体 promotion、default branch 修改与发布绑定时间属于 `CUTOVER_INPUT`，进入后续迁移 / 发布流程；本轮继续停留在 `New`，不 merge、不删除、不重命名任何分支。
 
 ---
 
@@ -258,10 +258,10 @@ migrationClass = REWRITE
 
 ### 11.1 平台
 
-- Vercel 继续作为推荐首选：Next.js 支持直接、PR Preview 与 promotion 路径适合 Design in Browser、首版运维较轻；
-- Cloudflare Workers + OpenNext 是可行备选：若现有 DNS、边缘、账户、成本或区域事实明显更适合，可提升为首选；
-- 当前缺少真实账户、域名、费用、区域、现网平台和权限证据，最终平台保持 `OPEN_DECISION`；
-- 选型前用同一最小 Preview 验证 SSG、Route Handler、image、headers、noindex、environment、rollback 与 build 行为，不用营销页面代替实测。
+- Primary 正式冻结为 Vercel：Next.js 原生支持、Preview Deployment、Design in Browser 审核效率和较低首版运维复杂度符合 Website 1.0；
+- Fallback 正式冻结为 Cloudflare Workers + OpenNext：保留为未来迁移、灾备或特殊边缘需求的备选，不形成双平台首发要求；
+- 旧站当前运行平台属于 `MIGRATION_PREFLIGHT`，不改变 Website 1.0 的 Vercel 目标方向；
+- 开发与发布准备仍需在 Vercel Preview 中验证 SSG、Route Handler、image、headers、noindex、environment、rollback 与 build 行为，不用架构文档代替实测。
 
 ### 11.2 Promotion
 
@@ -286,7 +286,7 @@ Promotion 前必须有：
 - DNS 级回滚只作为域名 / 平台切换异常的后备路径；
 - 回滚后复核 canonical、TLS、robots、sitemap、Form 与环境变量；
 - 旧站在 rollback window 内保持可恢复，但不同时以两个 canonical production 站对外索引；
-- rollback 条件、责任人、窗口长度与完成判定必须在切换前填写，当前为 `OPEN_DECISION`。
+- rollback 条件、责任人、窗口长度与完成判定必须在切换前填写，分类为 `RELEASE_RUNBOOK_INPUT`，不阻塞 Node 9 冻结。
 
 ---
 
@@ -295,7 +295,7 @@ Promotion 前必须有：
 ### 12.1 Canonical host 与 www / apex
 
 - 必须选择唯一 canonical host；apex 与 `www` 只能有一个返回规范内容，另一个永久重定向；
-- 当前真实域名、注册商、DNS provider 与线上 host 未验证，因此 apex / www 选择保持 `OPEN_DECISION`；
+- 当前真实域名、注册商、DNS provider 与线上 host 未验证；apex / `www` 最终选择分类为 `CUTOVER_INPUT`，在配置 canonical 与 DNS 前确定，不阻塞 Node 9 冻结；
 - canonical、Open Graph URL、sitemap host、robots sitemap URL 与 redirect 必须使用同一 host；
 - Preview、平台默认域名和旧 host 不得成为 production canonical。
 
@@ -408,26 +408,27 @@ Content truth / bilingual
 
 ---
 
-## 15. `OPEN_DECISION`
+## 15. 非阻塞后续输入分类
 
-### 阻塞 production cutover
+Node 9 已无阻塞级待决事项。下列事项必须在其对应实施阶段核查，但不阻塞 Node 9 `PASS / FROZEN`：
 
-1. 根 `/` 使用固定 `/zh`，还是仅依据 `Accept-Language` 并 fallback `/zh`；禁止 IP 地理判断；
-2. 最终部署平台选择 Vercel 还是 Cloudflare，以及对应账户、费用、区域与权限；
-3. 当前真实 production 域名、平台、线上 commit、DNS provider 与 deployment owner；
-4. canonical host 采用 apex 还是 `www`；
-5. `main` 何时、以何种 reviewed promotion 接收 `New`，何时成为 GitHub default 与 production branch；
-6. 当前旧站是否仍有真实流量、backlinks、重要 hash 与 `/api/create` 调用；
-7. Contact / Participation 是否首发启用；如启用，其接收人、数据治理、Privacy / Legal 与接收服务；
-8. 12 个核心页面的产品事实分别由谁担任 Fact Owner 与 Publish Approver；
-9. cutover window、rollback window 长度、rollback owner 与明确触发阈值。
+| 输入 | 分类 | 必须完成的时间点 |
+|---|---|---|
+| 当前旧站真实 production 域名、平台、线上 commit、DNS provider 与 deployment owner | `MIGRATION_PREFLIGHT` | 迁移实施开始前 |
+| 旧站真实流量、backlinks、重要 hash 与 `/api/create` 调用 | `MIGRATION_PREFLIGHT` | 确定 redirect、兼容和旧 API 处置前 |
+| `#universe`、`#join` 等旧 fragment 的最终映射 | `MIGRATION_PREFLIGHT` | 完成真实使用审计后、Cutover 前 |
+| canonical host 使用 apex 还是 `www` | `CUTOVER_INPUT` | 配置 canonical、redirect 与 DNS 前 |
+| `New` reviewed promotion / PR 进入 `main`、更新 GitHub default 与 production branch 的具体时间 | `CUTOVER_INPUT` | Website 1.0 完成审核、production promotion 前 |
+| production cutover 日期、时段与冻结窗口 | `CUTOVER_INPUT` | 发布排期确认前 |
+| Vercel production account、project、权限、环境与 promotion owner | `RELEASE_RUNBOOK_INPUT` | 建立正式 Preview / Production 环境前 |
+| 12 个核心页面的 Fact Owner 与 Publish Approver 名单 | `RELEASE_RUNBOOK_INPUT` | 对应内容进入 production 前 |
+| rollback window、rollback owner、触发阈值与完成判定 | `RELEASE_RUNBOOK_INPUT` | production cutover 前 |
+| Contact 接收人、数据处理、Privacy / Legal 与接收服务 | `FUTURE_DECISION` | 首版默认不启用；未来决定启用 Contact 时 |
+| Analytics / Cookie 产品与治理方案 | `FUTURE_DECISION` | 首版默认不启用；出现真实测量需求后 |
+| 大型媒体使用哪一种 CDN / Object Storage | `FUTURE_DECISION` | 出现正式大型资产后 |
+| rollback window 结束后是否移出 `legacy/` 或删除历史分支 | `FUTURE_DECISION` | 默认继续保留；未来单独审核 |
 
-### 不阻塞核心 12 页继续进入后续开发计划
-
-- `#universe`、`#join` 的最终兼容映射；
-- Analytics / Cookie 是否启用；默认不启用；
-- 大型媒体未来使用哪一种对象存储 / CDN；当前无正式大型资产；
-- rollback window 结束后是否移出 `legacy/` 或删除历史分支；默认保留，后续单独审核。
+以上分类不能被解释为可以跳过上线核查；它们只是不再作为技术架构冻结的前置条件。
 
 ---
 
@@ -442,10 +443,13 @@ Content truth / bilingual
 | 内容管理 ↔ Legacy 文案 | `NO_CONFLICT` | Legacy 文案默认 `DRAFT / REWRITE`，必须重新绑定来源并完成双语审核 |
 | 内容管理 ↔ SEO | `NO_CONFLICT` | metadata、canonical、hreflang、sitemap 与正文共享 `pageId` 和发布状态 |
 | 部署 ↔ Preview / Draft | `NO_CONFLICT` | Preview noindex、secret 与 production 隔离；Preview 通过不等于 production approval |
-| 部署 ↔ 分支治理 | `NO_CONFLICT` | 推荐最终 `main` 为 default / production，但本轮不操作；`New` 与历史分支保留可恢复路径 |
+| 部署 ↔ 分支治理 | `NO_CONFLICT` | 已冻结最终 `main` 为 authoritative production / default branch；当前继续基于 `New`，待审核通过后 reviewed promotion / PR 进入 `main`，本轮不操作分支 |
 | Design in Browser ↔ 架构 | `NO_CONFLICT` | 页面 Section 所有权、CSS Modules、局部 Client Islands 与 PR Preview 支持快速视觉迭代 |
 | Resident degradation ↔ 性能 / SEO | `NO_CONFLICT` | 语义内容服务端输出，高级视觉按需加载、可关闭、失败不影响内容和索引 |
-| Form ↔ Privacy / Legal | `NO_CONFLICT` | API 仅保留条件式边界；业务与法律条件未满足前不启用 |
+| 双语 ↔ Routing / SEO | `NO_CONFLICT` | 首版仅 `/zh` 与 `/en`；根 `/` 确定性进入 `/zh`，Header 按稳定 `pageId` 保持当前页面切换，URL 是语言事实来源，不使用 `Accept-Language` 或 IP 判断 |
+| Form ↔ Privacy / Legal | `NO_CONFLICT` | 首版 Contact / Participation 默认不启用；未来只有满足事实、处理、Privacy / Legal 与服务条件后才可启用 |
+| Analytics ↔ Cookie / Privacy | `NO_CONFLICT` | 首版 Analytics 与 Cookie 默认不启用；未来真实需求作为 `FUTURE_DECISION` 单独审核 |
+| 部署平台 ↔ Preview / Production | `NO_CONFLICT` | Vercel 为 1.0 Primary，Cloudflare Workers + OpenNext 为 Fallback；不要求首版双平台部署，Preview 与 Production 保持隔离 |
 
 ### 16.2 Node 1–8 冲突检查
 
@@ -457,14 +461,18 @@ Content truth / bilingual
 - `Design in Browser` 获得快速路由、局部样式、Preview 与 Motion / Resident 独立边界支持；
 - Resident 与高级视觉退出后，内容、SEO、导航、CTA 与品牌结构仍完整；
 - 技术架构没有自动引入 Tailwind、shadcn、Bento Grid、SaaS Component Library、generic Hero 或 generic Card system；
-- Contact、Privacy、Legal、Research、Developers、Updates 与 Support 仍受 Node 5 / 6 启用条件约束；
-- 根 `/` 继续保持 `OPEN_DECISION`，未越权冻结；
+- Contact / Participation 首版默认不启用，Privacy / Legal 在真实收集个人信息前启用；Research、Developers、Updates 与 Support 继续受 Node 5 / 6 启用条件约束；
+- 根 `/` 已按 Node 6 留给 Node 9 的决策边界正式冻结为确定性进入 `/zh`，首版不做 `Accept-Language` 自动判断，禁止 IP 地理判断；
 - 技术与部署推荐没有反向冻结最终 Layout、Typography、Color、Hero、Resident 或 Motion 参数。
 
 ### 16.3 Node 9 收口状态
 
-三份组成文档已经形成一致的推荐方案，但第 15 节仍有 production 阻塞级人工决策。因此 Node 9 当前不得标记 `PASS / FROZEN`。
+三份组成文档在技术架构、双语、内容治理、SEO、部署、Legacy 迁移、Design in Browser、Resident degradation、Preview / Production 与分支治理之间未发现实质冲突。
+
+第 15 节事项已按 `MIGRATION_PREFLIGHT`、`CUTOVER_INPUT`、`RELEASE_RUNBOOK_INPUT` 与 `FUTURE_DECISION` 分类。它们必须在对应实施阶段核查，但不是 Node 9 冻结的阻塞项。
+
+因此本组成文档与 Node 9 正式标记为 `PASS / FROZEN`。
 
 ---
 
-Node 9 当前状态：`IN_PROGRESS / REVIEW_REQUIRED`
+Node 9 当前状态：`PASS / FROZEN`

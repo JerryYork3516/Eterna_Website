@@ -4,13 +4,13 @@
 
 文档性质：Website 1.0 Node 9 — 技术架构组成文档
 
-状态：`IN_PROGRESS / REVIEW_REQUIRED`
+状态：`PASS / FROZEN`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
 > 本文件基于 Node 1–8 正式文档、Legacy 扫描与技术债审计、当前仓库与 `legacy/` 实际结构，以及框架和部署平台官方资料，提出 Website 1.0 的推荐技术架构。
 > 本文件是 Node 9 的技术架构组成文档，与 `content-management-v0.1.md`、`migration-plan-v0.1.md` 共同构成 Node 9，不是独立子节点。
-> 本文件不创建正式网站代码，不修改 Legacy，不开始 Node 10。所有推荐等待人工审核；本文件与整个 Node 9 均不自行标记 `PASS`。
+> 本文件不创建正式网站代码，不修改 Legacy，不开始 Node 10。本文记录的技术架构与部署方向已完成 Node 9 人工裁决；具体实现仍须进入 Node 10 后执行。
 
 ---
 
@@ -20,17 +20,17 @@
 
 | 层级 | 推荐 | 当前决策性质 |
 |---|---|---|
-| Framework | Next.js App Router | `RECOMMENDED / REVIEW_REQUIRED` |
-| UI | React + TypeScript strict mode | `RECOMMENDED / REVIEW_REQUIRED` |
-| Rendering | 公开内容页面默认 SSG / prerender；按需使用最小 SSR；交互与高级视觉使用局部 CSR | `RECOMMENDED / REVIEW_REQUIRED` |
-| Routing | `app/[lang]/...` 文件路由，显式 `/zh` / `/en` | `RECOMMENDED / REVIEW_REQUIRED` |
-| Styling | CSS Custom Properties + CSS Modules + 少量全局基础样式 | `RECOMMENDED / REVIEW_REQUIRED` |
-| Motion | CSS 优先；只有复杂编排确有需要时才引入 Motion for React | `RECOMMENDED / REVIEW_REQUIRED` |
-| Advanced visual | 独立 Client Island；不默认引入 Three.js / WebGL / Canvas | `RECOMMENDED / REVIEW_REQUIRED` |
-| Content boundary | 页面组件只消费经过 schema 校验的结构化内容；内容不得继续内嵌在根组件 | `RECOMMENDED / REVIEW_REQUIRED` |
-| Form / API | 条件成立后使用同仓 Route Handler 或独立同源服务；不迁移旧 Airtable handler | `RECOMMENDED / REVIEW_REQUIRED` |
-| Package manager | npm + lockfile；Node.js 使用实施时 Active LTS 并通过版本文件固定 | `RECOMMENDED / REVIEW_REQUIRED` |
-| Deployment | Vercel 作为首选；Cloudflare Workers + OpenNext 作为可行备选 | `RECOMMENDED / REVIEW_REQUIRED` |
+| Framework | Next.js App Router | `FROZEN` |
+| UI | React + TypeScript strict mode | `FROZEN` |
+| Rendering | 公开内容页面默认 SSG / prerender；按需使用最小 SSR；交互与高级视觉使用局部 CSR | `FROZEN` |
+| Routing | `app/[lang]/...` 文件路由，显式 `/zh` / `/en` | `FROZEN` |
+| Styling | CSS Custom Properties + CSS Modules + 少量全局基础样式 | `FROZEN` |
+| Motion | CSS 优先；只有复杂编排确有需要时才引入 Motion for React | `FROZEN` |
+| Advanced visual | 独立 Client Island；不默认引入 Three.js / WebGL / Canvas | `FROZEN` |
+| Content boundary | 页面组件只消费经过 schema 校验的结构化内容；内容不得继续内嵌在根组件 | `FROZEN` |
+| Form / API | 首版默认不启用 Contact / Participation；未来条件成立后使用同仓 Route Handler 或独立同源服务，不迁移旧 Airtable handler | `FROZEN` |
+| Package manager | npm + lockfile；Node.js 使用实施时 Active LTS 并通过版本文件固定 | `FROZEN` |
+| Deployment | Primary：Vercel；Fallback：Cloudflare Workers + OpenNext | `FROZEN` |
 
 ### 1.2 核心架构句
 
@@ -54,7 +54,7 @@
 | 项目 | 当前事实 |
 |---|---|
 | branch | `New` |
-| Node 9 本轮审核基线 HEAD | `db03f10` |
+| Node 9 最终审核前基线 HEAD | `6638a71` |
 | 新站根应用 | 尚不存在；根目录没有 `package.json`、框架配置或部署配置 |
 | Legacy 路径 | `legacy/` |
 | Legacy stack | React 19、Vite 6、OGL、JavaScript / JSX / CSS |
@@ -73,10 +73,10 @@
 - GitHub default branch 仍为旧 `main`，本地 Git 证据为 `origin/HEAD -> origin/main`；
 - 历史分支 `Eternanet_v0.1` 仍存在，本地分支与 `origin/Eternanet_v0.1` 跟踪引用均可见；
 - `New`、旧 `main` 与 `Eternanet_v0.1` 并存，会产生默认入口、生产部署来源、PR 基线、文档发现和错误分支发布风险；
-- 该问题必须在 Node 9 的 `migration-plan-v0.1.md` 中正式决定 production branch、GitHub default branch、合并 / 归档顺序、部署绑定与回滚基线；
+- `migration-plan-v0.1.md` 已冻结治理原则：Website 1.0 完成并通过审核后由 `New` reviewed promotion / PR 进入 `main`，`main` 最终成为 authoritative production branch 与 GitHub default branch，`New` 不作为长期 production branch，`Eternanet_v0.1` 保留为历史基线；
 - 当前不得自行 merge、删除、重命名、rebase 或修改上述分支，也不得调整 GitHub default branch。
 
-本节只记录分支治理事实与后续必须解决的风险，不执行任何 Git 分支治理操作。
+具体 promotion、default branch 与部署绑定时间进入后续迁移 / 发布流程。本节只记录冻结原则与当前风险，不执行任何 Git 分支治理操作。
 
 ### 2.3 Node 1–8 强约束
 
@@ -207,36 +207,30 @@ app/
 - `<html lang>` 分别为经过审核的中文与英文语义值；
 - 语言切换根据稳定 `pageId` 映射到同一页面另一语言，不拼接任意字符串；
 - `/zh/products/studio` 与 `/en/products/studio` 必须成对；
-- 不用 localStorage 作为正式语言身份；可在未来仅用于记忆偏好，但 URL 始终是事实来源。
+- Header 提供明确的 `中 / EN` 语言切换入口，用户可以在任一页面随时手动切换；
+- 切换后保持当前对应页面，例如 `/zh/products/aftelle` 与 `/en/products/aftelle` 互相切换，不跳回 Home；
+- URL 是当前语言的唯一事实来源，不用 localStorage、Cookie 或客户端状态覆盖当前 URL；
+- `中 / EN` 的最终字体、尺寸、容器、状态与响应式样式属于 `Design in Browser`，不在 Node 9 冻结。
 
-### 5.3 根 `/` 决策建议
+### 5.3 根 `/` 正式策略
 
-决策状态：`RECOMMENDED / OPEN_DECISION`
+决策状态：`FROZEN`
 
-当前推荐方案 A：首版使用确定性 redirect：
+Website 1.0 首版使用确定性 redirect：
 
 ```text
 /  ->  /zh
 ```
 
-理由：
+冻结规则与理由：
 
 - 行为稳定、可测试、无地理或 Cookie 推断；
 - 不需要为根路径建立第三份内容或客户端语言选择屏；
 - 不引入会改变静态路由边界的全局 request-time 语言中间件；
-- 用户仍可在任何页面明确切换到对应 `/en` 页面。
-
-同时保留可评估方案 B：根 `/` 只根据请求的 `Accept-Language` 判断进入 `/zh` 或 `/en`，无法确认或不匹配时 fallback 到 `/zh`。
-
-方案 B 的边界：
-
-- 只在根 `/` 执行语言入口判断，不改变 `/zh`、`/en` 的正式内容身份；
-- 不创建第三份根路径正文；
-- 不因 Cookie、账户状态或产品状态改变 canonical 页面；
-- 必须具有确定的测试矩阵、缓存策略和 fallback；
-- 禁止使用 IP 地理位置判断语言。
-
-方案 A 与方案 B 均满足 Node 6“根 `/` 只承担语言入口”的约束。等待人工选择后再冻结；Node 9 当前不得把 `/ -> /zh` 解释为最终决定。
+- 用户仍可通过 Header 的 `中 / EN` 明确切换到当前页面的 `/en` 对应版本；
+- 首版不读取 `Accept-Language` 自动判断入口语言；
+- 禁止使用 IP 地理位置判断语言；
+- 后续只有出现真实国际用户需求并完成新的产品、缓存、SEO 与隐私评估后，才重新评估自动语言偏好。
 
 ### 5.4 URL 规范化
 
@@ -579,9 +573,11 @@ Node 9 不伪造尚未实测的 KB 数值；实施后依据真实 bundle 与设�
 
 ### 15.1 当前决策
 
-当前不启用 Contact / Participation API，因为 GAP-02、接收责任、适用 Privacy / Legal 和处理链路尚未解决。
+Website 1.0 首版默认不启用 Contact / Participation 页面、入口、表单或 API，因为 GAP-02、接收责任、适用 Privacy / Legal 和处理链路尚未解决。
 
 架构只保留条件式 server boundary，不创建假 endpoint、不迁移 `/api/create`、不连接 Airtable。
+
+Privacy / Legal 只有在真实收集个人信息前才必须启用。Analytics 与 Cookie 默认不启用；没有经过证明的真实需求时，不接入追踪脚本、不显示无意义 Cookie banner，也不创建空页面或 `Coming soon` 入口。
 
 ### 15.2 未来启用条件
 
@@ -715,9 +711,9 @@ frozen dependency install
 
 ## 19. Deployment
 
-### 19.1 推荐：Vercel
+### 19.1 Primary：Vercel
 
-推荐 Vercel 作为首选部署平台，原因：
+Vercel 正式冻结为 Website 1.0 的目标部署平台，原因：
 
 - 对 Next.js App Router、SSG、Route Handler、图片与 Preview 提供直接支持；
 - Git PR Preview 与独立 URL 适合 Design in Browser；
@@ -725,9 +721,9 @@ frozen dependency install
 - 当前团队不需要先维护自建 Node server、CDN、cache 与发布编排；
 - 对 6 页面首版运维负担较低。
 
-这不是对现有生产平台的事实判断；当前生产平台仍是 `UNVERIFIED`。
+该冻结描述 Website 1.0 的目标部署方向，不声称旧站当前运行于 Vercel。旧站真实生产平台属于 `MIGRATION_PREFLIGHT`，不阻塞 Node 9。
 
-### 19.2 备选：Cloudflare Workers + OpenNext
+### 19.2 Fallback：Cloudflare Workers + OpenNext
 
 Cloudflare 当前官方路径可通过 OpenNext adapter 支持 Next.js App Router、SSG、SSR、Route Handler 与 Preview 相关能力，因此技术上可行。
 
@@ -739,7 +735,7 @@ Cloudflare 当前官方路径可通过 OpenNext adapter 支持 Next.js App Route
 - Preview / production 配置差异；
 - 平台行为与 Next 原生能力的回归范围。
 
-如果域名、边缘策略、成本或组织基础设施明确偏向 Cloudflare，可在部署平台人工决策时将其提升为首选。Node 9 暂不因为“全球边缘”宣传自动选 Cloudflare。
+Cloudflare 保留为未来迁移或灾备选型，不作为 Website 1.0 当前阻塞项，也不与 Vercel 形成双平台首发要求。只有未来出现真实域名、边缘、成本、区域或组织基础设施需求时，才重新评估是否迁移。
 
 ### 19.3 可移植性原则
 
@@ -829,7 +825,7 @@ Node 9 由三份平级组成文档共同形成，不存在正式的 `9.1 / 9.2 /
 - 内容系统只描述事实与发布资格，不向页面强加通用布局或组件模板；
 - 迁移与部署必须使用本文件的静态优先、SEO、降级和可移植性边界；
 - 三份文档共同受 Node 6 页面职责、Node 7 / 8 Visual Quality Gate、Design in Browser 与 Resident degradation 约束；
-- 任一组成文档中的 `OPEN_DECISION` 都不得由另一份文档静默假定为已冻结。
+- 任一组成文档中的迁移、Cutover、Release Runbook 或未来输入都必须保持其分类，不得被另一份文档静默提升为已完成事实。
 
 ---
 
@@ -843,15 +839,18 @@ Node 9 由三份平级组成文档共同形成，不存在正式的 `9.1 / 9.2 /
 
 1. Node 8.1 已是 `PASS`，Home / Digital Residents 页面结构与 Home 视觉 Brief 原为 `REVIEW_REQUIRED`；`node8-freeze-v0.1.md` 已通过正式范围调整统一裁决 Node 8 为 `PASS / FROZEN`，只冻结 Narrative Arc、Section Architecture、交互、Presence 与质量门禁，不冻结最终视觉。
 2. Node 7 / 8 多处写明技术实现 `NOT_FROZEN`；Node 9 被授权评估并推荐技术架构，因此不是越权冻结视觉。
-3. Node 6 将根 `/` 行为留给 Node 9；本文件将确定性 `/ -> /zh` 标记为 `RECOMMENDED / OPEN_DECISION`，并保留仅基于 `Accept-Language`、fallback `/zh` 的备选方案，等待人工冻结。
-4. Node 5 要求保留真实联系能力，但 GAP-02 与 Privacy / Legal 尚未解决；本文件保留 server boundary 而不启用 Form，符合“能力要求存在、虚假入口不得上线”的共同约束。
+3. Node 6 将根 `/` 行为留给 Node 9；本文件已正式冻结确定性 `/ -> /zh`，不使用 `Accept-Language` 或 IP 地理判断，并保留 Header 手动切换，符合 Node 6 的入口边界。
+4. Node 5 要求保留真实联系能力，但不要求首版必须启用表单；本文件冻结“默认不启用、条件成立后再启用”的 server boundary，符合“能力边界存在、虚假入口不得上线”的共同约束。
 
-### 23.3 本组成文档的 `OPEN_DECISION`
+### 23.3 本组成文档冻结结论
 
-- 根 `/` 采用固定 `/ -> /zh`，还是只根据 `Accept-Language` 选择 `/zh` / `/en` 并以 `/zh` 为 fallback。
-- Vercel 与 Cloudflare 的最终生产平台选择仍取决于真实账户、域名、费用、区域和现网约束；Vercel 继续作为推荐首选。
+- 根 `/` 确定性进入 `/zh`；首版不使用 `Accept-Language`，禁止 IP 地理判断；
+- Header 提供 `中 / EN`，按稳定 `pageId` 保持当前对应页面；最终视觉样式留给 `Design in Browser`；
+- Vercel 是 Website 1.0 正式 Primary，Cloudflare Workers + OpenNext 是未来 Fallback；
+- Contact / Participation、Analytics 与 Cookie 首版默认不启用；Privacy / Legal 在真实收集个人信息前启用；
+- 旧站生产事实、Cutover 细节与发布阈值按 `migration-plan-v0.1.md` 分类为非阻塞后续输入。
 
-两种根语言方案都禁止 IP 地理判断。以上决策完成前，整个 Node 9 保持 `IN_PROGRESS / REVIEW_REQUIRED`，不得标记最终 `PASS / FROZEN`。
+技术架构、内容管理与迁移方案之间未发现新的阻塞级问题。本组成文档正式标记为 `PASS / FROZEN`。
 
 ---
 
@@ -876,4 +875,4 @@ Node 9 由三份平级组成文档共同形成，不存在正式的 `9.1 / 9.2 /
 
 ---
 
-Node 9 当前状态：`IN_PROGRESS / REVIEW_REQUIRED`
+Node 9 当前状态：`PASS / FROZEN`

@@ -4,7 +4,7 @@
 
 文档性质：Website 1.0 Node 9 — 内容管理与发布治理组成文档
 
-状态：`IN_PROGRESS / REVIEW_REQUIRED`
+状态：`PASS / FROZEN`
 
 编制日期：`2026-08-08`（Asia/Shanghai）
 
@@ -199,6 +199,17 @@ content/
 
 术语表用于约束核心术语的一致性，但不能代替自然本地化和逐页人工审核。
 
+### 6.1 语言入口与切换冻结规则
+
+- Website 1.0 首版只支持中文 `/zh` 与 English `/en`；
+- 根 `/` 确定性进入 `/zh`，不根据 `Accept-Language` 自动判断；
+- 禁止使用 IP 地理位置判断语言；
+- Header 提供明确的 `中 / EN` 手动切换入口；
+- 切换必须根据稳定 `pageId` 进入当前页面的对应语言版本，例如 `/zh/products/aftelle` 与 `/en/products/aftelle` 互相切换，不返回 Home；
+- URL 是当前语言的事实来源，内容加载不得用 localStorage、Cookie 或运行时推断覆盖 URL；
+- 语言切换入口的最终视觉样式、尺寸和响应式表现属于 `Design in Browser`，不在 Node 9 冻结；
+- 后续只有出现真实国际用户需求后，才重新评估自动语言偏好。
+
 ---
 
 ## 7. Build 发布门禁
@@ -274,7 +285,9 @@ schema 校验通过不代表内容事实正确。Production promotion 仍需要�
 
 ### 10.1 Contact / Participation
 
-只有以下条件全部成立后才能发布入口或 API：
+Website 1.0 首版默认不启用 Contact / Participation 页面、入口、表单或 API，也不创建空页面、假入口或 `Coming soon`。
+
+未来只有以下条件全部成立后才能发布入口或 API：
 
 - 存在真实公开联系方式或接收人；
 - 有响应责任、处理时间与停止接收机制；
@@ -295,6 +308,13 @@ GAP-02 未解决前，Contact 能力保留为架构边界，不显示假地址�
 - 数据流或供应商变化会触发双语复核；
 - 不用 Legacy 表单 note、模板法律文本或营销文案替代正式告知；
 - 未发生个人信息收集时，不为制造企业规模创建空 Privacy / Legal 页面。
+
+### 10.3 Analytics / Cookie
+
+- Website 1.0 首版默认不启用 Analytics；
+- 没有真实、获批的测量需求时不加入追踪 SDK、像素或同类第三方脚本；
+- 没有会触发 Cookie 告知或同意要求的真实功能时，不设置非必要 Cookie，也不显示无意义 Cookie banner；
+- 未来启用 Analytics / Cookie 时，作为 `FUTURE_DECISION` 重新审核数据、用途、保留、第三方、性能与 Privacy / Legal 影响。
 
 ---
 
@@ -330,7 +350,7 @@ GAP-02 未解决前，Contact 能力保留为架构边界，不显示假地址�
 - 一次迁移后只保留一个可写权威 Content Source；
 - 重新审核 Preview、webhook、缓存、rollback、export 与供应商退出路径。
 
-CMS 产品选择当前为 `DEFERRED`，不是阻塞 Website 1.0 的 `OPEN_DECISION`。
+CMS 产品选择当前为 `DEFERRED`，不构成 Website 1.0 的阻塞项。
 
 ---
 
@@ -349,16 +369,28 @@ CMS 产品选择当前为 `DEFERRED`，不是阻塞 Website 1.0 的 `OPEN_DECISI
 
 ---
 
-## 14. `OPEN_DECISION`
+## 14. 冻结结论与非阻塞后续输入
 
-本组成文档没有阻塞首版架构推荐的 CMS 决策；repository-managed YAML 已是当前推荐。
+本组成文档正式冻结：
 
-以下业务事实仍为 `OPEN_DECISION`，并会阻止对应能力上线，但不阻止 12 个核心信息页面继续设计与开发：
+- repository-managed YAML 是首版 Content Source；
+- Git / Preview review 与 build-time schema validation 是首版发布治理；
+- `/zh` 与 `/en` 通过稳定 `pageId` 配对，根 `/` 确定性进入 `/zh`；
+- Contact / Participation 首版默认不启用；
+- Privacy / Legal 在真实收集个人信息前启用；
+- Analytics / Cookie 首版默认不启用；
+- Headless CMS 只在真实规模触发后重新评估。
 
-1. Contact / Participation 是否在 Website 1.0 首次 production 发布时启用；
-2. 若启用，真实接收人、数据处理者、字段、保留 / 删除规则和授权 Legal / Privacy 内容是什么；
-3. 当前产品事实分别由谁作为 Fact Owner 与 Publish Approver 正式批准。
+以下不构成 Node 9 阻塞项：
+
+| 输入 | 分类 | 后续处理 |
+|---|---|---|
+| 当前产品事实的具体 Fact Owner 与 Publish Approver 名单 | `RELEASE_RUNBOOK_INPUT` | 对应内容进入 production 前填写并审核 |
+| Contact 接收人、字段、处理者、保留 / 删除与 Legal / Privacy | `FUTURE_DECISION` | 只有未来决定启用 Contact 时处理 |
+| Analytics / Cookie 产品与治理方案 | `FUTURE_DECISION` | 当前默认不启用，出现真实需求后重新审核 |
+
+内容管理、双语、SEO、Preview 与发布门禁之间未发现新的阻塞级冲突。本组成文档正式标记为 `PASS / FROZEN`。
 
 ---
 
-Node 9 当前状态：`IN_PROGRESS / REVIEW_REQUIRED`
+Node 9 当前状态：`PASS / FROZEN`
