@@ -55,18 +55,18 @@ Node 2 的事实扫描绑定 `Eternanet_v0.1@b72967fb1c87f0b14c94da67a706f3c16cc
 
 ## 2. 总体结论
 
-旧站是一套完成度较高的双语单页 React Landing Page，不是能够直接扩展为 Eterna 长期企业主站的 Website 1.0 基线。
+旧站是一套完成度较高的双语单页 React Landing Page，不是能够直接扩展为 Eterna 长期项目官网的 Website 1.0 基线。
 
 旧站的正面基础包括：以数字居民为中心的叙事、Studio 与 Aftelle 的高层职责区分、Universe 长期愿景提示、完整的中英文覆盖、基本语义结构、skip link、表单 label、`aria-live`、focus 样式和 reduced-motion 处理。这些内容证明旧站并非无价值原型，但其价值主要是概念、交互和视觉参考。
 
 旧站的核心问题包括：
 
-1. 信息架构仍是 1 个 HTML 入口、5 个 hash Section 的单页结构，与 Node 1 冻结的“长期企业主站、品牌门户和产品体系总入口”不匹配；
+1. 信息架构仍是 1 个 HTML 入口、5 个 hash Section 的单页结构，与 Node 1 冻结的“长期项目官网、品牌门户与公开产品体系总入口”不匹配；
 2. Eterna 总体叙事、产品定义、当前进度、未来愿景、表单转化和双语文案全部集中在 `App.jsx`，缺少版本化来源和内容治理边界；
 3. Aftelle 功能清单、当前开发进度以及部分愿景句超出当前已冻结上位输入能够直接支持的范围；
 4. `App.jsx` 777 行、`styles.css` 1669 行，页面、内容、状态、SEO 更新、导航和表单职责高度集中；
 5. Airtable 表单存在生产映射不确定、数据治理不足、滥用防护不足和错误边界过薄等风险；
-6. 当前 Vite 单页实现只有一个文档入口和一套页面级 metadata，非 URL 级双语及缺失的企业站 SEO / legal / support 基础能力会限制 Website 1.0；
+6. 当前 Vite 单页实现只有一个文档入口和一套页面级 metadata，非 URL 级双语、项目官网的页面级 SEO，以及尚未建立条件边界的 legal / privacy / support 能力会限制 Website 1.0；
 7. Aurora 有独立组件、清理和 reduced-motion 处理，但仍与全站固定背景和旧视觉系统绑定，只适合作为参考资产。
 
 Node 3 结论：旧站不适合原样延续或扩建。Website 1.0 可以迁移少量经过复核的内容语义与交互能力，但旧页面骨架、内容承载方式、CSS 组织和 API 实现应退出目标基线。
@@ -75,17 +75,17 @@ Node 3 结论：旧站不适合原样延续或扩建。Website 1.0 可以迁移�
 
 ## 3. 产品与信息架构问题
 
-### 3.1 与企业主站定位不匹配
+### 3.1 与项目官网定位不匹配
 
-Node 1 已冻结 Website 是 Eterna 的长期企业主站、品牌门户和产品体系总入口，而不是单一产品 Landing Page。旧站当前 Vite 单页实现只有一个文档入口，并将所有内容压入 `Vision → Resident → Products → Scenarios → Join` 的线性阅读路径。
+Node 1 已冻结 Website 是 Eterna 的长期项目官网、品牌门户与公开产品体系总入口，而不是单一产品 Landing Page。旧站当前 Vite 单页实现只有一个文档入口，并将所有内容压入 `Vision → Resident → Products → Scenarios → Join` 的线性阅读路径。
 
 这一结构可以完成一次品牌介绍，但无法证明能够长期承载：
 
-- 企业与品牌事实；
+- Eterna 项目与品牌事实；
 - 多产品的独立、可追溯公开信息；
 - 产品状态变化与历史更新；
 - 研究、开发者、新闻、支持等未来扩展内容；
-- legal、privacy、support 等企业站基础信息。
+- 真实条件成立后才可公开的 legal、privacy、support 等条件式信息。
 
 本节点只确认现有结构与定位不匹配，不在此提出新页面或新导航。
 
@@ -122,9 +122,9 @@ Node 1 已冻结 Website 是 Eterna 的长期企业主站、品牌门户和产�
 | “当前主线”中的 Studio Next、Aftelle、Runtime Core 推进与连续性验证状态 | `REWRITE`；可能符合项目进展，但旧站没有记录版本、日期、发布记录或产品仓库来源 | `legacy/src/App.jsx` Join progress；Node 1 `GAP-06` |
 | Universe 平台组和公共基础设施完整列举 | `REFERENCE_ONLY`；名称可追溯到长期拓扑，但单页卡片形式仍可能被理解为当前产品清单 | `legacy/src/App.jsx` Universe；Node 1 表达时序原则 |
 
-### 3.4 企业身份缺位
+### 3.4 公司公开事实缺位（条件式）
 
-旧站主要解释理念、Resident、产品和参与方式，没有可验证的公司公开身份、公司介绍、团队、地点、媒体联系或法律主体信息。Node 1 已把这些内容记录为 GAP，因此旧站不能被视为已完成企业层表达。
+旧站主要解释理念、Resident、产品和参与方式，没有可验证的公司公开身份、公司介绍、团队、地点、媒体联系或法律主体信息。Node 1 已把这些内容记录为 GAP；这一事实继续保留，但 Website 不是以公司介绍为中心的企业官网，因此该缺位不单独否定其项目官网定位。未来只有真实且获准公开的公司事实存在时，Website 才条件式承载。
 
 ### 3.5 旧站产品转化中心过强
 
@@ -141,10 +141,10 @@ Hero CTA、进度 CTA 和 Join 表单共同把页面导向参与意向提交。�
 | HIGH | `App.jsx` 同时承载双语文案、全页 Section、Header/Footer、SEO DOM 更新、导航状态、表单状态与提交逻辑 | `legacy/src/App.jsx` 777 行；除 `SectionIntro` 外主要页面结构集中在 `App` | 内容、交互与页面结构无法独立演进，任何产品或语言变更都触碰根组件 |
 | HIGH | 全站 CSS 单文件集中 | `legacy/styles.css` 1669 行，包含 tokens、全局样式、全部 Section、表单、响应式和动效 | 样式责任边界不清，局部迁移容易携带全局副作用 |
 | HIGH | 内容是 JSX 内嵌双语对象，没有来源版本、审核状态或内容生命周期 | `content.cn` / `content.en` 位于 `App.jsx` | 不能满足 Node 1 的来源追溯要求，双语内容易漂移 |
-| HIGH | 当前 Vite 单页实现以一个文档入口和 hash Section 承载全部内容 | `legacy/index.html`、`main.jsx`、5 个 Section ID；无 pathname 路由 | hash Section 没有独立 URL 文档、独立 metadata 和独立内容边界，不适合作为长期多栏目企业主站的信息发现与索引基础 |
+| HIGH | 当前 Vite 单页实现以一个文档入口和 hash Section 承载全部内容 | `legacy/index.html`、`main.jsx`、5 个 Section ID；无 pathname 路由 | hash Section 没有独立 URL 文档、独立 metadata 和独立内容边界，不适合作为长期多栏目项目官网的信息发现与索引基础 |
 | HIGH | 表单 API 与特定平台约定隐式耦合 | 前端固定 POST `/api/create`；`legacy/api/create.js` 不进入 Vite bundle；无部署路由配置 | 旧站在静态部署、预览和生产环境中的行为可能不同 |
 | MAJOR | 无测试、lint、格式化或 CI 配置 | `package.json` 只有 `dev`、`build`、`preview` | 内容、响应式、表单与 WebGL 回归无法通过仓库门禁确认 |
-| MAJOR | 语言能力依赖运行时 DOM 修改与 localStorage | `document.title`、meta mutation、`eterna-language`、旧 key `afterlife-language` | 语言状态没有独立 URL，不能直接复用到可索引多语言企业站 |
+| MAJOR | 语言能力依赖运行时 DOM 修改与 localStorage | `document.title`、meta mutation、`eterna-language`、旧 key `afterlife-language` | 语言状态没有独立 URL，不能直接复用到可索引多语言项目官网 |
 | MAJOR | Aurora 是全站固定渲染层，缺少 WebGL 初始化失败降级边界 | `App` 无条件挂载 `Aurora`；`Aurora.jsx` 直接创建 OGL `Renderer` | GPU、浏览器或上下文创建失败可能影响页面体验，视觉效果与页面根结构耦合 |
 | MINOR | README 的运行路径仍按旧根目录书写 | 根 `README.md` 引用根 `src/`、`styles.css`、`api/create.js`，实际均在 `legacy/` | 新成员按文档执行会进入错误目录；属于旧站维护文档漂移 |
 | MINOR | Git 跟踪 `.DS_Store` | 根与 `legacy/.DS_Store` 均被跟踪，`.gitignore` 无对应规则 | 形成无业务价值的仓库噪声；不影响页面运行 |
@@ -227,13 +227,13 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 
 ---
 
-## 6. SEO、可访问性与企业站缺口
+## 6. SEO、可访问性与项目官网缺口
 
 ### 6.1 SEO 与可索引性
 
 | 能力 | 当前状态 | 审计结论 |
 | --- | --- | --- |
-| 多页面可索引结构 | 只有一个 `index.html` 和客户端渲染内容 | `GAP`；不满足长期企业站的独立内容表达需要 |
+| 多页面可索引结构 | 只有一个 `index.html` 和客户端渲染内容 | `GAP`；不满足长期项目官网的独立内容表达需要 |
 | 语言 URL | 中英文共用同一 URL，通过 localStorage / React 切换 | `GAP`；搜索引擎和分享链接无法稳定表达语言版本 |
 | 基础 metadata | 有 title、description、OG type/site/title/description | `MIGRATE` 能力；具体文案必须重写并绑定来源 |
 | canonical / hreflang | 未发现 | `GAP` |
@@ -243,7 +243,7 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 | favicon / manifest | 未发现 | `GAP` |
 | hash navigation | click 被 preventDefault 后只执行 `window.scrollTo`，不更新 location hash | 当前交互不能稳定形成可分享、可回退的 Section URL 状态 |
 
-当前 Vite 单页实现只有一个文档入口和一套页面级 metadata；hash Section 没有独立 URL 文档、独立 metadata 和独立内容边界，因此当前实现不适合作为长期多栏目企业主站的信息发现与索引基础。问题来自当前实现方式，不代表 SPA 技术天然不能实现 SEO，也不代表旧站存在 metadata 就已经具备企业级 SEO 基础设施。
+当前 Vite 单页实现只有一个文档入口和一套页面级 metadata；hash Section 没有独立 URL 文档、独立 metadata 和独立内容边界，因此当前实现不适合作为长期多栏目项目官网的信息发现与索引基础。问题来自当前实现方式，不代表 SPA 技术天然不能实现 SEO，也不代表旧站存在 metadata 就已经具备产品级 SEO 基础设施。
 
 ### 6.2 已存在的可访问性基础
 
@@ -267,7 +267,7 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 - WebGL 性能、GPU 降级、上下文创建失败和高对比度模式未验证；
 - hash 导航阻止默认行为但不维护浏览器历史，返回键和深链接行为不完整。
 
-### 6.4 企业站基础能力缺口
+### 6.4 项目官网公开信息与条件式能力缺口
 
 仓库未发现以下正式能力或正文：
 
@@ -291,7 +291,7 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 | skip link、语义标签、可见 label、focus-visible、`aria-live`、reduced-motion | `KEEP` | 是明确且低耦合的可访问性行为；后续实现仍需重新验收 |
 | 数字居民正式定义的核心语义 | `MIGRATE` | 迁移的是语义目标、信息职责和正确概念边界，不代表直接复用 Legacy 原文；Website 1.0 正式文案必须重新依据 Node 1 上位事实生成并审核 |
 | “数字居民为中心、平台是环境”的 Universe 表达原则 | `MIGRATE` | 迁移的是表达目标与正确概念边界，不代表直接复用 Legacy 原文；正式文案必须重新依据 Node 1 生成并审核，也不得迁移旧平台卡片结构或当前能力暗示 |
-| 中英文语言能力 | `MIGRATE` | 企业站需要一致的多语言表达能力；旧 localStorage + DOM mutation 实现不能直接继承 |
+| 中英文语言能力 | `MIGRATE` | 项目官网需要一致的多语言表达能力；旧 localStorage + DOM mutation 实现不能直接继承 |
 | title / description / social metadata 能力 | `MIGRATE` | 保留的是能力需求，不代表复制旧 `index.html`、旧文案、单 URL 语言切换或 DOM 后改写实现 |
 | 表单的 idle / submitting / success / error 反馈模式 | `REFERENCE_ONLY` | 交互状态可参考；业务是否保留需 Node 5 确认，旧网络实现不迁移 |
 | Header 活动项、移动横向导航和滚动 offset | `REFERENCE_ONLY` | 可作为交互样本；Website 1.0 导航尚未设计，不能预设继续使用 |
@@ -305,8 +305,8 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 | Join 参与意向业务与文案 | `REWRITE` | 需求尚未确认，且数据用途说明不足以承担正式隐私告知 |
 | `legacy/api/create.js` Airtable handler | `REWRITE` | 服务边界、部署映射、验证、反滥用、数据治理和错误处理不足 |
 | `styles.css` 整体实现 | `REWRITE` | 1669 行全局单文件与当前页面结构强耦合，不适合作为目标样式基线 |
-| `App.jsx` 整体实现 | `REWRITE` | 内容、页面、SEO、状态和网络职责集中，不能作为企业站根组件继续扩建 |
-| 5 个 hash anchor 作为全站信息架构 | `DROP` | 不能承载长期企业主站；具体新 IA 留给 Node 6 |
+| `App.jsx` 整体实现 | `REWRITE` | 内容、页面、SEO、状态和网络职责集中，不能作为项目官网根组件继续扩建 |
+| 5 个 hash anchor 作为全站信息架构 | `DROP` | 不能承载长期项目官网；具体新 IA 留给 Node 6 |
 | disabled 登录按钮 | `DROP` | 没有登录功能，仍占用主导航动作位置并形成能力预期 |
 | `afterlife-language` 旧 localStorage key 兼容 | `DROP` | 属于旧命名遗留，不应进入 Website 1.0 内容或状态基线 |
 | ignored `legacy/dist/`、`legacy/node_modules/`、本地 `.env.local` | `DROP` | 分别是生成物、安装环境和本地配置，不是可迁移源码或资产 |
@@ -363,10 +363,10 @@ Node 3 不修复以上风险。参与表单是否进入 Website 1.0 必须先由
 ## 10. 对 Website 1.0 后续节点的约束
 
 1. Node 4 参考研究不得把旧站视觉或单页结构预设为目标，也不得用参考网站覆盖 Node 1 上位定位；
-2. Node 5 必须先确认企业信息、产品信息、参与表单、新闻、研究、开发者和支持等内容的真实需求、负责人、来源和时效；
+2. Node 5 必须先确认项目信息、产品信息、参与表单、新闻、研究、开发者、支持及条件式公司事实等内容的真实需求、负责人、来源和时效；
 3. Node 5 必须把 Aftelle North Star、公司公开身份、品牌规范和当前产品可用性继续保留为 GAP，除非获得正式输入；
 4. Node 5 若保留表单，必须明确数据字段、用途、第三方处理者、保留与删除规则、反滥用要求和用户告知；
-5. Node 6 必须解决企业主站长期扩展与可索引内容结构问题，但本节点不指定页面、导航、URL 或语言路由；
+5. Node 6 必须解决项目官网长期扩展与可索引内容结构问题，但本节点不指定页面、导航、URL 或语言路由；
 6. Node 7 不得把旧圆形 CSS 标记、Aurora 色彩或玻璃卡片直接认定为正式品牌系统；
 7. Node 8 可把旧站作为交互和视觉参考，不得把 `App.jsx` / `styles.css` 作为目标页面实现开始重构；
 8. Node 9 必须独立决定 Website 1.0 的技术和服务边界，不因旧站使用 React、Vite、OGL 或 Airtable 而默认继承；

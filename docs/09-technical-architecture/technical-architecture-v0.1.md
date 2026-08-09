@@ -34,7 +34,7 @@
 
 ### 1.2 核心架构句
 
-**把 Eterna Website 1.0 建成“静态内容与语义 HTML 为主、局部交互与高级视觉按需增强”的 Next.js 多语言企业站，而不是一个全页客户端应用。**
+**把 Eterna Website 1.0 建成“静态内容与语义 HTML 为主、局部交互与高级视觉按需增强”的 Next.js 多语言项目官网，而不是一个全页客户端应用。**
 
 这套架构服务于：
 
@@ -82,7 +82,7 @@
 
 目标架构必须满足：
 
-1. Eterna 是长期企业主站、品牌门户和产品体系总入口，不是单一 Landing Page；
+1. Website 是 Eterna 的长期项目官网、品牌门户与公开产品体系总入口，不是单一 Landing Page；
 2. 当前公开结构为 6 个页面组、12 个语言页面：Home、Digital Residents、Products、Aftelle、Studio、About Eterna × `/zh` / `/en`；
 3. 根 `/` 只负责进入正式语言版本，不承载第三份重复正文；
 4. 中英文内容、状态、日期、CTA 可用性与产品边界必须对应；

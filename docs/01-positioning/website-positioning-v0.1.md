@@ -23,11 +23,11 @@
 
 ### Website 项目决策
 
-Eterna Website 1.0 定位为 Eterna 的长期企业主站、品牌门户和产品体系总入口，而不是单一产品 Landing Page。
+Eterna Website 1.0 定位为 Eterna 的长期项目官网、品牌门户与公开产品体系总入口，而不是单一产品 Landing Page。
 
 这一判断是对“官方网站、品牌展示与公开产品入口”以及多产品 Universe 拓扑的 Website 项目级落实，不是对 Eterna 产品体系新增一个领域平台。Website 是公开表达与入口层，不是 Eterna Universe 的中心主体、领域产品或公共基础设施。
 
-“企业主站”在本文件中描述网站的长期信息与品牌职责，不代表当前已经具备正式公司介绍正文；公司公开身份仍是 GAP。
+Website 的核心展示对象是 Eterna 项目、Digital Resident、当前有真实依据的产品，以及 Eterna 的长期方向与公开愿景。未来如存在真实且获准公开的法定主体、公司名称、Legal / Privacy、团队或其他公司事实，Website 可以条件式承载，但这些内容不得反向成为 Website 的根定位；公司公开身份当前仍是 GAP。
 
 ---
 
@@ -35,7 +35,7 @@ Eterna Website 1.0 定位为 Eterna 的长期企业主站、品牌门户和产�
 
 | 目标 | 来源属性 | 当前定位 |
 | --- | --- | --- |
-| 建立统一、长期的 Eterna 企业与品牌表达入口 | Website 项目决策，受 README 仓库职责支持 | 让访问者首先理解 Eterna，而不是误把 Eterna 等同于某个 App 或单项能力 |
+| 建立统一、长期的 Eterna 项目与品牌表达入口 | Website 项目决策，受 README 仓库职责支持 | 让访问者首先理解 Eterna，而不是误把 Eterna 等同于某个 App 或单项能力 |
 | 提供 Eterna 产品体系的公开总入口 | Website 项目决策，受 README 与 Universe 支持 | 以可扩展方式说明产品之间的关系；不在节点 1 决定导航、页面或 URL |
 | 准确解释数字居民核心概念 | 上位事实的公共表达职责 | 所有定义性内容追溯到《数字居民定义》，避免把模型、Prompt、Agent 或角色卡称为完整 Resident |
 | 展示当前有充分证据支持的核心产品与进展 | Website 项目决策 | 只发布有版本化来源的当前事实；上位文档没有正式指定“旗舰产品”，不得擅自使用该称号 |
@@ -152,7 +152,7 @@ Website 不承担以下职责：
 
 ### Website 项目决策
 
-1. Website 采用长期企业主站结构，新增产品或公共内容时不要求重建 Eterna 品牌根架构。
+1. Website 采用长期项目官网结构，新增产品或公共内容时不要求重建 Eterna 品牌根架构。
 2. Eterna 与数字居民保持为稳定上位叙事；单一产品、单一阶段或单一技术不得取代总体定义。
 3. 所有定义性表达应能追溯到 Eterna_Docs 的明确文件、版本和 commit；产品现状应追溯到对应产品的可验证来源。
 4. Website 不把当前产品状态永久固化成 Eterna 的最终定义。
@@ -170,7 +170,7 @@ Website 不承担以下职责：
 | 未决问题 | 当前状态 | 后续需要 |
 | --- | --- | --- |
 | Aftelle 的完整正式定位是什么 | GAP：冻结 commit 的根 `INDEX.md` 将“Aftelle 产品北极星”列为待补关键文档，当前正式产品正文中未发现 Aftelle Product North Star | 在 Eterna_Docs 中形成并审核正式产品正文后再更新 Website 表达 |
-| Website 是否有上位批准的企业主站正文 | GAP：只有仓库职责句，本文件是项目级推导 | 如需上升为 Eterna 正式定义，应在 Eterna_Docs 另行治理，不由 Website 擅自完成 |
+| Website 是否有上位批准的正式定位正文 | GAP：只有仓库职责句；“长期项目官网、品牌门户与公开产品体系总入口”是当前项目级人工裁决 | 如需上升为 Eterna 正式定义或完整 Website North Star，应在 Eterna_Docs 另行治理，不由 Website 擅自完成 |
 | Eterna 的正式品牌规范是什么 | GAP | 独立品牌治理输入；节点 1 不设计视觉或语调 |
 | 公司法定身份与公开公司介绍是什么 | GAP | 经审核的公司事实正文及公开授权范围 |
 | 哪些产品可被称为当前旗舰产品 | GAP：上位文档没有该称号 | 由产品治理提供正式认定、时间范围和证据 |
