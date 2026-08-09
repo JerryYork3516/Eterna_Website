@@ -17,7 +17,7 @@
 
 Node 8 最终状态：`PASS / FROZEN`。
 
-Node 8 已经完成进入 Node 9 所需的产品设计冻结。现有 Node 8 子文档中标记为 `REVIEW_REQUIRED` 的页面结构与视觉探索材料，按本文件重新解释：
+Node 8 已经完成进入 Node 9 所需的产品设计冻结。Node 8 相关子文档原曾标记为 `REVIEW_REQUIRED` 的页面结构与视觉探索材料，按本文件重新解释：
 
 - Home 与 Digital Residents 的 Narrative Arc、Section Architecture、页面职责、CTA 层级、内容状态边界与 Resident Presence 使用边界，纳入本次冻结；
 - 最终 Layout、Hero、高保真视觉、具体视觉参数与最终资产不因本次冻结而获得批准；
