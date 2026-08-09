@@ -118,8 +118,8 @@ Node 1 已冻结 Website 是 Eterna 的长期项目官网、品牌门户与公�
 | --- | --- | --- |
 | “成为进入数字世界的唯一途径” / “your only gateway into the digital world” | `REWRITE`；“唯一途径”不是 Node 1 冻结的 Eterna 或数字居民定义，构成未经来源支持的排他性主张 | `legacy/src/App.jsx` hero closing；Node 1 上位输入未提供该结论 |
 | “创造价值并为你赚取报酬” | `REWRITE`；属于未来应用结果或能力承诺，未绑定当前产品事实与可用状态 | `legacy/src/App.jsx` vision paragraphs；Node 1 要求不把愿景写成当前能力 |
-| Aftelle 的文字、语音、视觉、多模态、备份、恢复、迁移和个人设备能力清单 | `REWRITE`；高层职责部分受上位文档支持，但 Aftelle Product North Star 仍是 GAP，完整功能清单不能直接作为正式产品事实 | Node 1 `GAP-01`；`legacy/src/App.jsx` Products |
-| “当前主线”中的 Studio Next、Aftelle、Runtime Core 推进与连续性验证状态 | `REWRITE`；可能符合项目进展，但旧站没有记录版本、日期、发布记录或产品仓库来源 | `legacy/src/App.jsx` Join progress；Node 1 `GAP-06` |
+| Aftelle 的文字、语音、视觉、多模态、备份、恢复、迁移和个人设备能力清单 | `REWRITE`；高层职责部分受上位文档支持，但 Aftelle Product North Star 仍是 GAP，完整功能清单不能直接作为正式产品事实 | Node 1 `N1-GAP-01`；`legacy/src/App.jsx` Products |
+| “当前主线”中的 Studio Next、Aftelle、Runtime Core 推进与连续性验证状态 | `REWRITE`；可能符合项目进展，但旧站没有记录版本、日期、发布记录或产品仓库来源 | `legacy/src/App.jsx` Join progress；Node 1 `N1-GAP-06` |
 | Universe 平台组和公共基础设施完整列举 | `REFERENCE_ONLY`；名称可追溯到长期拓扑，但单页卡片形式仍可能被理解为当前产品清单 | `legacy/src/App.jsx` Universe；Node 1 表达时序原则 |
 
 ### 3.4 公司公开事实缺位（条件式）

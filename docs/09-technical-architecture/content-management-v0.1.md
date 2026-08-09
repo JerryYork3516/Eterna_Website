@@ -298,7 +298,7 @@ Website 1.0 首版默认不启用 Contact / Participation 页面、入口、表�
 - Preview 不写入 production 数据；
 - 适用 Privacy / Legal 已获授权并与真实数据流一致。
 
-GAP-02 未解决前，Contact 能力保留为架构边界，不显示假地址、假表单或无人处理入口。
+N5-GAP-02 未解决前，Contact 能力保留为架构边界，不显示假地址、假表单或无人处理入口。
 
 ### 10.2 Privacy / Legal
 

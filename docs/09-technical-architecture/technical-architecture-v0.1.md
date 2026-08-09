@@ -316,7 +316,7 @@ Website 1.0 首版使用确定性 redirect：
 
 首版不自动生成 `Organization`、产品可用性、下载、价格、团队或公司实体 JSON-LD。
 
-只有对应事实来源、公开授权和页面内容成立时才添加结构化数据。GAP-01 未解决前，不用 schema.org 标记补写法定主体或成熟公司事实。
+只有对应事实来源、公开授权和页面内容成立时才添加结构化数据。N5-GAP-01 未解决前，不用 schema.org 标记补写法定主体或成熟公司事实。
 
 ---
 
@@ -573,7 +573,7 @@ Node 9 不伪造尚未实测的 KB 数值；实施后依据真实 bundle 与设�
 
 ### 15.1 当前决策
 
-Website 1.0 首版默认不启用 Contact / Participation 页面、入口、表单或 API，因为 GAP-02、接收责任、适用 Privacy / Legal 和处理链路尚未解决。
+Website 1.0 首版默认不启用 Contact / Participation 页面、入口、表单或 API，因为 N5-GAP-02、接收责任、适用 Privacy / Legal 和处理链路尚未解决。
 
 架构只保留条件式 server boundary，不创建假 endpoint、不迁移 `/api/create`、不连接 Airtable。
 

@@ -119,7 +119,7 @@ Footer 负责提供比 Header 更完整但仍真实的网站地图：
 | 内容 | 当前处理 |
 | --- | --- |
 | Aftelle、Studio 直达入口 | 可进入 Footer，主导航仍只保留 Products |
-| Contact / Participation | GAP-02 解决、接收责任明确后进入 Footer；相关页面可从适当内容提供上下文入口 |
+| Contact / Participation | N5-GAP-02 解决、接收责任明确后进入 Footer；相关页面可从适当内容提供上下文入口 |
 | Privacy / Legal | 实际收集个人信息前必须发布并进入 Footer；未触发时不创建空页面 |
 | Research、Developers、Updates、Support | 当前不进入 Footer；只有正式启用后才加入 |
 
@@ -226,7 +226,7 @@ Footer 不是把未来栏目名称全部预先列出的占位区，也不用于�
 | Updates / News | 新建 `/{lang}/updates` 及详情 | 有持续、可审核、可失效的公开动态来源 |
 | Support | 新建 `/{lang}/support` | 有正式支持范围、处理责任与更新机制 |
 | 正式公司信息 | 优先扩展 About Eterna，必要时再建立下层内容 | 法定主体、公开名称和相应事实得到批准 |
-| Contact / Participation | 新建 `/{lang}/contact` 或在真实场景中提供入口 | GAP-02、接收责任、隐私和处理链路全部解决 |
+| Contact / Participation | 新建 `/{lang}/contact` 或在真实场景中提供入口 | N5-GAP-02、接收责任、隐私和处理链路全部解决 |
 | Privacy / Legal | 使用低频独立地址并进入 Footer | 形成适用、获授权且与实际处理一致的正式文本 |
 
 新增类别不会自动进入主导航。每次扩展都必须先证明：内容真实、用户有需要、有人负责、可以持续更新，而且不会改变 Eterna 根定位。
@@ -241,13 +241,13 @@ Footer 不是把未来栏目名称全部预先列出的占位区，也不用于�
 | Developers | 当前没有已确认的公开开发者资源与稳定维护入口 |
 | Updates / Progress / News | Node 5 将其列为非阻塞能力；当前没有持续、已审核的公开动态来源 |
 | Support | 当前没有正式支持范围、处理责任或更新机制 |
-| Company / Corporate | Eterna 当前是项目阶段，GAP-01 未解决；About Eterna 已能承载真实项目信息 |
+| Company / Corporate | Eterna 当前是项目阶段，N5-GAP-01 未解决；About Eterna 已能承载真实项目信息 |
 | Leadership / Team | 没有正式公开团队事实来源 |
 | Careers | 没有正式招聘内容和运营责任 |
 | Press / Media | 没有正式媒体资料与联系机制 |
 | Investors / Investor Relations | 没有对应主体、事实或业务需求 |
 | Partners | 没有可公开的正式合作体系内容 |
-| Contact 独立页 | GAP-02 与接收责任尚未解决；先保留挂接规则，不发布虚假入口 |
+| Contact 独立页 | N5-GAP-02 与接收责任尚未解决；先保留挂接规则，不发布虚假入口 |
 | Privacy / Legal 独立页 | 当前尚未确认公开个人信息收集方案；一旦收集，发布前必须建立 |
 | Account / Login | Website 1.0 不建设统一账户系统，也不创建无功能入口 |
 | 站内搜索 | 当前内容规模不足以证明需要，Node 5 将其列为条件式能力 |
