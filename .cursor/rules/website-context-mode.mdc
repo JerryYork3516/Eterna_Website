@@ -14,3 +14,6 @@ alwaysApply: true
 - Use existing implementations before introducing new ones.
 - Do not self-approve visual gates that require human review.
 - Keep changes small, direct, and verifiable.
+- For external tool, Plugin, MCP, Browser, GitHub, or Vercel tasks, read `docs/10-development-plan/tool-governance-v0.1.md`.
+- Project-specific workflows live only under `.agents/skills/`; read the relevant `SKILL.md` when the task matches, and do not create Cursor-specific copies.
+- Skills remain subordinate to `AGENTS.md`, Engineering Standards, and task-relevant Node documents; skill-assisted browser review cannot pass a human Visual Quality Gate.

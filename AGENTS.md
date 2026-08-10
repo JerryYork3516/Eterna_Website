@@ -24,8 +24,8 @@ Website responsibilities:
 
 - Node 1–9 planning and freeze work is complete.
 - Node 10 is still `REVIEW_REQUIRED`.
-- P1, P2, P3, and P4 are complete.
-- P5, P6, and P7 are not complete.
+- P1, P2, P3, P4, and P5 are complete.
+- P6 and P7 are not complete.
 - D1 has **not** started.
 - The root Next.js app does **not** exist yet.
 
@@ -36,13 +36,20 @@ Use the current Git branch and the Node 10 document as the working baseline.
 Read and obey sources in this order:
 
 1. `Eterna_Docs` — upstream facts and product definitions
-2. `docs/01–10` — Website planning, freeze, and execution constraints
+2. Node 1–10 formal documents — Website planning, freeze, and execution constraints
 3. This `AGENTS.md` — AI working discipline for this repo
-4. The root Website app created after D1 — the implementation
-5. `legacy/` — historical implementation and migration evidence only
-6. `references/` — reference-only material
+4. `docs/10-development-plan/engineering-standards-v0.1.md` — code and engineering rules
+5. `docs/10-development-plan/tool-governance-v0.1.md` — capability routing and permission rules
+6. The task-specific `.agents/skills/` workflow, when triggered
+7. Plugin, MCP, and external-tool capabilities
+8. P6 deterministic automation and its evidence
+9. The root Website app created after D1 — the implementation
+10. `legacy/` — historical implementation and migration evidence only
+11. `references/` — reference-only material
 
 Rules:
+- Lower layers cannot override higher layers.
+- Skills and tools are not new fact or authority sources.
 - `legacy/` cannot override Website planning.
 - `references/` cannot override formal decisions.
 - Website implementation cannot become a new source of upstream facts.
@@ -221,3 +228,14 @@ A task is only done when all of these are true:
 - human-only gates were not self-claimed as passed.
 
 Do not say “done” because it looks fine or should work.
+
+## 17. Project Skills & Tool Routing
+
+Repo-local project workflows live only under `.agents/skills/`:
+
+- `$website-behavior-preserving-simplification` — use only when the user explicitly requests behavior-preserving simplification, cleanup, abstraction reduction, duplication removal, or AI-smell removal.
+- `$website-design-in-browser-review` — use only when the user explicitly requests browser, visual, UI, responsive, or Design in Browser review; it collects evidence and cannot approve the human Visual Quality Gate.
+
+Project Skills must obey this `AGENTS.md`, `docs/10-development-plan/engineering-standards-v0.1.md`, task-relevant Node documents, and the current explicit task. A Skill is a workflow, not a new fact source, Rule, permission, or automated gate.
+
+For any Skill, Plugin, MCP, Browser, GitHub, Vercel, or external-tool task, read `docs/10-development-plan/tool-governance-v0.1.md`. Codex and Cursor use the same `.agents/skills/` source; do not create Cursor-specific copies.
