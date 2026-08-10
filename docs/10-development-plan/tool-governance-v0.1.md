@@ -11,7 +11,7 @@
 审计基线：`New@1a1d3d6eb37063d2f43cddc7c56e809c48ca4f7b`
 
 > 本文件冻结 Website 的 repo-local Skills、工具路由、权限边界和生命周期。
-> 本轮没有安装 Plugin、MCP、Playwright、axe、Lighthouse 或 Vercel CLI，没有修改外部权限、配置 CI、开始 P6 / P7 或执行 D1。
+> 本轮没有安装 Plugin、MCP、Playwright、axe、Lighthouse 或 Vercel CLI，没有修改外部权限、配置 CI、开始 P6 / P7 或执行 Stage 1.1。
 
 ---
 
@@ -99,10 +99,10 @@ OPTIONAL = NONE
 | GitHub local work | native Git | `NONE` | force-push、merge 和 admin actions |
 | GitHub remote context | existing GitHub Connector，`READ_ONLY_FIRST` | GitHub UI；按真实任务人工恢复的 `gh` | remote write 需当前任务授权；settings / protection / default branch 为人工 |
 | Browser evidence | Codex Browser / Computer Use | manual Chrome / real device | final Visual Quality Gate = `HUMAN` |
-| Deterministic browser evidence | Playwright + axe after P6 / D1 | existing task-specific manual evidence | 自动结果不产生视觉 PASS |
-| Preview deployment | Vercel Git integration after D1 | human-operated Vercel Dashboard | Production promotion 不自动执行 |
+| Deterministic browser evidence | Playwright + axe after P6 / Stage 1.1 | existing task-specific manual evidence | 自动结果不产生视觉 PASS |
+| Preview deployment | Vercel Git integration after Stage 1.1 | human-operated Vercel Dashboard | Production promotion 不自动执行 |
 | Deployment inspection | Vercel Dashboard；按需只读 CLI | approved read-only API / MCP only after a proven gap | promotion、rollback、domain、DNS、production secret |
-| Documentation | official documentation through current Web access | locked dependency docs after D1 | 不增加 Documentation MCP / Context7 |
+| Documentation | official documentation through current Web access | locked dependency docs after Stage 1.1 | 不增加 Documentation MCP / Context7 |
 | Security | P6 deterministic dependency、secret、SAST / CodeQL checks | scoped human security review | finding disposition、bypass、patch merge |
 | Figma | `DEFER` | named approved file 的未来 read-only access | design source approval、write / delete / publish |
 
@@ -170,7 +170,7 @@ Plugin、MCP、CLI 或 Connector 暴露这些能力，不构成执行授权。�
 
 - Vercel MCP / Plugin：等真实只读 inspection 缺口和可限制 scope 被证明；
 - Figma MCP / Plugin：等正式 Figma-centered workflow 出现；
-- Codex Security：等 D8、攻击面扩大、server functionality 增多或真实 security review need；
+- Codex Security：等 Stage 1.8、攻击面扩大、server functionality 增多或真实 security review need；
 - Cloudflare integration：保持 Node 9 fallback，不形成双平台首发工具链；
 - Sentry、Analytics、CMS、visual regression 与 accessibility SaaS：等真实运营、内容或测量需求。
 
@@ -245,7 +245,7 @@ EXTERNAL_INSTALLATION = NOT_PERFORMED
 P6 = NOT_STARTED
 P7 = NOT_STARTED
 Node 10 = REVIEW_REQUIRED
-D1–D9 = NOT_STARTED
+Stage 1.1–1.9 = NOT_STARTED
 Node 1–10 = UNCHANGED
 Legacy = NO CHANGES
 Production authority = HUMAN-AUTHORIZED

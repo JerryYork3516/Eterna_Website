@@ -9,14 +9,14 @@
 编制日期：`2026-08-10`（Asia/Shanghai）
 
 > 本文件定义 Eterna Website 1.0 的基础工程原则、目标目录职责、文件与模块边界、复用和抽象规则，以及前端实现质量边界。
-> P4 是 Node 10 开发前的内部规范整理，不是新的正式 Node 或开发阶段；本文件不修改 Node 1–10 的裁决，不开始 D1，也不创建根 Next.js 应用。
-> P4 完成表示本文件可作为 Website 1.0 D1 的工程规范基线，不表示 Node 10 已通过或 D1 已开始。
+> P4 是 Node 10 开发前的内部规范整理，不是新的正式 Node 或开发阶段；本文件不修改 Node 1–10 的裁决，不开始 Stage 1.1，也不创建根 Next.js 应用。
+> P4 完成表示本文件可作为 Website 1.0 Stage 1.1 的工程规范基线，不表示 Node 10 已通过或 Stage 1.1 已开始。
 
 ---
 
 ## 1. 范围与优先级
 
-本版规定 Website 1.0 D1 开发基线的工程与代码质量规则。发生取舍时，按以下顺序判断：
+本版规定 Website 1.0 Stage 1.1 开发基线的工程与代码质量规则。发生取舍时，按以下顺序判断：
 
 ```text
 Correctness
@@ -108,7 +108,7 @@ public/
 tests/
 ```
 
-这是目标职责说明，不是 D1 的空目录清单。D1 不需要一次创建全部目录；只有出现真实文件和职责时才创建对应目录。
+这是目标职责说明，不是 Stage 1.1 的空目录清单。Stage 1.1 不需要一次创建全部目录；只有出现真实文件和职责时才创建对应目录。
 
 ### 3.1 `app/`
 
@@ -176,7 +176,7 @@ tests/
 
 承载需要跨模块或从公开行为验证系统的测试。与单一模块紧密绑定的测试可以保留在模块附近，避免测试目录与实现所有权脱节。
 
-具体测试原则见第 27 节；测试工具、配置与 coverage threshold 留给 P6 / D1。
+具体测试原则见第 27 节；测试工具、配置与 coverage threshold 留给 P6 / Stage 1.1。
 
 ---
 
@@ -694,7 +694,7 @@ Resident 在空间不足时可以降低复杂度、静态化、移动位置或�
 
 ## 21. Accessibility 基础规范
 
-Website 继续以 `WCAG 2.2 AA` 为目标。本节冻结代码级底线；具体自动化工具与阈值留给 P6 / D1，Machine / Human 的职责边界见第 32 节。
+Website 继续以 `WCAG 2.2 AA` 为目标。本节冻结代码级底线；具体自动化工具与阈值留给 P6 / Stage 1.1，Machine / Human 的职责边界见第 32 节。
 
 ### 21.1 Native semantics first
 
@@ -851,7 +851,7 @@ YAML 不得：
 
 Production content 必须 fail closed。Schema、locale pair、publication state 或 required source 不满足时，不得静默降级成未知内容继续发布。
 
-具体 validator、错误格式与 build gate 实现留给 P6 / D1；本节只冻结上述责任链和失败原则。
+具体 validator、错误格式与 build gate 实现留给 P6 / Stage 1.1；本节只冻结上述责任链和失败原则。
 
 ---
 
@@ -890,7 +890,7 @@ Sticky / pinned 只在服务明确空间或内容关系时使用，必须可以�
 - optional visual failure 只能留在 Presence / Visual Zone，不能扩散成整页失败；
 - 降级后主要内容、导航、语言切换与真实 CTA 仍可用。
 
-Resident、Hero、最终视觉、动画参数与 advanced renderer 的具体形式继续保持 `NOT_FROZEN`，留给 Design in Browser 与 D7 收敛。
+Resident、Hero、最终视觉、动画参数与 advanced renderer 的具体形式继续保持 `NOT_FROZEN`，留给 Design in Browser 与 Stage 1.7 收敛。
 
 ---
 
@@ -923,7 +923,7 @@ Web Platform
 
 不得因为 AI 熟悉、教程常用、“项目通常都会装”或写起来方便，就默认加入 lodash、axios、moment、Redux、Zustand、giant UI kit、shadcn、Tailwind、GSAP、Three.js、form framework、icon mega-pack 或 utility mega-library。
 
-这不是永久禁止。真实需求出现后，按本节重新评估。Node 9 已将 advanced visual 延迟选型，D1 不得提前安装 Three.js 或 WebGL framework。
+这不是永久禁止。真实需求出现后，按本节重新评估。Node 9 已将 advanced visual 延迟选型，Stage 1.1 不得提前安装 Three.js 或 WebGL framework。
 
 ---
 
@@ -967,7 +967,7 @@ Production content、schema、locale pair、publication 或 build gate 失败继
 
 测试代码也保持具体、直接。不得为少量测试建立巨型 helper framework、复杂 mock infrastructure、测试 DSL 或 `TestFactoryFactory`。测试应帮助理解产品契约，而不是成为第二套应用框架。
 
-本节不选择测试框架、coverage threshold 或 CI 配置；这些由 P6 / D1 根据真实工程落地。
+本节不选择测试框架、coverage threshold 或 CI 配置；这些由 P6 / Stage 1.1 根据真实工程落地。
 
 ---
 
@@ -1038,7 +1038,7 @@ measure before optimize
 - third-party integration 明确要求 stable identity；
 - 其他当前代码证据证明 manual memoization 更清楚或必要。
 
-核心原则是 `evidence or contract before manual memoization`，而不是要求 measurement、rerender 问题和 stable identity 三项同时成立。具体 bundle budget、Lighthouse threshold 与 performance tooling 留给 P6 / D1。
+核心原则是 `evidence or contract before manual memoization`，而不是要求 measurement、rerender 问题和 stable identity 三项同时成立。具体 bundle budget、Lighthouse threshold 与 performance tooling 留给 P6 / Stage 1.1。
 
 ---
 
@@ -1070,7 +1070,7 @@ measure before optimize
 
 ### 32.1 `MACHINE_ENFORCEABLE`
 
-P6 / D1 应尽可能自动化：
+P6 / Stage 1.1 应尽可能自动化：
 
 - formatting；
 - lint；
@@ -1135,8 +1135,8 @@ Automated PASS ≠ Human Review PASS
 
 ## 34. 规范变更与 P4 最终状态
 
-本文件冻结的是 Website 1.0 D1 开发基线工程规范，不是永久不可修改的教条。后续真实工程证据如果证明某条规则需要调整，应在受影响边界内完成正式变更，而不是由开发便利、框架默认值或个人偏好静默改写。
+本文件冻结的是 Website 1.0 Stage 1.1 开发基线工程规范，不是永久不可修改的教条。后续真实工程证据如果证明某条规则需要调整，应在受影响边界内完成正式变更，而不是由开发便利、框架默认值或个人偏好静默改写。
 
 P4 — Website 工程与代码规范：`PASS / COMPLETE`
 
-P4 完成不改变正式计划状态：Node 10 仍为 `REVIEW_REQUIRED`，D1–D9 仍为 `NOT_STARTED`。本轮没有开始 P5、P6 或 D1，没有创建应用代码、CSS、YAML、Component、依赖、tooling、CI 或新的正式 Node。
+P4 完成不改变正式计划状态：Node 10 仍为 `REVIEW_REQUIRED`，Stage 1.1–1.9 仍为 `NOT_STARTED`。本轮没有开始 P5、P6 或 Stage 1.1，没有创建应用代码、CSS、YAML、Component、依赖、tooling、CI 或新的正式 Node。

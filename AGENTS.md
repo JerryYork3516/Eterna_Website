@@ -22,11 +22,10 @@ Website responsibilities:
 
 ## 2. Current status
 
-- Node 1–9 planning and freeze work is complete.
-- Node 10 is still `REVIEW_REQUIRED`.
-- P1, P2, P3, P4, and P5 are complete.
-- P6 and P7 are not complete.
-- D1 has **not** started.
+- Stage 0 is `COMPLETE`: Node 1–10 and P1–P7 are complete.
+- Node 10 is `PASS / FROZEN`.
+- Stage 1 is `READY_TO_START / NOT_STARTED`.
+- Stage 1.1 is `READY_TO_START / NOT_STARTED`; Stage 1.2–1.9 are `NOT_STARTED`.
 - The root Next.js app does **not** exist yet.
 
 Use the current Git branch and the Node 10 document as the working baseline.
@@ -43,7 +42,7 @@ Read and obey sources in this order:
 6. The task-specific `.agents/skills/` workflow, when triggered
 7. Plugin, MCP, and external-tool capabilities
 8. P6 deterministic automation and its evidence
-9. The root Website app created after D1 — the implementation
+9. The root Website app created after Stage 1.1 — the implementation
 10. `legacy/` — historical implementation and migration evidence only
 11. `references/` — reference-only material
 
@@ -62,7 +61,7 @@ Suggested map:
 - Engineering / code tasks: read `docs/10-development-plan/engineering-standards-v0.1.md` + the directly relevant Node 9 / Node 10 documents
 - Content / bilingual tasks: read Node 6 + Node 9 content governance + related page docs
 - UI / page design tasks: read Node 7 + Node 8 + related page docs
-- Migration / deployment tasks: read Node 9 migration plan + Node 10 D9
+- Migration / deployment tasks: read Node 9 migration plan + Node 10 Stage 1.9
 
 For formal Website engineering or code work, `AGENTS.md` defines how the AI works, while `docs/10-development-plan/engineering-standards-v0.1.md` is the engineering standards source for how the code should be written. Cursor, Codex, and other agents must follow the same engineering standards instead of maintaining separate code rules.
 
@@ -212,7 +211,7 @@ Rules:
 - Do not overwrite user changes.
 - Do not force-push.
 - Do not merge `New` into `main` unless the task explicitly says to do so.
-- Do not change GitHub default branch unless D9 / release work explicitly requires it.
+- Do not change GitHub default branch unless Stage 1.9 / release work explicitly requires it.
 - Small intermediate edits do not require a commit every time; commit stable, reviewable points.
 
 ## 16. Definition of Done

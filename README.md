@@ -27,9 +27,10 @@ Eterna Website 是 Eterna 的长期项目官网、品牌门户与公开产品体
 ## Current Status
 
 - Website 1.0 的规划、冻结结果与开发约束位于 `docs/`。
-- Node 1–9 已完成相应规划与冻结。
-- Node 10 当前处于规划最终审核阶段，状态为 `REVIEW_REQUIRED`。
-- D1 尚未开始；仓库根目录的 Next.js App Router 正式应用尚不存在。
+- Stage 0 已完成：Node 1–10 与 P1–P7 均已收口。
+- Node 10 状态为 `PASS / FROZEN`。
+- Stage 1 与 Stage 1.1 均为 `READY_TO_START / NOT_STARTED`；Stage 1.2–1.9 为 `NOT_STARTED`。
+- 仓库根目录的 Next.js App Router 正式应用尚不存在。
 
 ## Repository Structure
 
@@ -44,12 +45,12 @@ Eterna Website 是 Eterna 的长期项目官网、品牌门户与公开产品体
 
 - 不要按旧 Vite 方式从仓库根目录启动网站。
 - 不要把 `legacy/` 当作 Website 1.0 的目标实现。
-- D1 将在仓库根目录建立新的 Next.js App Router 应用。
-- `npm install`、`npm run dev` 等正式命令将在 D1 实际创建工程后，根据真实脚本补充到本文件。
+- Stage 1.1 将在仓库根目录建立新的 Next.js App Router 应用。
+- `npm install`、`npm run dev` 等正式命令将在 Stage 1.1 实际创建工程后，根据真实脚本补充到本文件。
 
 ## Authority
 
 - Eterna 上位事实以 `Eterna_Docs` 为准。
 - Website 规划与开发约束以 `docs/` 为准。
 - `legacy/` 只证明历史实现与迁移事实。
-- Website 1.0 最终实现以 D1 开始后建立的仓库根应用为准。
+- Website 1.0 最终实现以 Stage 1.1 开始后建立的仓库根应用为准。

@@ -10,8 +10,8 @@
 
 审计基线：`New@b24bd7bcd9ad220a22d5280779bb300edb9cea99`
 
-> 本文件只决定 Website 1.0 D1–D9 所需外部能力、首选路径和权限边界。
-> 本轮没有安装 Plugin、添加 MCP、登录 SaaS、创建 Token、修改权限、修改 Rules、配置 CI，也没有开始 P5-C、P6、P7 或 D1。
+> 本文件只决定 Website 1.0 Stage 1.1–1.9 所需外部能力、首选路径和权限边界。
+> 本轮没有安装 Plugin、添加 MCP、登录 SaaS、创建 Token、修改权限、修改 Rules、配置 CI，也没有开始 P5-C、P6、P7 或 Stage 1.1。
 
 ---
 
@@ -106,9 +106,9 @@ Cursor 官方当前支持 repository search / edit、terminal、Web search / fet
 
 候选能力按以下维度判断：
 
-1. **Value**：是否解决 D1–D9 的真实缺口；
+1. **Value**：是否解决 Stage 1.1–1.9 的真实缺口；
 2. **Existing overlap**：原生 Codex / Cursor / Git / CLI / P6 是否已解决；
-3. **Frequency**：在 D1–D9 中是否重复发生；
+3. **Frequency**：在 Stage 1.1–1.9 中是否重复发生；
 4. **Permission risk**：是否需要 repo write、deployment、production、secret 或外部账户；
 5. **Security / Privacy**：是否向第三方发送代码、内容、部署 metadata 或凭据；
 6. **Maintenance**：配置、版本、认证、兼容性与 failure surface；
@@ -130,22 +130,22 @@ Verdict 定义：
 
 | Candidate | Value / frequency | Existing overlap | Permission / data risk | Maintenance / replaceability | Human gate impact | Verdict |
 |---|---|---|---|---|---|---|
-| Native Git + shell | D1–D9 高频 local diff、commit、branch、push | 当前已经可用 | repository write；无 SaaS 扩权 | 最低；标准工具，易替换 | 不具备 Production 平台权限 | `USE` |
+| Native Git + shell | Stage 1.1–1.9 高频 local diff、commit、branch、push | 当前已经可用 | repository write；无 SaaS 扩权 | 最低；标准工具，易替换 | 不具备 Production 平台权限 | `USE` |
 | Existing Codex GitHub Connector | PR、review、remote branch、workflow / check state 提供结构化证据 | 普通 Git 已覆盖 local work；Connector 补 remote context | 当前连接具备 repo read/write/admin-capable scope，明显高于推荐目标；会向 GitHub / Connector 处理 repository metadata | 已安装，无项目配置；可回退 Git / GitHub UI | write/admin 动作必须明确授权 | `USE`，但 read-only-first |
 | Additional GitHub MCP for Codex / Cursor | 与现有 Connector、Git、GitHub UI 基本重复 | 重叠高 | 新 OAuth / PAT 与额外写入口 | 多一套认证、toolset 和版本面 | 增加误操作路径 | `REJECT` |
-| Codex Desktop Browser / Computer Use | D3–D8 高频真实渲染、交互、截图与 DOM 证据 | 当前会话已暴露 provider | 优先 local / Preview；避免 production authenticated session | 已安装；不进入项目依赖 | 只收集证据，不判视觉 PASS | `USE` |
-| Playwright Test / CLI | D3–D8 的 viewport、keyboard、reduced-motion、route、screenshot 与 E2E 可重复证据 | Browser 人工探索不能提供稳定自动回归 | 访问 local / Preview URL；测试凭据必须与 production 隔离 | 项目 dev dependency；具体版本与配置归 P6 / D1 | 自动结果不替代人工 Gate | `USE` as P6 Automation capability |
+| Codex Desktop Browser / Computer Use | Stage 1.3–1.8 高频真实渲染、交互、截图与 DOM 证据 | 当前会话已暴露 provider | 优先 local / Preview；避免 production authenticated session | 已安装；不进入项目依赖 | 只收集证据，不判视觉 PASS | `USE` |
+| Playwright Test / CLI | Stage 1.3–1.8 的 viewport、keyboard、reduced-motion、route、screenshot 与 E2E 可重复证据 | Browser 人工探索不能提供稳定自动回归 | 访问 local / Preview URL；测试凭据必须与 production 隔离 | 项目 dev dependency；具体版本与配置归 P6 / Stage 1.1 | 自动结果不替代人工 Gate | `USE` as P6 Automation capability |
 | Additional Browser MCP | 当前 Codex Browser + 未来 Playwright 已覆盖 | 重叠高 | 可能访问浏览器 profile、cookie 与 authenticated session | 多一套浏览器 lifecycle / compatibility | 可能模糊自动证据与人工裁决 | `REJECT`，除非未来非 Codex host 出现已证明缺口 |
-| Manual browser review | D3–D9 必需，尤其 D4–D8 Visual Gate | 自动工具不能覆盖视觉品质、VoiceOver 与真实设备判断 | 由人工控制会话和账户 | 无 Agent integration 维护 | 正式最终裁决路径 | `USE / HUMAN-ONLY` |
-| Vercel Git integration | D1–D9 Preview 与 commit-specific URL 的核心路径 | Git provider 原生触发，无需 Agent 部署工具 | 连接 repo 与 Vercel project；Preview / Production branch 必须隔离 | Vercel 官方主路径，替换时仍保留标准 Git | Preview 不等于 Production approval | `USE` when D1 creates the project |
+| Manual browser review | Stage 1.3–1.9 必需，尤其 Stage 1.4–1.8 Visual Gate | 自动工具不能覆盖视觉品质、VoiceOver 与真实设备判断 | 由人工控制会话和账户 | 无 Agent integration 维护 | 正式最终裁决路径 | `USE / HUMAN-ONLY` |
+| Vercel Git integration | Stage 1.1–1.9 Preview 与 commit-specific URL 的核心路径 | Git provider 原生触发，无需 Agent 部署工具 | 连接 repo 与 Vercel project；Preview / Production branch 必须隔离 | Vercel 官方主路径，替换时仍保留标准 Git | Preview 不等于 Production approval | `USE` when Stage 1.1 creates the project |
 | Vercel Dashboard / CLI read inspection | deployment status、build logs、deployment id 与 rollback evidence | Dashboard 已能人工检查；CLI 可结构化补充 | 需要 Vercel account；限制为 project / Preview inspect | CLI 可移除；本机当前未安装 | inspection 不能 promotion | `OPTIONAL` |
 | Vercel MCP / Plugin | 可查项目、部署与 logs | Git integration + Dashboard / CLI 已覆盖首版 | 官方文档明确 MCP 继承连接用户的 Vercel access，可能包含 deploy / project write | 当前为 Beta；增加 OAuth、prompt-injection 与权限面 | 容易把 inspection 与 deployment write 混合 | `DEFER` |
 | Figma MCP / Plugin | 有正式设计源时可读取 asset、variable、component 或 approved mock | Node 8 已冻结 Design in Browser；当前无 Figma workflow | 至少 design read；write 会修改外部设计文件并发送设计上下文 | 当前 Beta 演进快；无现有依赖，易延后 | 不能覆盖 Browser Visual Gate | `DEFER` |
 | Deterministic security tools | dependency vulnerability、secret、SAST / CodeQL 与 supply-chain checks | 属于 P6 Automation，不应包装成 Skill / Plugin | CI / repo read；上传第三方前需单独判断 | 可重复、可设 gate；具体工具 P6 决定 | 只提供 finding，不替代人工 triage | `USE` as P6 Automation capability |
 | GitHub native security visibility | 在 GitHub 汇总 Dependabot、secret scanning、CodeQL / code scanning 结果 | P6 local / CI scan 可先完成 | repository security metadata；启用规则可能需要 admin | 与 GitHub workflow 集成；当前是否启用未验证 | 告警处理与 bypass 需人工 | `OPTIONAL`，由 P6 核实 |
-| Codex Security Plugin | threat model、攻击路径、验证与修复建议可补 deterministic scan | 当前首版无账户，Contact / Analytics 默认关闭，Server API 很少 | 需连接 GitHub repository 并分析 code / history；当前未激活 | 仍为 research preview；审查成本高于当前攻击面 | patch 仍需人工 review | `DEFER`，D8 或攻击面扩大后复核 |
-| Native Web / official docs | D1–D9 查 Next.js、React、Vercel、Playwright 等当前官方资料 | Codex 与 Cursor 当前均能访问 Web / docs | 只访问公开官方资料；不需项目 token | 无项目配置，低维护 | 不影响 Gate | `USE` |
-| Documentation MCP / Context7 | 可聚合 version-specific docs | 当前 Web + official docs 足够；framework version 将由 D1 lockfile 固定 | 新第三方会接收 query / dependency context | 新服务、索引时效与错误来源 | 无 Gate 增益 | `REJECT` for Website 1.0 |
+| Codex Security Plugin | threat model、攻击路径、验证与修复建议可补 deterministic scan | 当前首版无账户，Contact / Analytics 默认关闭，Server API 很少 | 需连接 GitHub repository 并分析 code / history；当前未激活 | 仍为 research preview；审查成本高于当前攻击面 | patch 仍需人工 review | `DEFER`，Stage 1.8 或攻击面扩大后复核 |
+| Native Web / official docs | Stage 1.1–1.9 查 Next.js、React、Vercel、Playwright 等当前官方资料 | Codex 与 Cursor 当前均能访问 Web / docs | 只访问公开官方资料；不需项目 token | 无项目配置，低维护 | 不影响 Gate | `USE` |
+| Documentation MCP / Context7 | 可聚合 version-specific docs | 当前 Web + official docs 足够；framework version 将由 Stage 1.1 lockfile 固定 | 新第三方会接收 query / dependency context | 新服务、索引时效与错误来源 | 无 Gate 增益 | `REJECT` for Website 1.0 |
 
 当前官方状态核对：
 
@@ -165,8 +165,8 @@ Verdict 定义：
 | Local repository work | native filesystem + shell + Git | read、diff、checks、commit、branch、push |
 | Structured GitHub external state | existing Codex GitHub Connector，read-only-first | PR、review comments、remote branch、workflow / check state |
 | Interactive browser evidence | current Codex Desktop Browser / Computer Use provider | rendered page、responsive state、interaction、screenshot、DOM evidence |
-| Repeatable browser evidence | Playwright Test / CLI，由 P6 / D1 选择精确包与配置 | E2E、viewport、keyboard、reduced-motion、screenshot regression |
-| Preview delivery | Vercel Git integration，在 D1 建立 project 时接入 | commit-specific Preview、PR review URL、environment separation |
+| Repeatable browser evidence | Playwright Test / CLI，由 P6 / Stage 1.1 选择精确包与配置 | E2E、viewport、keyboard、reduced-motion、screenshot regression |
+| Preview delivery | Vercel Git integration，在 Stage 1.1 建立 project 时接入 | commit-specific Preview、PR review URL、environment separation |
 | Deterministic security evidence | P6 dependency / secret / SAST gate | repeatable vulnerability and supply-chain findings |
 | Current documentation | native Web access，优先 official docs | version / API drift verification without new infrastructure |
 | Final visual and production decisions | human review | Visual Quality Gate、RC acceptance、Production authority |
@@ -177,7 +177,7 @@ Verdict 定义：
 
 ## 6. OPTIONAL
 
-- **Vercel Dashboard / CLI read inspection**：当 D1 已存在真实 Vercel project 后，用于读取 deployment status、build logs、deployment id；当前 CLI 未安装，不在 P5-B 安装。
+- **Vercel Dashboard / CLI read inspection**：当 Stage 1.1 已存在真实 Vercel project 后，用于读取 deployment status、build logs、deployment id；当前 CLI 未安装，不在 P5-B 安装。
 - **GitHub native security visibility**：P6 可根据 repository plan 和真实 CI 需要核实 Dependabot、secret scanning、dependency review 与 CodeQL；当前不假设已启用。
 - **Manual Chrome session as browser fallback**：当 Codex isolated Browser 无法复现 profile-specific 或真实设备问题时，由人工控制；不把 production authenticated session 交给 Agent。
 
@@ -187,7 +187,7 @@ Verdict 定义：
 
 - **Vercel MCP / Plugin**：等真实 project、只读 inspection 缺口和可限制 scope 被证明后再评估；不能继承 production-capable owner 权限。
 - **Figma MCP / Plugin**：等出现正式 Figma workflow、approved asset / mock 或 token source-of-truth 后再评估；默认 read-only。
-- **Codex Security Plugin**：等 D8 targeted review、Contact / API 启用、账户边界出现或攻击面显著扩大后再评估。
+- **Codex Security Plugin**：等 Stage 1.8 targeted review、Contact / API 启用、账户边界出现或攻击面显著扩大后再评估。
 - **Cloudflare integration**：Node 9 只把 Cloudflare Workers + OpenNext 冻结为 fallback，不形成 Website 1.0 双平台工具要求。
 - **Visual regression SaaS、Sentry、Analytics、CMS、accessibility SaaS、bundle-analysis SaaS**：当前没有真实 operational / content / measurement requirement；需求出现后按独立权限和隐私审计处理。
 
@@ -244,7 +244,7 @@ one capability
 
 ### 9.3 Production authority
 
-除非未来 D9 的当前任务中有人工做出明确授权，AI 不默认拥有：
+除非未来 Stage 1.9 的当前任务中有人工做出明确授权，AI 不默认拥有：
 
 - Production deploy / promote / rollback；
 - DNS modification、domain transfer 或 canonical cutover；
@@ -277,7 +277,7 @@ Fallback: manually controlled Chrome / real device
 Human-only: Visual Quality Gate, VoiceOver judgement, final responsive acceptance
 ```
 
-Playwright screenshots、DOM、keyboard、viewport、reduced-motion 与 axe output 都是 evidence；它们不产生 `PASS` authority。Lighthouse 可在 P6 / D1 作为 performance、accessibility、best-practice 和 SEO risk evidence，不能替代视觉审核。官方能力见 [Lighthouse](https://developer.chrome.com/docs/lighthouse/)。
+Playwright screenshots、DOM、keyboard、viewport、reduced-motion 与 axe output 都是 evidence；它们不产生 `PASS` authority。Lighthouse 可在 P6 / Stage 1.1 作为 performance、accessibility、best-practice 和 SEO risk evidence，不能替代视觉审核。官方能力见 [Lighthouse](https://developer.chrome.com/docs/lighthouse/)。
 
 ### Vercel / Deployment
 
@@ -303,7 +303,7 @@ Human-only: finding acceptance, risk disposition, patch merge and security bypas
 
 ```text
 Preferred: official documentation through native Web access
-Fallback: repository lockfile / installed package docs once D1 exists
+Fallback: repository lockfile / installed package docs once Stage 1.1 exists
 Rejected now: generic Documentation MCP
 ```
 
@@ -366,7 +366,7 @@ P5-B = PASS / COMPLETE
 P5 = IN_PROGRESS
 P6 = NOT_STARTED
 P7 = NOT_STARTED
-D1–D9 = NOT_STARTED
+Stage 1.1–1.9 = NOT_STARTED
 Node 1–10 = UNCHANGED
 Legacy = NO CHANGES
 INSTALLATION = NOT_PERFORMED

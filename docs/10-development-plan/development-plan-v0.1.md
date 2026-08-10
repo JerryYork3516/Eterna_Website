@@ -9,7 +9,14 @@
 编制日期：`2026-08-09`（Asia/Shanghai）
 
 > 本文件把 Node 1–9 已冻结结果转换为 Website 1.0 的开发、审核、迁移与上线执行顺序。
-> Node 10 冻结的是开发计划，不代表任何开发阶段已经开始或通过。本轮不创建 Next.js 应用、不编写正式网站代码、不修改 `legacy/`、不部署、不修改 DNS 或 Git 分支，也不执行 D1。
+> Node 10 冻结的是开发计划，不代表任何开发阶段已经开始或通过。本轮不创建 Next.js 应用、不编写正式网站代码、不修改 `legacy/`、不部署、不修改 DNS 或 Git 分支，也不执行 Stage 1.1。
+
+```text
+Stage 0 = Website 1.0 规划、Node 1–10 与 Pre-development readiness P1–P7
+Stage 1 = Website 1.0 正式开发
+```
+
+Stage 0 已完成。Node 1–10 保留原名称和历史身份，不重命名为 `0.x`。
 
 ---
 
@@ -42,15 +49,29 @@
 
 ### 阶段状态规则
 
-- D1–D9 是唯一正式开发阶段，不继续拆成新的正式节点；
-- Node 10 冻结只批准本计划进入执行准备，不表示任何 D 阶段已经开始或通过；
+- Stage 1 是 Website 1.0 的正式开发生命周期，由 Stage 1.1–1.9 依序组成；
+- Node 10 冻结只批准本计划进入执行准备，不表示任何 Stage 1.x 已经开始或通过；
 - 每阶段只有满足 Acceptance Criteria、Automated Checks、Human Review 与 Exit Gate 后才能完成；
 - 自动检查通过不等于人工视觉、内容或上线授权通过；
 - 阶段内 checklist、修复批次和浏览器迭代属于执行任务，不升级为新正式阶段。
 
-### Pre-D1 Development Baseline
+### Stage-internal execution nodes
 
-以下文件与 repo-local workflow 是 D1–D9 的正式开发前执行基线：
+每个 Stage 1.x 在真正开始前，可以依据当时仓库事实拆成 `1.x.1–1.x.n` 内部执行节点。本文件不预先制定任何 Stage 1.1–1.9 的内部节点。
+
+```text
+进入 Stage 1.x 前
+→ 查看当时真实仓库
+→ 制定 1.x.1–1.x.n
+→ 逐节点执行
+→ Stage 1.x Final Gate
+```
+
+内部节点采用 `JUST_IN_TIME` decomposition，不是新的正式 Stage。必要修复批次可以使用 `R1 / R2` 或 `A1 / A2`，不得借此无限增加数字层级。
+
+### Stage 0 / Pre-development Baseline
+
+以下文件与 repo-local workflow 是 Stage 1.1–1.9 的正式开发前执行基线：
 
 | Boundary | Formal entry |
 |---|---|
@@ -61,15 +82,15 @@
 | CORE Skill | `.agents/skills/website-design-in-browser-review/SKILL.md` |
 | Quality gates | `docs/10-development-plan/quality-gates-v0.1.md` |
 
-`skills-audit-v0.1.md` 与 `plugins-mcp-audit-v0.1.md` 保留 P5-A / P5-B 的审计证据；D1–D9 的最终 Skill、tool routing、权限和自动 Gate 以 Tool Governance 与 Quality Gates 为执行入口。
+`skills-audit-v0.1.md` 与 `plugins-mcp-audit-v0.1.md` 保留 P5-A / P5-B 的审计证据；Stage 1.1–1.9 的最终 Skill、tool routing、权限和自动 Gate 以 Tool Governance 与 Quality Gates 为执行入口。
 
-P1–P6 文件中的 handoff state block 保留各自收口时点的历史快照；当前正式 Node / P / D 执行状态以本文件第 6 节的 P7 最终结论为准。
+P1–P6 文件中的 handoff state block 保留各自收口时点的历史快照；当前正式 Node / P / Stage 执行状态以本文件第 6 节的 P7 最终结论为准。
 
 这些基线服从 Eterna 上位事实与 Node 1–10，不得覆盖产品、内容、设计、技术或阶段冻结；开发实现、Agent workflow、工具调用和验证必须遵守这些基线。Skill 与工具不产生新事实、授权或 Human Gate PASS。
 
-### D1 entry conditions
+### Stage 1.1 entry conditions
 
-D1 只有同时满足以下条件才可由一个明确任务正式开始：
+Stage 1.1 只有同时满足以下条件才可由一个明确任务正式开始：
 
 - P1–P7 全部 `PASS`；
 - Node 10 = `PASS / FROZEN`；
@@ -77,20 +98,22 @@ D1 只有同时满足以下条件才可由一个明确任务正式开始：
 - working tree clean；
 - unresolved `BLOCKER = NONE`；
 - unresolved `MAJOR = NONE`；
-- 当前任务明确授权执行 D1。
+- 当前任务明确授权执行 Stage 1.1。
 
 P7 完成后的状态是：
 
 ```text
-Pre-D1 = READY
-D1 = READY_TO_START / NOT_STARTED
+Stage 0 = COMPLETE
+Stage 1 = READY_TO_START / NOT_STARTED
+Stage 1.1 = READY_TO_START / NOT_STARTED
+Stage 1.2–1.9 = NOT_STARTED
 ```
 
-`READY_TO_START` 只表示进入条件已经满足，不构成创建应用、安装依赖、配置 CI 或执行任何 D1 工作的授权。
+`READY_TO_START` 只表示进入条件已经满足，不构成创建应用、安装依赖、配置 CI 或执行任何 Stage 1.1 工作的授权。
 
 ---
 
-## D1 — 新站工程基线
+## Stage 1.1 — 新站工程基线
 
 ### Goal
 
@@ -164,11 +187,11 @@ D1 = READY_TO_START / NOT_STARTED
 
 ### Exit Gate
 
-D1 自动检查全部通过、工程边界完成人工审核，并形成可恢复的阶段 commit / push 后，才允许进入 D2。
+Stage 1.1 自动检查全部通过、工程边界完成人工审核，并形成可恢复的阶段 commit / push 后，才允许进入 Stage 1.2。
 
 ---
 
-## D2 — 路由、双语与内容系统
+## Stage 1.2 — 路由、双语与内容系统
 
 ### Goal
 
@@ -232,11 +255,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 - Fact / Language / Publish 角色审核真实内容、来源、双语自然度和公开边界；
 - 确认 Preview 能支持真实内容审核，但没有把草稿提升为 production；
-- D4 开始前，Home 中英文必须已具备真实、可审核内容，禁止 lorem ipsum、假 UI 或占位营销文案。
+- Stage 1.4 开始前，Home 中英文必须已具备真实、可审核内容，禁止 lorem ipsum、假 UI 或占位营销文案。
 
 ### Dependencies
 
-- D1 已通过；
+- Stage 1.1 已通过；
 - Node 1 上位来源与产品事实仍有效；
 - 需要进入 Preview 的内容具有可追溯来源和审核责任。
 
@@ -248,11 +271,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-路由、双语与内容门禁自动检查通过，真实工作内容完成必要人工审核，Preview / production 边界被证明有效并形成阶段 commit / push 后，才允许进入 D3。
+路由、双语与内容门禁自动检查通过，真实工作内容完成必要人工审核，Preview / production 边界被证明有效并形成阶段 commit / push 后，才允许进入 Stage 1.3。
 
 ---
 
-## D3 — 全站基础框架与 SEO
+## Stage 1.3 — 全站基础框架与 SEO
 
 ### Goal
 
@@ -279,7 +302,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D2 route / content / locale manifest；
+- Stage 1.2 route / content / locale manifest；
 - Node 6 Header / Footer / URL / 页面关系；
 - Node 7 Web Design System；
 - Node 8 全站交互规范；
@@ -317,7 +340,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Dependencies
 
-- D2 已通过；
+- Stage 1.2 已通过；
 - 12 个 route 和内容身份稳定；
 - Preview 可用于真实浏览器审核。
 
@@ -329,11 +352,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-共享框架与 SEO 自动检查通过，Keyboard / Mobile / bilingual 基础完成人工审核，并形成阶段 commit / push 后，才允许进入 D4。
+共享框架与 SEO 自动检查通过，Keyboard / Mobile / bilingual 基础完成人工审核，并形成阶段 commit / push 后，才允许进入 Stage 1.4。
 
 ---
 
-## D4 — Home｜Design in Browser
+## Stage 1.4 — Home｜Design in Browser
 
 ### Goal
 
@@ -355,11 +378,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 - 保持 Eterna → Digital Resident → Continuity / Relationship → Products → About 的叙事顺序；
 - 让 Aftelle / Studio 形成职责关系，不退化为两张普通产品卡；
 - 同时检查 Focus、reduced-motion、资产缺失和脚本部分失败状态；
-- 记录未通过项与浏览器审核证据，持续收敛而不是自动进入 D5。
+- 记录未通过项与浏览器审核证据，持续收敛而不是自动进入 Stage 1.5。
 
 ### Inputs
 
-- D1–D3 的真实工程、内容、路由、Header / Footer 与 SEO；
+- Stage 1.1–1.3 的真实工程、内容、路由、Header / Footer 与 SEO；
 - Node 7 Living Precision / Web Design System；
 - Node 8 Home Narrative、Visual Quality Gate、Anti-pattern / DEAD Gate 与 freeze 范围。
 
@@ -390,28 +413,28 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Human Review
 
-**强制人工 Home Visual Quality Gate。** 人工在真实浏览器中审核中文、英文、Desktop、Tablet、Mobile、Keyboard、reduced-motion 与无 Resident 状态。Codex、截图、测试、Lighthouse 或代码完成度均不能自动判定 D4 PASS。
+**强制人工 Home Visual Quality Gate。** 人工在真实浏览器中审核中文、英文、Desktop、Tablet、Mobile、Keyboard、reduced-motion 与无 Resident 状态。Codex、截图、测试、Lighthouse 或代码完成度均不能自动判定 Stage 1.4 PASS。
 
 ### Dependencies
 
-- D3 已通过；
+- Stage 1.3 已通过；
 - Home 双语真实内容已可审核；
 - Preview 可稳定呈现真实页面与多 viewport。
 
 ### Explicit Non-goals
 
-- 不在 D4 完成 Digital Residents 或其他四个页面；
+- 不在 Stage 1.4 完成 Digital Residents 或其他四个页面；
 - 不因为“未来感”引入 WebGL / Three.js；
 - 不用静态概念图或失败探索作为正式设计依据；
 - 不把 Home 视觉结构强制复制为所有页面模板。
 
 ### Exit Gate
 
-只有人工明确通过 Home Visual Quality Gate，且阻塞问题解决、自动检查通过、稳定审核点完成阶段 commit / push 后，才允许进入 D5。
+只有人工明确通过 Home Visual Quality Gate，且阻塞问题解决、自动检查通过、稳定审核点完成阶段 commit / push 后，才允许进入 Stage 1.5。
 
 ---
 
-## D5 — Digital Residents
+## Stage 1.5 — Digital Residents
 
 ### Goal
 
@@ -435,11 +458,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D4 已通过的视觉基线；
+- Stage 1.4 已通过的视觉基线；
 - Node 1 数字居民权威边界；
 - Node 6 Digital Residents 页面职责；
 - Node 8 Digital Residents Narrative、Presence、CTA 与状态规则；
-- D2 内容治理和来源记录。
+- Stage 1.2 内容治理和来源记录。
 
 ### Deliverables
 
@@ -471,7 +494,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Dependencies
 
-- D4 已人工通过；
+- Stage 1.4 已人工通过；
 - Digital Residents 双语事实内容已由相应角色审核；
 - Node 1 权威输入未发生未处理变化。
 
@@ -483,11 +506,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-人工 Visual / Content Gate 明确通过，自动检查和响应式 / 降级审核完成，并形成阶段 commit / push 后，才允许进入 D6。
+人工 Visual / Content Gate 明确通过，自动检查和响应式 / 降级审核完成，并形成阶段 commit / push 后，才允许进入 Stage 1.6。
 
 ---
 
-## D6 — Products / Aftelle / Studio / About
+## Stage 1.6 — Products / Aftelle / Studio / About
 
 ### Goal
 
@@ -516,11 +539,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D4 / D5 已通过的视觉与交互基线；
+- Stage 1.4 / Stage 1.5 已通过的视觉与交互基线；
 - Node 1 产品和公司事实边界；
 - Node 6 四页职责；
 - Node 8 freeze 对四页 Design in Browser 的正式转移；
-- D2 内容来源、事实状态与双语治理。
+- Stage 1.2 内容来源、事实状态与双语治理。
 
 ### Deliverables
 
@@ -547,11 +570,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Human Review
 
-**Products、Aftelle、Studio、About 四个独立 Visual Gate 均为强制人工审核。** 四页全部通过后，再进行一次六页面视觉、内容、导航和品牌一致性人工审核；Codex 不得一次性自动判定 D6 PASS。
+**Products、Aftelle、Studio、About 四个独立 Visual Gate 均为强制人工审核。** 四页全部通过后，再进行一次六页面视觉、内容、导航和品牌一致性人工审核；Codex 不得一次性自动判定 Stage 1.6 PASS。
 
 ### Dependencies
 
-- D5 已人工通过；
+- Stage 1.5 已人工通过；
 - 各页真实中英文内容与来源达到可审核状态；
 - Aftelle / Studio 当前事实若仍缺失，页面必须以受限、诚实内容成立，不能用推测填补。
 
@@ -563,11 +586,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-四个逐页人工 Visual Gate 与六页面一致性 Gate 全部明确通过，自动检查完成并形成稳定阶段 commit / push 后，才允许进入 D7。
+四个逐页人工 Visual Gate 与六页面一致性 Gate 全部明确通过，自动检查完成并形成稳定阶段 commit / push 后，才允许进入 Stage 1.7。
 
 ---
 
-## D7 — Motion 与 Resident Presence
+## Stage 1.7 — Motion 与 Resident Presence
 
 ### Goal
 
@@ -593,7 +616,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D4–D6 已通过的静态六页面；
+- Stage 1.4–1.6 已通过的静态六页面；
 - Node 7 Motion / Resident 四层机制；
 - Node 8 Presence / Degradation / No-Resident Gate；
 - Node 9 Motion 分级、Client Island 与高级渲染准入条件。
@@ -629,7 +652,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Dependencies
 
-- D4–D6 所有静态页面已达到产品级并完成人工审核；
+- Stage 1.4–1.6 所有静态页面已达到产品级并完成人工审核；
 - 有真实浏览器和设备测试条件；
 - 高级资产若存在，来源、权利与 fallback 已通过治理。
 
@@ -642,11 +665,11 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-人工明确批准 Motion 与 Resident 决定，所有降级 / 生命周期 / 性能检查通过，并形成阶段 commit / push 后，才允许进入 D8。
+人工明确批准 Motion 与 Resident 决定，所有降级 / 生命周期 / 性能检查通过，并形成阶段 commit / push 后，才允许进入 Stage 1.8。
 
 ---
 
-## D8 — 全站质量与 Release Candidate
+## Stage 1.8 — 全站质量与 Release Candidate
 
 ### Goal
 
@@ -674,7 +697,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D1–D7 所有已通过输出和阶段证据；
+- Stage 1.1–1.7 所有已通过输出和阶段证据；
 - Node 5 MUST / SHOULD 与 Node 7 / 8 质量门禁；
 - Node 9 testing、performance、accessibility、SEO、Preview / production 规则。
 
@@ -684,7 +707,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 - 12 URL QA matrix；
 - 内容、视觉、Accessibility、SEO、Performance、Degradation 报告；
 - RC commit SHA、Preview URL、asset / content version 与已知问题记录；
-- D9 使用的发布候选和验收证据包。
+- Stage 1.9 使用的发布候选和验收证据包。
 
 ### Acceptance Criteria
 
@@ -706,27 +729,27 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Human Review
 
-**强制人工全站 Release Candidate Gate。** 人工审核六页视觉、双语内容、Keyboard / VoiceOver / zoom、真实设备响应式和已知问题；只有人工明确接受 RC，才可进入 D9。
+**强制人工全站 Release Candidate Gate。** 人工审核六页视觉、双语内容、Keyboard / VoiceOver / zoom、真实设备响应式和已知问题；只有人工明确接受 RC，才可进入 Stage 1.9。
 
 ### Dependencies
 
-- D7 已通过；
+- Stage 1.7 已通过；
 - 全部正式内容、资产和 CTA 达到 production 审核状态；
 - production-like Preview、测试设备和审核责任可用。
 
 ### Explicit Non-goals
 
-- 不在 D8 修改 DNS、切 production 或变更 Git 分支治理；
+- 不在 Stage 1.8 修改 DNS、切 production 或变更 Git 分支治理；
 - 不以测试分数掩盖人工视觉、内容或可访问性失败；
 - 不为赶 RC 降低 Node 7 / 8 Gate 或新增未审核功能。
 
 ### Exit Gate
 
-全部阻塞问题关闭、RC 证据完整且人工明确批准，形成 D8 阶段 commit / push 和 immutable RC candidate 后，才允许进入 D9。
+全部阻塞问题关闭、RC 证据完整且人工明确批准，形成 Stage 1.8 阶段 commit / push 和 immutable RC candidate 后，才允许进入 Stage 1.9。
 
 ---
 
-## D9 — 迁移、部署与正式上线
+## Stage 1.9 — 迁移、部署与正式上线
 
 ### Goal
 
@@ -755,7 +778,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Inputs
 
-- D8 已批准的 immutable Release Candidate；
+- Stage 1.8 已批准的 immutable Release Candidate；
 - Node 9 migration plan、分支治理与 deployment runbook；
 - 真实账户、域名、DNS、旧生产、流量和责任人输入；
 - 经批准的 cutover / rollback 授权。
@@ -792,7 +815,7 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Dependencies
 
-- D8 RC 已明确人工批准；
+- Stage 1.8 RC 已明确人工批准；
 - 真实迁移、账户、域名、DNS、owner 与窗口输入齐备；
 - reviewed PR / promotion、production 与 rollback 权限可用。
 
@@ -805,16 +828,16 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 
 ### Exit Gate
 
-人工完成 Production Cutover 授权，production 验证通过，监控稳定，rollback window 完成且 Legacy archive 记录获批后，D9 才可完成。任何删除历史证据的动作仍需单独授权。
+人工完成 Production Cutover 授权，production 验证通过，监控稳定，rollback window 完成且 Legacy archive 记录获批后，Stage 1.9 才可完成。任何删除历史证据的动作仍需单独授权。
 
 ---
 
 ## 2. 开发阶段 Git、Commit 与 Push 规则
 
-每个 D 阶段完成并通过该阶段 Gate 后，执行：
+每个 Stage 1.x 完成并通过该阶段 Gate 后，执行：
 
 ```text
-implement the authorized D-stage scope
+implement the authorized Stage 1.x scope
 → applicable machine gates, including diff / status checks
 → required human gates
 → scoped staging of approved files
@@ -831,7 +854,7 @@ implement the authorized D-stage scope
 - Design in Browser 的中间小调整不要求每次单独 commit，应在形成可审核稳定点后提交；
 - 工作区存在其他修改时只暂存当前阶段批准文件，不使用无边界 `git add -A`；
 - commit / push 不等于自动进入下一阶段；下一阶段仍受依赖和 Exit Gate 约束；
-- D9 的 `New -> main`、default branch 与 production promotion 只能按 reviewed flow 和人工授权执行，不能把普通阶段 push 当作上线。
+- Stage 1.9 的 `New -> main`、default branch 与 production promotion 只能按 reviewed flow 和人工授权执行，不能把普通阶段 push 当作上线。
 
 ---
 
@@ -841,42 +864,42 @@ implement the authorized D-stage scope
 
 | 阶段 | 人工 Gate |
 |---|---|
-| D4 | Home Visual Quality Gate：真实浏览器、双语、三类设备、无 Resident 与 reduced-motion |
-| D5 | Digital Residents Visual / Content Gate：定义准确性、公众可理解性、视觉与双语 |
-| D6 | Products / Aftelle / Studio / About 逐页 Visual Gate，以及六页面整体一致性 Gate |
-| D7 | Motion / Resident 视觉必要性、技术升级价值与降级质量 |
-| D8 | 全站 Release Candidate：内容、视觉、Accessibility、Responsive、SEO、Performance 与 Degradation |
-| D9 | Production Cutover、分支 promotion、DNS / domain、rollback 与上线授权 |
+| Stage 1.4 | Home Visual Quality Gate：真实浏览器、双语、三类设备、无 Resident 与 reduced-motion |
+| Stage 1.5 | Digital Residents Visual / Content Gate：定义准确性、公众可理解性、视觉与双语 |
+| Stage 1.6 | Products / Aftelle / Studio / About 逐页 Visual Gate，以及六页面整体一致性 Gate |
+| Stage 1.7 | Motion / Resident 视觉必要性、技术升级价值与降级质量 |
+| Stage 1.8 | 全站 Release Candidate：内容、视觉、Accessibility、Responsive、SEO、Performance 与 Degradation |
+| Stage 1.9 | Production Cutover、分支 promotion、DNS / domain、rollback 与上线授权 |
 
-D1–D3 仍需要工程、内容、键盘和基础浏览器人工审核，只是不承担最终页面视觉 PASS。
+Stage 1.1–1.3 仍需要工程、内容、键盘和基础浏览器人工审核，只是不承担最终页面视觉 PASS。
 
 ---
 
-## 4. Node 1–9 → D1–D9 覆盖检查
+## 4. Node 1–9 → Stage 1.1–1.9 覆盖检查
 
 | 冻结职责 | 主要阶段 | 覆盖结论 |
 |---|---|---|
-| 6 页面 / 12 双语 URL | D2、D3、D8、D9 | `COVERED`：route、内容、SEO、RC 与 production 均验证 |
-| Header / Footer / `中 / EN` | D2、D3、D4–D6、D8 | `COVERED`：同页切换、共享框架与逐页审核 |
-| Content Governance | D2、D4–D6、D8 | `COVERED`：schema、来源、双语、事实与发布状态、失效门禁 |
-| SEO | D3、D8、D9 | `COVERED`：metadata、canonical、hreflang、sitemap、robots、404 与上线响应 |
-| Design in Browser | D4–D7 | `COVERED`：真实内容、路由、响应式、逐页浏览器人工审核 |
-| Living Precision | D3–D8 | `COVERED`：基础系统、页面视觉、Motion 与全站质量 Gate |
-| Visual Quality / Anti-pattern / DEAD Gate | D4–D8 | `COVERED`：Home、概念页、四页、增强层和 RC 分层审核 |
-| Resident Presence | D4、D5、D7、D8 | `COVERED`：先无 Resident，后证据化增强与全站降级 |
-| Motion | D3、D4–D7、D8 | `COVERED`：reduced-motion 基线、页面迭代、正式增强和 RC |
-| Responsive | D3–D8 | `COVERED`：Desktop、Tablet、Mobile 从框架到 RC 全程审核 |
-| Accessibility / WCAG 2.2 AA | D1、D3–D8 | `COVERED`：语义、Keyboard、Focus、VoiceOver、zoom、motion 与人工 Gate |
-| Performance | D1、D4、D7、D8、D9 | `COVERED`：轻量基线、页面预算、高级视觉、RC 与 production 指标 |
-| Preview | D1–D9 | `COVERED`：工程 Preview、草稿 noindex、逐页审核、RC 与最终 promotion |
-| Production | D2、D3、D8、D9 | `COVERED`：fail-closed、SEO 身份、RC 与上线验证 |
-| Legacy Migration | D1、D2、D7、D9 | `COVERED`：隔离、重写、禁止 Aurora 继承、迁移与归档 |
-| Repository Branch Governance | 全阶段 Git 规则、D9 | `COVERED`：阶段 push 与最终 reviewed `New -> main` 分开治理 |
-| Cutover | D8、D9 | `COVERED`：immutable RC、preflight、promotion、DNS 与验证 |
-| Rollback | D1、D8、D9 | `COVERED`：可恢复构建、RC 绑定、rollback deployment / window / archive |
-| Contact / Privacy / Legal | D2、D3、D8、D9 | `COVERED`：首版默认关闭、无假入口；真实收集个人信息前重新通过门禁 |
-| Analytics / Cookie | D1、D3、D8、D9 | `COVERED`：首版默认关闭，不创建无意义 banner；未来按真实需求审核 |
-| Asset source / rights / fallback | D2、D4–D8 | `COVERED`：manifest、逐页资产、alt / transcript、失败和 RC 审核 |
+| 6 页面 / 12 双语 URL | Stage 1.2、Stage 1.3、Stage 1.8、Stage 1.9 | `COVERED`：route、内容、SEO、RC 与 production 均验证 |
+| Header / Footer / `中 / EN` | Stage 1.2、Stage 1.3、Stage 1.4–1.6、Stage 1.8 | `COVERED`：同页切换、共享框架与逐页审核 |
+| Content Governance | Stage 1.2、Stage 1.4–1.6、Stage 1.8 | `COVERED`：schema、来源、双语、事实与发布状态、失效门禁 |
+| SEO | Stage 1.3、Stage 1.8、Stage 1.9 | `COVERED`：metadata、canonical、hreflang、sitemap、robots、404 与上线响应 |
+| Design in Browser | Stage 1.4–1.7 | `COVERED`：真实内容、路由、响应式、逐页浏览器人工审核 |
+| Living Precision | Stage 1.3–1.8 | `COVERED`：基础系统、页面视觉、Motion 与全站质量 Gate |
+| Visual Quality / Anti-pattern / DEAD Gate | Stage 1.4–1.8 | `COVERED`：Home、概念页、四页、增强层和 RC 分层审核 |
+| Resident Presence | Stage 1.4、Stage 1.5、Stage 1.7、Stage 1.8 | `COVERED`：先无 Resident，后证据化增强与全站降级 |
+| Motion | Stage 1.3、Stage 1.4–1.7、Stage 1.8 | `COVERED`：reduced-motion 基线、页面迭代、正式增强和 RC |
+| Responsive | Stage 1.3–1.8 | `COVERED`：Desktop、Tablet、Mobile 从框架到 RC 全程审核 |
+| Accessibility / WCAG 2.2 AA | Stage 1.1、Stage 1.3–1.8 | `COVERED`：语义、Keyboard、Focus、VoiceOver、zoom、motion 与人工 Gate |
+| Performance | Stage 1.1、Stage 1.4、Stage 1.7、Stage 1.8、Stage 1.9 | `COVERED`：轻量基线、页面预算、高级视觉、RC 与 production 指标 |
+| Preview | Stage 1.1–1.9 | `COVERED`：工程 Preview、草稿 noindex、逐页审核、RC 与最终 promotion |
+| Production | Stage 1.2、Stage 1.3、Stage 1.8、Stage 1.9 | `COVERED`：fail-closed、SEO 身份、RC 与上线验证 |
+| Legacy Migration | Stage 1.1、Stage 1.2、Stage 1.7、Stage 1.9 | `COVERED`：隔离、重写、禁止 Aurora 继承、迁移与归档 |
+| Repository Branch Governance | 全阶段 Git 规则、Stage 1.9 | `COVERED`：阶段 push 与最终 reviewed `New -> main` 分开治理 |
+| Cutover | Stage 1.8、Stage 1.9 | `COVERED`：immutable RC、preflight、promotion、DNS 与验证 |
+| Rollback | Stage 1.1、Stage 1.8、Stage 1.9 | `COVERED`：可恢复构建、RC 绑定、rollback deployment / window / archive |
+| Contact / Privacy / Legal | Stage 1.2、Stage 1.3、Stage 1.8、Stage 1.9 | `COVERED`：首版默认关闭、无假入口；真实收集个人信息前重新通过门禁 |
+| Analytics / Cookie | Stage 1.1、Stage 1.3、Stage 1.8、Stage 1.9 | `COVERED`：首版默认关闭，不创建无意义 banner；未来按真实需求审核 |
+| Asset source / rights / fallback | Stage 1.2、Stage 1.4–1.8 | `COVERED`：manifest、逐页资产、alt / transcript、失败和 RC 审核 |
 
 覆盖检查未发现必须新增第十个正式开发阶段的职责。
 
@@ -887,20 +910,20 @@ D1–D3 仍需要工程、内容、键盘和基础浏览器人工审核，只是
 ### 未发现实质冲突
 
 - Node 5 要求保留真实联系能力，Node 9 冻结首版默认不启用 Contact。开发计划以“保留受控技术边界、不创建页面 / 入口 / API；未来条件全部成立后再启用”同时满足两者；
-- Node 8 将最终视觉保持 `NOT_FROZEN`，Node 10 通过 D4–D7 的 Design in Browser 和人工 Gate 收敛视觉，不把规划文档误当高保真批准；
+- Node 8 将最终视觉保持 `NOT_FROZEN`，Node 10 通过 Stage 1.4–1.7 的 Design in Browser 和人工 Gate 收敛视觉，不把规划文档误当高保真批准；
 - Node 9 的 SSG-first 与 Draft Preview 不冲突：production 只消费 `PUBLISHED`，受控 Preview 可以显示 `DRAFT / REVIEW_REQUIRED` 且必须 noindex；
 - Node 9 选择 Next.js 不自动引入 Tailwind、shadcn、Bento Grid、generic Hero、generic Card system 或重型组件库；
-- Resident 是增强层，D4–D6 静态页面先通过，D7 才允许评估高级渲染，符合 No-Resident Gate；
-- `New` 是当前开发基线，`main` 是最终 authoritative production branch；阶段 push 到 `New` 与 D9 reviewed promotion 职责分离。
+- Resident 是增强层，Stage 1.4–1.6 静态页面先通过，Stage 1.7 才允许评估高级渲染，符合 No-Resident Gate；
+- `New` 是当前开发基线，`main` 是最终 authoritative production branch；阶段 push 到 `New` 与 Stage 1.9 reviewed promotion 职责分离。
 
 ### 后续必须补齐但不阻塞 Node 10 冻结
 
 | 分类 | 输入 | 最迟完成阶段 |
 |---|---|---|
-| `RELEASE_RUNBOOK_INPUT` | 12 个页面的 Fact Owner、Language Reviewer、Publish Approver | 对应内容进入 production 前；D2 起记录，D8 完成 |
-| `MIGRATION_PREFLIGHT` | 旧站 production 域名、平台、commit、DNS、owner、流量、backlinks、重要 hash、`/api/create` | D9 cutover 方案执行前 |
-| `CUTOVER_INPUT` | canonical host 的 apex / www、cutover 日期 / 窗口、`New -> main` 和 default branch 具体时间 | D9 production promotion 前 |
-| `RELEASE_RUNBOOK_INPUT` | Vercel account / project / 权限 / owner、rollback owner / window / threshold | D9 production 配置与 cutover 前 |
+| `RELEASE_RUNBOOK_INPUT` | 12 个页面的 Fact Owner、Language Reviewer、Publish Approver | 对应内容进入 production 前；Stage 1.2 起记录，Stage 1.8 完成 |
+| `MIGRATION_PREFLIGHT` | 旧站 production 域名、平台、commit、DNS、owner、流量、backlinks、重要 hash、`/api/create` | Stage 1.9 cutover 方案执行前 |
+| `CUTOVER_INPUT` | canonical host 的 apex / www、cutover 日期 / 窗口、`New -> main` 和 default branch 具体时间 | Stage 1.9 production promotion 前 |
+| `RELEASE_RUNBOOK_INPUT` | Vercel account / project / 权限 / owner、rollback owner / window / threshold | Stage 1.9 production 配置与 cutover 前 |
 | `FUTURE_DECISION` | Contact / Privacy / Legal、Analytics / Cookie、CDN / Object Storage、Legacy 最终删除 | 仅在真实需求或单独授权出现时；不阻塞核心 Website 1.0 |
 
 Aftelle Product North Star、正式公司公开身份、最终品牌资产和部分当前产品事实仍受既有来源限制。它们不允许被开发者补写；若某页面缺少足够公开事实，应以受限、诚实、来源明确的内容成立，不能用假功能、空页面或 `Coming soon` 填补。
@@ -909,15 +932,15 @@ Aftelle Product North Star、正式公司公开身份、最终品牌资产和部
 
 ## 6. Node 10 审核结论
 
-- D1–D9 已覆盖 Node 1–9 的正式冻结职责；
-- 未发现需要新增第十个开发阶段的真实阻塞职责；
+- Stage 1.1–1.9 已覆盖 Node 1–9 的正式冻结职责；
+- 未发现需要新增 Stage 1.10 的真实阻塞职责；
 - 未发现需要重开产品定位、Sitemap、技术栈、内容源、部署、双语或 Design in Browser 路线的实质冲突；
 - 所有人工视觉、内容、RC 与 production Gate 均保留人工裁决；
 - P1–P6 均已通过，Node 10 已接入 `AGENTS.md`、Engineering Standards、Tool Governance、两个 CORE Skills 与 Quality Gates；
-- 未发现 Node 10 与 P3–P6 的实质冲突，未发现 Node 8 / Node 9 regression，D1–D9 的实质规划保持不变；
-- D8 仍是唯一 Release Candidate 阶段，D9 只验证 RC continuity、release preflight 与 Production authorization；
-- Production authorization = `HUMAN_ONLY`；`New -> main` 与 GitHub default branch 变更只允许在 D9 reviewed promotion 中执行；
-- 本轮只冻结计划，没有开始 D1，没有修改 Legacy、应用、CI、工具、Plugin / MCP、GitHub 权限、DNS 或 Deployment。
+- 未发现 Node 10 与 P3–P6 的实质冲突，未发现 Node 8 / Node 9 regression，Stage 1.1–1.9 的实质规划保持不变；
+- Stage 1.8 仍是唯一 Release Candidate 阶段，Stage 1.9 只验证 RC continuity、release preflight 与 Production authorization；
+- Production authorization = `HUMAN_ONLY`；`New -> main` 与 GitHub default branch 变更只允许在 Stage 1.9 reviewed promotion 中执行；
+- 本轮只冻结计划，没有开始 Stage 1.1，没有修改 Legacy、应用、CI、工具、Plugin / MCP、GitHub 权限、DNS 或 Deployment。
 
 ```text
 P1 = PASS
@@ -934,9 +957,10 @@ NEW_REGRESSION = NONE
 
 Node 10 plan = FROZEN
 Node 10 = PASS / FROZEN
-Pre-D1 = READY
-D1 = READY_TO_START / NOT_STARTED
-D2–D9 = NOT_STARTED
+Stage 0 = COMPLETE
+Stage 1 = READY_TO_START / NOT_STARTED
+Stage 1.1 = READY_TO_START / NOT_STARTED
+Stage 1.2–1.9 = NOT_STARTED
 ```
 
 Node 10 最终状态：`PASS / FROZEN`

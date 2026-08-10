@@ -8,8 +8,8 @@
 
 编制日期：`2026-08-10`（Asia/Shanghai）
 
-> 本文件审计 Website 1.0 在 D1–D9 中真正值得封装的 AI 工作流程，并设计最小 Skill contract。
-> 本轮不安装、创建或启用 Skill，不决定 Plugin / MCP，不配置 Automation，不修改 Rules，也不开始 D1。
+> 本文件审计 Website 1.0 在 Stage 1.1–1.9 中真正值得封装的 AI 工作流程，并设计最小 Skill contract。
+> 本轮不安装、创建或启用 Skill，不决定 Plugin / MCP，不配置 Automation，不修改 Rules，也不开始 Stage 1.1。
 
 ---
 
@@ -21,7 +21,7 @@ P5-A 只回答三个问题：哪些重复任务需要 task-specific workflow，�
 
 - `AGENTS.md` 的 always-on 工作纪律；
 - `engineering-standards-v0.1.md` 的完整 P4 工程规范与 Code Review Checklist；
-- `development-plan-v0.1.md` 的 D1–D9 重复任务和人工 Gate；
+- `development-plan-v0.1.md` 的 Stage 1.1–1.9 重复任务和人工 Gate；
 - 两份 `.cursor/rules/` 适配层；
 - Aftelle 工具治理中“只解决真实问题、按需启用、自动化优先、数量从严”的可迁移经验。
 
@@ -82,14 +82,14 @@ CURRENT_PROJECT_SKILLS = NONE
 
 ## 4. Repeated task map
 
-| 工作类别 | D1–D9 重复性 | 主要易错点 | 正确承载方式 |
+| 工作类别 | Stage 1.1–1.9 重复性 | 主要易错点 | 正确承载方式 |
 |---|---:|---|---|
 | Code Review | 高 | scope 扩张、重复造轮子、边界与 AI smell | `AGENTS.md` + Engineering Standards 第 33 节 + 普通 review task |
 | Behavior-preserving simplification | 中高 | 自动重构、误改行为、清理范围扩张 | 明确触发的 Skill workflow |
-| Design in Browser review | 高，集中在 D4–D8 | 矩阵漏项、证据不足、AI 自行判 PASS | Website-specific Skill workflow + Human final authority |
+| Design in Browser review | 高，集中在 Stage 1.4–1.8 | 矩阵漏项、证据不足、AI 自行判 PASS | Website-specific Skill workflow + Human final authority |
 | Dependency review | 低 | 为方便引入依赖、遗漏成本与安全 | Engineering Standards 第 25 节；机器 audit 交 P6 |
 | Content / fact review | 高 | 来源、事实状态、双语、发布边界混淆 | schema / gates + human Fact / Language / Publish review；Skill 暂缓 |
-| Release / RC review | 后期重复 | 自动与人工证据混淆、跨域 checklist 漏项 | Node 10 D8 / D9 + P6 gates；等真实流程后再判断 Skill |
+| Release / RC review | 后期重复 | 自动与人工证据混淆、跨域 checklist 漏项 | Node 10 Stage 1.8 / Stage 1.9 + P6 gates；等真实流程后再判断 Skill |
 | format / lint / typecheck / build | 每阶段 | 结果漏跑或不一致 | P6 / CI Automation，不包装成 Skill |
 | GitHub / Vercel / Browser / Figma | 按任务 | 外部权限、连接与状态 | P5-B Plugin / MCP，不包装成 Skill |
 
@@ -103,10 +103,10 @@ CURRENT_PROJECT_SKILLS = NONE
 |---|---|---|
 | Website Code Review | `REJECT` | P4 第 33 节已有完整 Website checklist；普通 review 可直接引用，另建 Skill 只会形成第三套规则 |
 | Behavior-Preserving Simplification | `CORE` | 需要稳定的“锁定行为、限缩范围、删除无价值复杂度、重新验证”流程；不能由 lint 自动完成，也不应 always-on |
-| Design in Browser Review | `CORE` | D4–D8 高频且项目特异，必须稳定覆盖双语、三类 viewport、no-Resident、reduced-motion 和人工 Gate 边界 |
+| Design in Browser Review | `CORE` | Stage 1.4–1.8 高频且项目特异，必须稳定覆盖双语、三类 viewport、no-Resident、reduced-motion 和人工 Gate 边界 |
 | Dependency Review | `REJECT` | P4 第 25 节已足够；新增很少，确定性 audit 属于 P6 |
-| Content / Fact Review | `DEFER` | 高价值但当前由 schema、来源记录和人类审核共同承担；等待 D2 暴露真实重复遗漏后再决定是否需要窄 Skill |
-| Release / RC Review | `DEFER` | D8 / D9 已有正式 checklist，最终形态依赖 P6 gates 与 P5-B 外部能力；现在设计会预测性重复 |
+| Content / Fact Review | `DEFER` | 高价值但当前由 schema、来源记录和人类审核共同承担；等待 Stage 1.2 暴露真实重复遗漏后再决定是否需要窄 Skill |
+| Release / RC Review | `DEFER` | Stage 1.8 / Stage 1.9 已有正式 checklist，最终形态依赖 P6 gates 与 P5-B 外部能力；现在设计会预测性重复 |
 | Run Lint / Typecheck / Build | `REJECT` | 纯机器步骤，应成为脚本与 CI gate |
 | External Tool Wrapper | `REJECT` | 外部访问能力属于 Plugin / MCP；Skill 不能伪装成连接器 |
 
@@ -114,7 +114,7 @@ CURRENT_PROJECT_SKILLS = NONE
 
 | 准入维度 | Behavior-Preserving Simplification | Design in Browser Review |
 |---|---|---|
-| D1–D9 会重复使用 | 是，复杂实现形成后按需使用 | 是，D4–D8 逐页和 RC 使用 |
+| Stage 1.1–1.9 会重复使用 | 是，复杂实现形成后按需使用 | 是，Stage 1.4–1.8 逐页和 RC 使用 |
 | 流程稳定 | 行为基线 → 简化 → 回归验证 | 审核矩阵 → 证据 → findings → 人工裁决 |
 | 普通 prompt 易漏项 | 易漏行为不变、scope 和回归证明 | 易漏语言、viewport、降级与 Human Gate |
 | 非 always-on Rule | 只在明确请求 simplify 时触发 | 只在页面进入浏览器审核时触发 |
@@ -151,8 +151,8 @@ OPTIONAL_SKILL_COUNT = 0
 
 ### 7.1 `DEFER`
 
-- Content / Fact Review：若 D2–D6 实际出现跨页面、双语和 publication 审核反复漏项，再设计只组织证据、不成为事实源的 contract。
-- Release / RC Review：等 P6 自动门禁、P5-B 外部能力和真实 D8 输入形成后，再判断是否仍有未被覆盖的人工编排工作。
+- Content / Fact Review：若 Stage 1.2–1.6 实际出现跨页面、双语和 publication 审核反复漏项，再设计只组织证据、不成为事实源的 contract。
+- Release / RC Review：等 P6 自动门禁、P5-B 外部能力和真实 Stage 1.8 输入形成后，再判断是否仍有未被覆盖的人工编排工作。
 
 ### 7.2 `REJECT`
 
@@ -307,5 +307,5 @@ P5-A 最终回答：
 SKILL_INSTALLATION = NOT_PERFORMED
 P5 = IN_PROGRESS
 P6 / P7 = NOT_STARTED
-D1–D9 = NOT_STARTED
+Stage 1.1–1.9 = NOT_STARTED
 ```

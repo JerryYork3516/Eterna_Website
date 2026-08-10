@@ -25,7 +25,7 @@ Read `AGENTS.md`, the relevant page specification, and only the applicable secti
 ## Workflow
 
 1. Record the target page, URL, commit or state, review scope, and evidence provider.
-2. Use the current Browser / Computer Use capability to inspect the real rendered page. When P6 / D1 has installed project Playwright, use its results only as additional deterministic evidence.
+2. Use the current Browser / Computer Use capability to inspect the real rendered page. When P6 / Stage 1.1 has installed project Playwright, use its results only as additional deterministic evidence.
 3. Cover the task-relevant matrix: Chinese, English, Desktop, Tablet, Mobile, no-Resident, reduced-motion, keyboard, and focus.
 4. Compare the rendered result with the applicable Node 7 / Node 8 rules for Product Reality, Living Precision, Typography, Layout, Responsive behavior, Accessibility, Degradation, and Anti-pattern / DEAD Gate.
 5. Record concrete evidence for every finding: page, locale, viewport or state, reproduction steps, observed result, and violated rule.

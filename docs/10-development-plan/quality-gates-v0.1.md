@@ -10,8 +10,8 @@
 
 P6-C 设计基线：`New@6ad78400f61b1c7d1165f8a61a2df271751be08c`
 
-> 本文件定义 Website 自动化质量门禁的总体分类、检查职责、执行强度、失败策略、统一严重度和 D1–D9 接入方式。
-> P6-A 冻结总体模型；P6-B 冻结首版工具职责、运行模式、执行顺序、owner 与 evidence contract；P6-C 冻结 Machine / Human 边界、Stage Acceptance、RC / Release evidence、例外规则与 P7 handoff。P6 没有安装工具、创建配置或 CI，也没有开始 D1。
+> 本文件定义 Website 自动化质量门禁的总体分类、检查职责、执行强度、失败策略、统一严重度和 Stage 1.1–1.9 接入方式。
+> P6-A 冻结总体模型；P6-B 冻结首版工具职责、运行模式、执行顺序、owner 与 evidence contract；P6-C 冻结 Machine / Human 边界、Stage Acceptance、RC / Release evidence、例外规则与 P7 handoff。P6 没有安装工具、创建配置或 CI，也没有开始 Stage 1.1。
 
 ---
 
@@ -25,7 +25,7 @@ upstream rules and contracts
 → normalized evidence and severity
 → failure policy
 → human review where required
-→ D-stage Exit Gate
+→ Stage 1.x Exit Gate
 ```
 
 机器结果只能证明其实际检查的范围。它不能覆盖上层规则，不能自动扩大当前任务范围，也不能代替 Node 7 / Node 8、内容或 Production 的人工裁决。
@@ -114,7 +114,7 @@ Automated PASS != Human PASS
 
 提供趋势、回归或风险证据，但当前不直接阻断阶段。Advisory finding 必须可追踪，不得被隐藏；如证据显示它已经违反正式契约，应重新归入对应 `REQUIRED` Gate，而不是继续以 advisory 名义绕过。
 
-P6-B / D1 只能依据正式阶段契约为具体检查分配强度，不得为了追求“更严格”把所有检查一律设为 blocker。
+P6-B / Stage 1.1 只能依据正式阶段契约为具体检查分配强度，不得为了追求“更严格”把所有检查一律设为 blocker。
 
 ---
 
@@ -259,15 +259,15 @@ without an explicit governed exception
 
 | Stage | Required Machine / deterministic acceptance | Required Human acceptance |
 |---|---|---|
-| D1 | `CODE_GATE` baseline、production build、tooling / config consistency 与 Legacy isolation | 工程基线足够轻、可维护、可恢复且未引入无必要抽象 |
-| D2 | YAML / schema、6 `pageId`、12 routes、locale pairing、根 `/ -> /zh`、publication / source contract | content contract、事实责任、双语和公开边界审核 |
-| D3 | shell / navigation、metadata / canonical / hreflang、sitemap / robots、accessibility baseline | Header / Footer / navigation 的真实双语浏览器、keyboard 与基础辅助技术检查 |
-| D4 | 当前 Home 的适用 `CODE_GATE`、`WEBSITE_CONTRACT_GATE`、`QUALITY_GATE` | Home Design in Browser：中文 / English、Desktop / Tablet / Mobile、Visual Quality 与 no-Resident / reduced-motion |
-| D5 | 当前 Digital Residents 页的适用 Code / Contract / Quality checks | Digital Residents Visual / Content Gate：定义、双语、响应式与 Resident 价值 |
-| D6 | Products / Aftelle / Studio / About 的适用 Code / Contract / Quality checks | 四页逐页 Design in Browser 与六页面整体 Visual / Content / Brand consistency Gate |
-| D7 | no-Resident、reduced-motion、renderer / visual failure degradation、lifecycle 与 performance evidence | Resident / Motion 的必要性、Living Precision、视觉质量和成本价值 |
-| D8 | `RC_FULL`，且第 17 节 RC evidence 完整 | full-site Visual / Content / Accessibility / Responsive / Degradation RC approval |
-| D9 | 已批准 RC 仍有效、production build、environment / canonical host / release preflight 与 rollback readiness | explicit Production authorization、cutover 与 rollback 条件批准 |
+| Stage 1.1 | `CODE_GATE` baseline、production build、tooling / config consistency 与 Legacy isolation | 工程基线足够轻、可维护、可恢复且未引入无必要抽象 |
+| Stage 1.2 | YAML / schema、6 `pageId`、12 routes、locale pairing、根 `/ -> /zh`、publication / source contract | content contract、事实责任、双语和公开边界审核 |
+| Stage 1.3 | shell / navigation、metadata / canonical / hreflang、sitemap / robots、accessibility baseline | Header / Footer / navigation 的真实双语浏览器、keyboard 与基础辅助技术检查 |
+| Stage 1.4 | 当前 Home 的适用 `CODE_GATE`、`WEBSITE_CONTRACT_GATE`、`QUALITY_GATE` | Home Design in Browser：中文 / English、Desktop / Tablet / Mobile、Visual Quality 与 no-Resident / reduced-motion |
+| Stage 1.5 | 当前 Digital Residents 页的适用 Code / Contract / Quality checks | Digital Residents Visual / Content Gate：定义、双语、响应式与 Resident 价值 |
+| Stage 1.6 | Products / Aftelle / Studio / About 的适用 Code / Contract / Quality checks | 四页逐页 Design in Browser 与六页面整体 Visual / Content / Brand consistency Gate |
+| Stage 1.7 | no-Resident、reduced-motion、renderer / visual failure degradation、lifecycle 与 performance evidence | Resident / Motion 的必要性、Living Precision、视觉质量和成本价值 |
+| Stage 1.8 | `RC_FULL`，且第 17 节 RC evidence 完整 | full-site Visual / Content / Accessibility / Responsive / Degradation RC approval |
+| Stage 1.9 | 已批准 RC 仍有效、production build、environment / canonical host / release preflight 与 rollback readiness | explicit Production authorization、cutover 与 rollback 条件批准 |
 
 本矩阵是最小阶段接受摘要，不替代 Node 10 的 Acceptance Criteria、Automated Checks、Human Review、Dependencies 与 Exit Gate。Machine 和 Human 两列均满足后，阶段才可能完成。
 
@@ -275,14 +275,14 @@ without an explicit governed exception
 
 ## 9. First-version check selection
 
-P6-B 只冻结工具职责和 preferred path；精确 package、version、config、command 与 workflow 由 D1 在真实根应用中落地。
+P6-B 只冻结工具职责和 preferred path；精确 package、version、config、command 与 workflow 由 Stage 1.1 在真实根应用中落地。
 
 ### 9.1 `CODE_GATE`
 
 | Check | Preferred responsibility | Boundary |
 |---|---|---|
 | Format | Prettier 只判断受控源码和文档是否符合统一格式 | 不承担 lint、语义或代码质量判断 |
-| Lint | ESLint CLI + 与当前 Next / React / accessibility 边界相关的规则 | 精确 config 与 plugin 在 D1 按实际 framework version 决定；lint 不能代替 axe 或人工可访问性审核 |
+| Lint | ESLint CLI + 与当前 Next / React / accessibility 边界相关的规则 | 精确 config 与 plugin 在 Stage 1.1 按实际 framework version 决定；lint 不能代替 axe 或人工可访问性审核 |
 | Type | TypeScript strict + framework type generation / typecheck | 不用 type assertion、`any` 或跳过生成步骤伪造通过 |
 | Unit / contract | Vitest，优先验证纯逻辑、schema、route、locale、publication 与 failure contract | 不以 coverage 数字或 implementation-detail tests 代替行为证据 |
 | Build | Next production build | 失败为 `FAIL_CLOSED -> BLOCK` |
@@ -347,7 +347,7 @@ SAST = CodeQL or one equivalent SAST
 Codex Security = DEFER
 ```
 
-GitHub capability 不可用时，D1 / P6 实施可以选择职责等价、可审计且不重复的替代工具；替换不构成并行叠加批准。
+GitHub capability 不可用时，Stage 1.1 / P6 实施可以选择职责等价、可审计且不重复的替代工具；替换不构成并行叠加批准。
 
 ---
 
@@ -386,7 +386,7 @@ frozen install
 
 ### `RC_FULL`
 
-D8 在 `CI_STANDARD` 基础上增加：
+Stage 1.8 在 `CI_STANDARD` 基础上增加：
 
 - 12-route full smoke 与 404；
 - metadata、canonical、hreflang、sitemap 与 robots 全量验证；
@@ -396,7 +396,7 @@ D8 在 `CI_STANDARD` 基础上增加：
 - no-Resident、reduced-motion、asset / partial-JS / renderer degradation；
 - Node 7 / Node 8 Visual Quality、内容、双语与 RC `HUMAN_GATE`。
 
-D9 不重新设计质量体系，也不重新批准视觉；它绑定已通过的 immutable RC evidence，执行 release identity、production response、rollback readiness 与 Production authorization。
+Stage 1.9 不重新设计质量体系，也不重新批准视觉；它绑定已通过的 immutable RC evidence，执行 release identity、production response、rollback readiness 与 Production authorization。
 
 ---
 
@@ -468,7 +468,7 @@ P6-B 只继承已经冻结的上位目标：
 - Lighthouse 100；
 - universal zero-warning policy。
 
-D1 建立工程基线，D4–D8 在真实页面、Preview 和 production-like evidence 上校准可执行 threshold。新阈值必须说明 metric、environment、sample、blocking policy 与回退方式，不能用工具默认值静默改写正式 Gate。
+Stage 1.1 建立工程基线，Stage 1.4–1.8 在真实页面、Preview 和 production-like evidence 上校准可执行 threshold。新阈值必须说明 metric、environment、sample、blocking policy 与回退方式，不能用工具默认值静默改写正式 Gate。
 
 ---
 
@@ -486,9 +486,9 @@ D1 建立工程基线，D4–D8 在真实页面、Preview 和 production-like ev
 
 ---
 
-## 16. D1 implementation handoff
+## 16. Stage 1.1 implementation handoff
 
-D1 在真实根应用中负责安装、固定版本并配置首版 repository tooling：
+Stage 1.1 在真实根应用中负责安装、固定版本并配置首版 repository tooling：
 
 - Prettier；
 - ESLint 与当前 Next / React / accessibility 相关规则；
@@ -499,13 +499,13 @@ D1 在真实根应用中负责安装、固定版本并配置首版 repository to
 
 Lighthouse CI 在出现可测量页面与 Preview 后按阶段需要接入；`npm audit` 不新增 scanner dependency。GitHub dependency security、Secret Scanning 与 CodeQL 属于 hosted capability / workflow，不是 npm production dependency；其启用、权限和 workflow 变更必须遵守 Tool Governance 与当前任务授权。
 
-D1 还要定义具体 npm scripts、validator 实现、config、CI YAML、版本锁定、缓存和并行策略。P6-B 不执行这些动作。
+Stage 1.1 还要定义具体 npm scripts、validator 实现、config、CI YAML、版本锁定、缓存和并行策略。P6-B 不执行这些动作。
 
 ---
 
-## 17. D8 Release Candidate evidence
+## 17. Stage 1.8 Release Candidate evidence
 
-D8 的 `RC_FULL` 输出必须绑定同一 candidate identity，包括 commit、content、asset 与 production-like Preview；不能拼接不同提交或过期环境的通过结果。RC evidence 至少包含：
+Stage 1.8 的 `RC_FULL` 输出必须绑定同一 candidate identity，包括 commit、content、asset 与 production-like Preview；不能拼接不同提交或过期环境的通过结果。RC evidence 至少包含：
 
 - commit SHA 与 Preview / artifact identity；
 - production build result；
@@ -530,13 +530,13 @@ REQUIRED MACHINE GATES = PASS
 REQUIRED HUMAN GATES = PASS
 ```
 
-`MINOR` 不得自动忽略。是否允许带入 RC，必须由人工对每项明确裁决并记录 reason、risk、owner、follow-up 与是否影响 D9；未处置的 `MINOR` 使 RC 保持 `REVIEW_REQUIRED`。
+`MINOR` 不得自动忽略。是否允许带入 RC，必须由人工对每项明确裁决并记录 reason、risk、owner、follow-up 与是否影响 Stage 1.9；未处置的 `MINOR` 使 RC 保持 `REVIEW_REQUIRED`。
 
 ---
 
-## 18. D9 Release evidence
+## 18. Stage 1.9 Release evidence
 
-D9 不建立第二套 RC。它验证已批准 RC 与实际 release target 的连续性，至少记录：
+Stage 1.9 不建立第二套 RC。它验证已批准 RC 与实际 release target 的连续性，至少记录：
 
 - release commit 与 approved RC commit 的关系；
 - production build 与 deploy artifact identity；
@@ -613,7 +613,7 @@ P7 接收：
 - repo-local Skills 与 Tool Governance；
 - Node 10 Development Plan。
 
-P7 负责 Node 10 的最终一致性复核与冻结，确认 P1–P6 的治理、事实、设计、技术、工程和 Gate 输入能够共同支持 D1。P7 不重新设计 P1–P6，也不能把 review 便利变成新的产品事实、工具安装、CI 实施或 D1 开始授权。
+P7 负责 Node 10 的最终一致性复核与冻结，确认 P1–P6 的治理、事实、设计、技术、工程和 Gate 输入能够共同支持 Stage 1.1。P7 不重新设计 P1–P6，也不能把 review 便利变成新的产品事实、工具安装、CI 实施或 Stage 1.1 开始授权。
 
 P7 当前保持 `NOT_STARTED`。
 
@@ -628,7 +628,7 @@ P6-C = PASS
 P6 = FINAL PASS
 P7 = NOT_STARTED
 Node 10 = REVIEW_REQUIRED
-D1–D9 = NOT_STARTED
+Stage 1.1–1.9 = NOT_STARTED
 
 TOOLS_INSTALLED = NO
 CI_CONFIGURED = NO
