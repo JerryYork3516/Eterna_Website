@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+---
+
+# Website Code Standards
+
+- Read the root `AGENTS.md` first; it is the entry point for AI working discipline.
+- For formal Website code, read `docs/10-development-plan/engineering-standards-v0.1.md` and apply the sections relevant to the task.
+- Search for an existing implementation before creating a new one.
+- Prefer native capabilities and genuine reuse.
+- Keep concrete implementations until real repetition proves an abstraction.
+- Keep semantic content server-first and Client Components local.
+- Do not add a dependency without explicit task scope and dependency admission.
+- Never claim an automated check has passed a human visual gate.
+- Do not restate or override the detailed engineering baseline here.
