@@ -24,7 +24,8 @@ Website responsibilities:
 
 - Node 1–9 planning and freeze work is complete.
 - Node 10 is still `REVIEW_REQUIRED`.
-- P1 and P2 are complete.
+- P1, P2, P3, and P4 are complete.
+- P5, P6, and P7 are not complete.
 - D1 has **not** started.
 - The root Next.js app does **not** exist yet.
 
@@ -51,10 +52,12 @@ Rules:
 Before any task, read this file and then only the minimum additional documents needed for that task.
 
 Suggested map:
-- Engineering / architecture tasks: read Node 9 + Node 10
+- Engineering / code tasks: read `docs/10-development-plan/engineering-standards-v0.1.md` + the directly relevant Node 9 / Node 10 documents
 - Content / bilingual tasks: read Node 6 + Node 9 content governance + related page docs
 - UI / page design tasks: read Node 7 + Node 8 + related page docs
 - Migration / deployment tasks: read Node 9 migration plan + Node 10 D9
+
+For formal Website engineering or code work, `AGENTS.md` defines how the AI works, while `docs/10-development-plan/engineering-standards-v0.1.md` is the engineering standards source for how the code should be written. Cursor, Codex, and other agents must follow the same engineering standards instead of maintaining separate code rules.
 
 Do not scan the whole docs set just to “understand everything”. Expand the reading set only when the task truly needs it.
 

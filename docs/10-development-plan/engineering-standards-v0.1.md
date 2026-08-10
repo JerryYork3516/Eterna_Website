@@ -465,7 +465,7 @@ Component 的 public contract 应保持小、稳定且能从调用处理解；�
 
 - 不允许无理由使用 `any`；
 - external 或尚未验证的数据先使用 `unknown`；
-- runtime boundary 必须 validate；
+- external / untrusted runtime boundary 必须 validate；
 - public contract 使用明确类型；
 - 类型靠近真正所有者；
 - 不重复定义同一 domain type；
@@ -475,7 +475,16 @@ Component 的 public contract 应保持小、稳定且能从调用处理解；�
 
 只有第三方类型确实无法表达、使用范围被隔离且有具体原因时，才可临时使用 `any`。不得用 `any` 让 TypeScript 停止报错，也不得把 `const data: any` 或 `handle(value: any)` 当作默认写法。
 
-YAML、JSON、URL input、API response 等外部输入在验证前属于不可信数据。先以 `unknown` 接收并经过 runtime validation，再进入可信类型域。
+YAML、JSON、URL input、API request / response、environment-derived data、external service data，以及 browser / network supplied values 等外部输入，在验证前属于不可信数据。先以 `unknown` 接收并经过 runtime validation，再进入可信类型域。
+
+内部 component、function 或 module 已由可靠 TypeScript contract 保证的数据，不因“更安全”机械重复 runtime validation。原则是：
+
+```text
+external / untrusted data
+→ unknown
+→ validation
+→ trusted typed domain
+```
 
 无证据的 `value as SomeType` 不能替代验证。Type assertion 只用于编译器缺少、但代码已经具有可证明事实的窄边界。
 
@@ -1019,7 +1028,17 @@ measure before optimize
 - Mobile 不加载只为 Desktop 使用的重资产；
 - 不为微优化牺牲可读性。
 
-不得机械加入 `useMemo`、`useCallback` 或 `memo`。只有 measurement、明确 rerender 问题和稳定 identity contract 共同证明必要时才使用。具体 bundle budget、Lighthouse threshold 与 performance tooling 留给 P6 / D1。
+不得机械加入 `useMemo`、`useCallback` 或 `memo`，也不得把 manual memoization 当作“高级 React”、默认性能优化或 AI 生成模板。当前 React / toolchain 如果提供可靠的自动优化能力，优先使用其能够清楚完成的优化，不为同一目的机械叠加 manual memoization。
+
+以下任一真实条件可以证明 manual memoization 合理：
+
+- profiling / measurement 发现实际性能问题；
+- expensive calculation 确实值得缓存；
+- reference identity 是真实 component / hook / integration contract；
+- third-party integration 明确要求 stable identity；
+- 其他当前代码证据证明 manual memoization 更清楚或必要。
+
+核心原则是 `evidence or contract before manual memoization`，而不是要求 measurement、rerender 问题和 stable identity 三项同时成立。具体 bundle budget、Lighthouse threshold 与 performance tooling 留给 P6 / D1。
 
 ---
 
