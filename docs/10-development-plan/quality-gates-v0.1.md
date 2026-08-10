@@ -2,16 +2,16 @@
 
 内部版本：`v0.1`
 
-文档性质：`P6-A Quality Gate 架构与失败策略`
+文档性质：`P6 Quality Gate 架构、检查职责与执行策略`
 
 状态：`DRAFT / P6-IN-PROGRESS`
 
 编制日期：`2026-08-10`（Asia/Shanghai）
 
-设计基线：`New@01735066ada0ccc498680254e21af3b23d9cf8f3`
+P6-B 设计基线：`New@44536e2e02692552240db963458dd4cba00ecb99`
 
-> 本文件定义 Website 自动化质量门禁的总体分类、执行强度、失败策略、统一严重度和 D1–D9 高层接入方式。
-> P6-A 不选择或安装具体工具，不配置 CI，不定义完整命令与阈值，不执行 P6-B，也不开始 D1。
+> 本文件定义 Website 自动化质量门禁的总体分类、检查职责、执行强度、失败策略、统一严重度和 D1–D9 接入方式。
+> P6-A 冻结总体模型；P6-B 冻结首版工具职责、运行模式、执行顺序、owner 与 evidence contract。本文件不安装工具、不创建配置或 CI、不执行 P6-C，也不开始 D1。
 
 ---
 
@@ -242,32 +242,257 @@ Gate 结果统一使用以下决策状态，避免把工具退出码直接当作
 
 ---
 
-## 9. Deferred to P6-B / D1
+## 9. First-version check selection
 
-P6-A 不决定或实施：
+P6-B 只冻结工具职责和 preferred path；精确 package、version、config、command 与 workflow 由 D1 在真实根应用中落地。
 
-- ESLint 精确配置；
-- Prettier 配置；
-- Vitest / Playwright 的选择、安装或命令；
-- axe package 与规则配置；
-- Lighthouse 配置与阈值；
-- CodeQL workflow；
-- secret scanner 具体产品；
-- dependency audit 具体产品与阈值；
-- GitHub Actions YAML；
-- npm scripts；
-- CI pipeline、缓存、并行与具体执行顺序。
+### 9.1 `CODE_GATE`
 
-P6-B 负责在本架构内定义具体工具、Gate ownership、执行顺序、启用条件、阈值与 evidence format；实际依赖和工程配置仍由 D1 按正式授权落地。
+| Check | Preferred responsibility | Boundary |
+|---|---|---|
+| Format | Prettier 只判断受控源码和文档是否符合统一格式 | 不承担 lint、语义或代码质量判断 |
+| Lint | ESLint CLI + 与当前 Next / React / accessibility 边界相关的规则 | 精确 config 与 plugin 在 D1 按实际 framework version 决定；lint 不能代替 axe 或人工可访问性审核 |
+| Type | TypeScript strict + framework type generation / typecheck | 不用 type assertion、`any` 或跳过生成步骤伪造通过 |
+| Unit / contract | Vitest，优先验证纯逻辑、schema、route、locale、publication 与 failure contract | 不以 coverage 数字或 implementation-detail tests 代替行为证据 |
+| Build | Next production build | 失败为 `FAIL_CLOSED -> BLOCK` |
+
+首版核心路径：
+
+```text
+format check
+→ lint
+→ typecheck
+→ unit / contract tests
+→ production build
+```
+
+### 9.2 `WEBSITE_CONTRACT_GATE`
+
+Website 自有契约优先由 repository-owned deterministic validators 与 Vitest contract tests 验证，不依赖 AI 判断，也不把 YAML schema 变成 Layout engine。
+
+必须覆盖：
+
+- `pageId` 只允许 `home`、`digital-residents`、`products`、`product-aftelle`、`product-studio`、`about`；
+- allowlist 恰好映射 12 个 `/zh` / `/en` 规范 route，且 route 唯一；
+- 根 `/` 确定性 redirect 到 `/zh`，非法 locale 不做模糊 fallback；
+- 每个 `pageId` 恰好有一份 `zh` 和一份 `en`，`pairedPageId` 与当前稳定身份一致；
+- route、record locale 与 URL locale 一致；
+- language switch target 存在，并保持当前 `pageId`；
+- YAML 通过安全解析、schema、enum 与 required-field validation；
+- publication state 合法，production 只消费 `PUBLISHED`；
+- fact / source required fields、CTA target 与 asset reference 满足发布契约；
+- canonical 唯一且匹配当前语言规范 URL；
+- hreflang、sitemap 与 robots 来自同一受控 route / publication mapping；
+- production 页面、metadata、navigation、sitemap 与输出 artifact 不含 `DRAFT`、`REVIEW_REQUIRED`、`WITHDRAWN` 或 Preview-only content。
+
+上述 production contract 失败默认 `FAIL_CLOSED`。Validator 只证明结构、状态和引用关系成立，不证明内容事实、翻译质量或公开批准已经通过人工审核。
+
+### 9.3 `QUALITY_GATE`
+
+| Area | Preferred path | Human / fallback boundary |
+|---|---|---|
+| Browser smoke | Playwright | manual Chrome / real device 用于交互补证；自动 smoke 不产生视觉 PASS |
+| Accessibility | axe 与 Playwright 集成，检查可自动判断的问题 | keyboard、VoiceOver、zoom、reduced-motion 和最终 WCAG 处置仍需人工 |
+| Performance | Lighthouse CI；Next build / bundle output 作为补充证据；production field metrics 在可用后加入 | 不以 Lighthouse 分数批准视觉或真实用户性能 |
+| Dependency security | `npm audit` 基于 committed lockfile；可用时由 GitHub dependency security 提供远端持续证据 | 同一 vulnerability 不建立两个重复 blocker |
+| Secret scan | GitHub Secret Scanning；不可用时替换为一条等价 deterministic scanner | secret evidence 不输出 secret value；外部设置变更仍需明确授权 |
+| SAST | CodeQL；不可用时替换为单一等价 SAST | 不叠加第二套商业 SAST；finding 进入统一 severity 与 disposition |
+
+Playwright 的首版 browser smoke 覆盖：
+
+- 12 个正式 URL；
+- primary navigation 与当前状态；
+- language switching；
+- 404；
+- no-Resident path；
+- reduced-motion path。
+
+Security 保持最小单一路径：
+
+```text
+dependency audit = npm ecosystem + available GitHub dependency security
+secret scan = GitHub Secret Scanning or one equivalent deterministic scanner
+SAST = CodeQL or one equivalent SAST
+Codex Security = DEFER
+```
+
+GitHub capability 不可用时，D1 / P6 实施可以选择职责等价、可审计且不重复的替代工具；替换不构成并行叠加批准。
 
 ---
 
-## 10. P6-A state
+## 10. Run modes
+
+### `LOCAL_FAST`
+
+开发过程中高频运行，只保留低成本、定位快速的当前范围检查：
+
+```text
+format
+→ lint
+→ typecheck
+→ relevant unit / contract tests
+```
+
+不要求每次局部修改都运行完整浏览器、performance 或全仓安全扫描。提交前仍须按变更风险补足相关检查。
+
+### `CI_STANDARD`
+
+用于 commit / PR 的标准确定性证据：
+
+```text
+frozen install
+→ format
+→ lint
+→ typecheck
+→ content / route / locale validation
+→ tests
+→ production build
+→ security deterministic checks
+→ Playwright browser smoke + axe automation
+```
+
+没有数据依赖的步骤可以并行，但逻辑 Gate 顺序不变：高成本 browser checks 不应掩盖前置 `FAIL_CLOSED` 失败。
+
+### `RC_FULL`
+
+D8 在 `CI_STANDARD` 基础上增加：
+
+- 12-route full smoke 与 404；
+- metadata、canonical、hreflang、sitemap 与 robots 全量验证；
+- production / Preview content-state 与 noindex 边界；
+- Lighthouse CI、bundle evidence 与可用的真实 field metrics；
+- full axe evidence，加上 keyboard / VoiceOver / 200% zoom 人工证据；
+- no-Resident、reduced-motion、asset / partial-JS / renderer degradation；
+- Node 7 / Node 8 Visual Quality、内容、双语与 RC `HUMAN_GATE`。
+
+D9 不重新设计质量体系，也不重新批准视觉；它绑定已通过的 immutable RC evidence，执行 release identity、production response、rollback readiness 与 Production authorization。
+
+---
+
+## 11. Execution order and stopping policy
+
+```text
+cheap / deterministic checks
+→ contract validation and tests
+→ production build
+→ security deterministic checks
+→ expensive browser / accessibility checks
+→ performance
+→ human review
+```
+
+如果前置 `FAIL_CLOSED` Gate 已失败，默认停止高成本 downstream Gate。只有为定位根因、确认影响面或收集一次性诊断证据时才继续，并必须明确标记为 diagnostic run，不得把后续结果用于抵消前置 `BLOCK`。
+
+并行只用于互不依赖的检查，不改变 owner、failure policy 或最终 stage decision。
+
+---
+
+## 12. Gate ownership
+
+| Gate | Responsibility owner |
+|---|---|
+| `CODE_GATE` | Engineering |
+| `WEBSITE_CONTRACT_GATE` | Content / Route contract |
+| `QUALITY_GATE` | Engineering + Browser evidence |
+| `HUMAN_GATE` | Human reviewer |
+
+Owner 表示责任类型和 finding 去向，不虚构团队、职位或具体人员。跨 Gate finding 必须指定一个 primary owner，避免重复处置或无人负责。
+
+---
+
+## 13. Evidence format
+
+各工具可以保留自己的原始输出；Website 只要求最终归一化摘要。每个失败或 review finding 至少包含：
+
+```text
+Gate:
+Check:
+Severity:
+Target:
+Evidence:
+Action:
+Blocking:
+```
+
+- `Target` 指向具体 file、route、locale、viewport 或 artifact；
+- `Evidence` 记录 expected / observed 与可复现证据位置，不泄露 secret；
+- `Action` 说明修复、人工处置或重新验证要求；
+- `Blocking` 使用当前 Enforcement 与 Failure Policy 得出的结果，而不是直接复制工具退出码。
+
+通过记录应至少绑定 check identity、scope、commit / artifact 与结果；`NOT_APPLICABLE` 必须记录条件不成立的原因。
+
+---
+
+## 14. Threshold policy
+
+P6-B 只继承已经冻结的上位目标：
+
+- accessibility 目标为 WCAG 2.2 AA，自动化只是其中一类证据；
+- production 真实用户第 75 百分位 Core Web Vitals Good 目标为 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1。
+
+当前没有真实根应用、Preview 或 production baseline，因此不创建以下硬阈值：
+
+- arbitrary coverage percentage；
+- arbitrary bundle KB limit；
+- Lighthouse 100；
+- universal zero-warning policy。
+
+D1 建立工程基线，D4–D8 在真实页面、Preview 和 production-like evidence 上校准可执行 threshold。新阈值必须说明 metric、environment、sample、blocking policy 与回退方式，不能用工具默认值静默改写正式 Gate。
+
+---
+
+## 15. Conditional gates
+
+以下能力未启用时，不运行其专项实现检查：
+
+- Contact form tests；
+- API security tests；
+- Analytics checks；
+- third-party integration tests；
+- Resident renderer-specific tests。
+
+关闭状态本身仍可确定性验证。例如 Contact 未批准时，route、navigation、CTA 与 production output 均不得暴露公开可执行 Contact 入口；Analytics 未批准时不得加载 tracking script。对应能力未来进入 scope 时，其 Conditional Gate 必须同步启用。
+
+---
+
+## 16. D1 implementation handoff
+
+D1 在真实根应用中负责安装、固定版本并配置首版 repository tooling：
+
+- Prettier；
+- ESLint 与当前 Next / React / accessibility 相关规则；
+- TypeScript strict 与 framework typecheck；
+- Vitest；
+- Playwright；
+- axe 的 browser-test integration。
+
+Lighthouse CI 在出现可测量页面与 Preview 后按阶段需要接入；`npm audit` 不新增 scanner dependency。GitHub dependency security、Secret Scanning 与 CodeQL 属于 hosted capability / workflow，不是 npm production dependency；其启用、权限和 workflow 变更必须遵守 Tool Governance 与当前任务授权。
+
+D1 还要定义具体 npm scripts、validator 实现、config、CI YAML、版本锁定、缓存和并行策略。P6-B 不执行这些动作。
+
+---
+
+## 17. P6-C handoff
+
+P6-C 需要最终收口：
+
+- `HUMAN_GATE` 与 machine Gate 的最终关系和不可替代边界；
+- Gate × D1–D9 stage acceptance matrix；
+- RC / release evidence 的必需字段、绑定与保留要求；
+- P6 全文 consistency、duplicate Gate 与 authority review；
+- P7 handoff。
+
+P6-B 不开始这些收口工作。
+
+---
+
+## 18. P6-B state
 
 ```text
 P6-A = PASS
+P6-B = PASS
 P6 = IN_PROGRESS
-P6-B = NOT_STARTED
+P6-C = NOT_STARTED
 P7 = NOT_STARTED
 Node 10 = REVIEW_REQUIRED
 D1–D9 = NOT_STARTED
