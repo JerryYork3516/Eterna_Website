@@ -4,14 +4,14 @@
 
 文档性质：`P6 Quality Gate 架构、检查职责与执行策略`
 
-状态：`DRAFT / P6-IN-PROGRESS`
+状态：`PASS / P6 COMPLETE`
 
 编制日期：`2026-08-10`（Asia/Shanghai）
 
-P6-B 设计基线：`New@44536e2e02692552240db963458dd4cba00ecb99`
+P6-C 设计基线：`New@6ad78400f61b1c7d1165f8a61a2df271751be08c`
 
 > 本文件定义 Website 自动化质量门禁的总体分类、检查职责、执行强度、失败策略、统一严重度和 D1–D9 接入方式。
-> P6-A 冻结总体模型；P6-B 冻结首版工具职责、运行模式、执行顺序、owner 与 evidence contract。本文件不安装工具、不创建配置或 CI、不执行 P6-C，也不开始 D1。
+> P6-A 冻结总体模型；P6-B 冻结首版工具职责、运行模式、执行顺序、owner 与 evidence contract；P6-C 冻结 Machine / Human 边界、Stage Acceptance、RC / Release evidence、例外规则与 P7 handoff。P6 没有安装工具、创建配置或 CI，也没有开始 D1。
 
 ---
 
@@ -225,20 +225,51 @@ Gate 结果统一使用以下决策状态，避免把工具退出码直接当作
 
 阶段只有在其 `REQUIRED` 自动 Gate 满足、所有 review finding 完成正式处置、所需 `HUMAN_GATE` 明确通过且 Exit Gate 其他条件成立后才能继续。
 
+### 7.1 Final Machine / Human boundary
+
+`Machine Gate` 负责可重复、可定位、可审计的确定性证据；`HUMAN_GATE` 负责机器不能可靠裁决的质量、事实、价值与授权。二者是共同前置条件，不是互相替代的两条可选路径。
+
+```text
+Automated PASS != Human PASS
+Human PASS cannot waive a FAIL_CLOSED machine failure
+without an explicit governed exception
+```
+
+最终规则：
+
+- Machine PASS 只覆盖实际运行的 check、scope、commit 与 artifact，不能批准 Design、Content、Architecture 或 Production；
+- Human PASS 不能把失败的确定性契约改写为机器通过；允许例外时只能按第 19 节记录 `GOVERNED_EXCEPTION`，且不得覆盖明确禁止 override 的 Gate；
+- 必需 Human Gate 未裁决时，阶段保持 `HUMAN_DECISION_REQUIRED`，即使全部自动检查通过也不能继续；
+- 人工裁决必须以当前实现和机器证据为输入，不得用主观认可忽略错误 route、内容发布状态、secret 或 broken build；
+- AI、截图、axe、Playwright、Lighthouse、CodeQL 或 build success 均不能代表人工授权。
+
+`HUMAN_GATE` 至少覆盖：
+
+- Design in Browser；
+- Visual Quality Gate 与 Living Precision；
+- 页面是否模板化、是否有明显 AI 味；
+- 内容事实、来源与公开范围；
+- 中文与英文表达质量；
+- 高影响 dependency / architecture decision；
+- Production authorization。
+
 ---
 
-## 8. D-stage mapping
+## 8. Stage Acceptance Matrix
 
-| Stage | High-level Gate focus |
-|---|---|
-| D1 | 工程基础 `CODE_GATE`，Legacy 隔离与最小 deterministic baseline |
-| D2 | Content、route、locale、`pageId`、schema、source 与 publication 的 `WEBSITE_CONTRACT_GATE` |
-| D3 | SEO、shared shell、semantic HTML 与 accessibility baseline |
-| D4–D7 | 与页面范围相称的自动 Gate，加上不可替代的 Human Visual / Content / Motion Gate |
-| D8 | 12 URL、全站 content / SEO / accessibility / performance / security / degradation 的 Release Candidate Gate，加上人工 RC Gate |
-| D9 | release identity、production response、rollback readiness 等确定性 Gate，加上 Production authorization |
+| Stage | Required Machine / deterministic acceptance | Required Human acceptance |
+|---|---|---|
+| D1 | `CODE_GATE` baseline、production build、tooling / config consistency 与 Legacy isolation | 工程基线足够轻、可维护、可恢复且未引入无必要抽象 |
+| D2 | YAML / schema、6 `pageId`、12 routes、locale pairing、根 `/ -> /zh`、publication / source contract | content contract、事实责任、双语和公开边界审核 |
+| D3 | shell / navigation、metadata / canonical / hreflang、sitemap / robots、accessibility baseline | Header / Footer / navigation 的真实双语浏览器、keyboard 与基础辅助技术检查 |
+| D4 | 当前 Home 的适用 `CODE_GATE`、`WEBSITE_CONTRACT_GATE`、`QUALITY_GATE` | Home Design in Browser：中文 / English、Desktop / Tablet / Mobile、Visual Quality 与 no-Resident / reduced-motion |
+| D5 | 当前 Digital Residents 页的适用 Code / Contract / Quality checks | Digital Residents Visual / Content Gate：定义、双语、响应式与 Resident 价值 |
+| D6 | Products / Aftelle / Studio / About 的适用 Code / Contract / Quality checks | 四页逐页 Design in Browser 与六页面整体 Visual / Content / Brand consistency Gate |
+| D7 | no-Resident、reduced-motion、renderer / visual failure degradation、lifecycle 与 performance evidence | Resident / Motion 的必要性、Living Precision、视觉质量和成本价值 |
+| D8 | `RC_FULL`，且第 17 节 RC evidence 完整 | full-site Visual / Content / Accessibility / Responsive / Degradation RC approval |
+| D9 | 已批准 RC 仍有效、production build、environment / canonical host / release preflight 与 rollback readiness | explicit Production authorization、cutover 与 rollback 条件批准 |
 
-这是职责映射，不是命令清单。每一 D 阶段仍服从 Node 10 的 Acceptance Criteria、Automated Checks、Human Review 与 Exit Gate。
+本矩阵是最小阶段接受摘要，不替代 Node 10 的 Acceptance Criteria、Automated Checks、Human Review、Dependencies 与 Exit Gate。Machine 和 Human 两列均满足后，阶段才可能完成。
 
 ---
 
@@ -472,27 +503,129 @@ D1 还要定义具体 npm scripts、validator 实现、config、CI YAML、版本
 
 ---
 
-## 17. P6-C handoff
+## 17. D8 Release Candidate evidence
 
-P6-C 需要最终收口：
+D8 的 `RC_FULL` 输出必须绑定同一 candidate identity，包括 commit、content、asset 与 production-like Preview；不能拼接不同提交或过期环境的通过结果。RC evidence 至少包含：
 
-- `HUMAN_GATE` 与 machine Gate 的最终关系和不可替代边界；
-- Gate × D1–D9 stage acceptance matrix；
-- RC / release evidence 的必需字段、绑定与保留要求；
-- P6 全文 consistency、duplicate Gate 与 authority review；
-- P7 handoff。
+- commit SHA 与 Preview / artifact identity；
+- production build result；
+- 12-route result 与 404；
+- content / locale / `pageId` / publication validation；
+- metadata、canonical、hreflang、sitemap 与 robots；
+- browser smoke；
+- automated 与人工 accessibility evidence；
+- no-Resident evidence；
+- reduced-motion evidence；
+- dependency、secret 与 SAST security result；
+- Lighthouse / bundle / available field performance evidence；
+- unresolved findings list；
+- Human Visual / Content / bilingual / RC decisions。
 
-P6-B 不开始这些收口工作。
+RC candidate 只有同时满足以下条件才可通过：
+
+```text
+BLOCKER = NONE
+MAJOR = NONE
+REQUIRED MACHINE GATES = PASS
+REQUIRED HUMAN GATES = PASS
+```
+
+`MINOR` 不得自动忽略。是否允许带入 RC，必须由人工对每项明确裁决并记录 reason、risk、owner、follow-up 与是否影响 D9；未处置的 `MINOR` 使 RC 保持 `REVIEW_REQUIRED`。
 
 ---
 
-## 18. P6-B state
+## 18. D9 Release evidence
+
+D9 不建立第二套 RC。它验证已批准 RC 与实际 release target 的连续性，至少记录：
+
+- release commit 与 approved RC commit 的关系；
+- production build 与 deploy artifact identity；
+- environment identity 与必要配置完整性，不记录 secret value；
+- canonical host；
+- production robots 与 sitemap；
+- Vercel deployment target；
+- branch / reviewed promotion / default-branch state；
+- rollback target、owner、window 与可用性；
+- Contact、Analytics、Resident 等 Conditional feature flags；
+- RC unresolved findings 是否仍适用、是否出现新风险。
+
+如果 release commit、content、asset、environment 或 feature scope 相对 approved RC 发生变化，必须明确影响范围并重新运行受影响 Gate；不得把旧 RC evidence 静默套用到新 artifact。无关且可证明不影响 RC 的 release metadata 变化也必须记录关系。
+
+```text
+PRODUCTION_AUTHORIZATION = HUMAN_ONLY
+```
+
+自动 build、deployment、smoke、DNS / TLS 或 rollback check 成功不能自行批准 promotion、DNS、domain、default branch、cutover 或上线。
+
+---
+
+## 19. Exception policy
+
+Gate 例外只能由人工明确授权，并且不把原失败结果改写成 `PASS`。最小记录为：
+
+- failed Gate / check；
+- severity；
+- reason；
+- scope；
+- accepted risk；
+- `TEMPORARY` 或 `PERMANENT`；
+- follow-up requirement；
+- explicit human authorization evidence。
+
+临时例外还必须有失效条件或最晚复核点。例外只适用于记录的 scope、commit / artifact 与阶段；后续变更不得自动继承。
+
+以下情况禁止 override：
+
+- secret leak；
+- invalid production content 或未批准 publication state；
+- broken production build；
+- wrong route / locale / `pageId` contract；
+- 未经人工授权的 Production action。
+
+本规则不建立额外审批系统；仓库中的可追溯记录和当前任务的明确人工授权构成最低治理要求。为赶进度、工具误报但无证据、或“其他 Gate 已通过”均不是有效例外理由。
+
+---
+
+## 20. Duplicate Gate Review
+
+P6-A / P6-B final review：`PASS`。未发现实质冲突；总模型与具体检查保持一层 summary、一层 owning implementation responsibility。
+
+- axe 是首版唯一 automated accessibility scanner；ESLint accessibility rules 只做静态代码提示，Playwright 只承载浏览器执行，三者不建立重复最终判决；
+- CodeQL 是首版唯一 SAST preferred path，不同时要求第二套 SAST；
+- Lighthouse CI 提供 lab / regression evidence，Core Web Vitals Good targets 是 production field outcome；二者进入同一 Performance finding / disposition，不作为两套独立最终 PASS；
+- dependency audit、secret scan 与 SAST 检查不同风险面；同一 finding 只保留一个 primary owner 和一个 blocking decision；
+- Code Review Skill 仍为 `REJECT`，abstraction、dependency worth 与 AI smell 保留人工工程审核，不复制为 Skill；
+- screenshot regression 只提示变化，不能替代 Design in Browser 或 Human Visual Gate；
+- 自动 Gate 不产生 Content、Visual、RC 或 Production 人工批准。
+
+因此无需删除 P6-A/B 的正式职责；本轮通过最终边界、Stage Matrix 和单一 finding ownership 消除潜在重复解释。
+
+---
+
+## 21. P7 handoff
+
+P7 接收：
+
+- P1–P6 `FINAL PASS` 状态；
+- 本 `quality-gates-v0.1.md`；
+- `AGENTS.md`；
+- Engineering Standards；
+- repo-local Skills 与 Tool Governance；
+- Node 10 Development Plan。
+
+P7 负责 Node 10 的最终一致性复核与冻结，确认 P1–P6 的治理、事实、设计、技术、工程和 Gate 输入能够共同支持 D1。P7 不重新设计 P1–P6，也不能把 review 便利变成新的产品事实、工具安装、CI 实施或 D1 开始授权。
+
+P7 当前保持 `NOT_STARTED`。
+
+---
+
+## 22. P6 final state
 
 ```text
 P6-A = PASS
 P6-B = PASS
-P6 = IN_PROGRESS
-P6-C = NOT_STARTED
+P6-C = PASS
+P6 = FINAL PASS
 P7 = NOT_STARTED
 Node 10 = REVIEW_REQUIRED
 D1–D9 = NOT_STARTED
