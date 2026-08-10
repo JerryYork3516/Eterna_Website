@@ -306,17 +306,256 @@ DRY 处理真实、同语义的重复；YAGNI 阻止为未发生需求提前建�
 
 ---
 
-## 9. 后续批次边界
+## 9. React Component 规范
 
-P4-A 不详细规定以下内容：
+### 9.1 组件为什么存在
 
-- React Component、Server / Client Component、state 与 `useEffect`；
-- TypeScript 类型规则；
-- CSS Modules、selector、responsive 与详细样式组织；
-- accessibility 与 SEO 实现细则；
-- testing、security、logging 与 error handling；
-- exact dependency admission；
-- ESLint / Prettier 配置；
+Component 至少应满足一项：
+
+- 有独立语义职责；
+- 有独立交互职责；
+- 有明确视觉职责；
+- 被真实复用；
+- 拆分后显著提高可读性或测试边界。
+
+JSX 超过几行、文件看起来较长或 AI 认为“应该组件化”，都不是独立拆分理由。不要用固定行数决定组件边界。
+
+### 9.2 页面 Section 默认由页面所有
+
+Home、Digital Residents、Products、Aftelle、Studio 与 About 的专属 Section 默认留在各自 feature 中。只有出现真实重复且语义、职责与变化方向一致时，才上提到 shared 层。
+
+在真实实现证明必要之前，不创建 `UniversalHero`、`GenericSection`、`UniversalProductCard`、`ContentBlockRenderer`、`SectionFactory` 或 `PageBuilder`。
+
+### 9.3 Composition 优先
+
+优先使用清楚的 component composition、`children` 和少量语义明确的 props，不设计依赖几十个配置项的万能组件。
+
+如果一个组件必须增加大量 `boolean`、`variant`、`mode`、`layout`、`alignment` 或 `specialCase` 才能适配不同页面，应重新检查这些调用方是否真的共享同一职责。
+
+---
+
+## 10. Server Component 与 Client Component
+
+### 10.1 Server-first
+
+默认使用 Server Component，尤其用于：
+
+- 页面正文；
+- Layout；
+- 静态 Section；
+- content loading；
+- metadata；
+- route-level composition；
+- 不需要浏览器交互的 UI。
+
+公开内容应尽量直接输出语义 HTML。不要因为框架支持客户端渲染，就把静态内容移入浏览器数据流。
+
+### 10.2 Client Component 只承载真实浏览器职责
+
+只有存在以下真实需求时才使用 Client Component：
+
+- click 或 keyboard interaction；
+- local UI state；
+- focus management；
+- browser API；
+- subscription；
+- runtime animation；
+- Resident renderer。
+
+`'use client'` 应停留在最小叶子节点。Header 中的 mobile menu、页面中的一个动画或单个按钮的 state，不构成把整个 page、root layout、大段静态正文或完整 Header 与页面一起 client 化的理由。
+
+Server Component 可以组合独立 Client Island。不得为了包含一个 Client Component 而把父层整体改成 Client Component；跨边界传递的数据应保持小而明确，并符合框架可序列化约束。
+
+---
+
+## 11. React State
+
+首版不引入全局状态库。状态按以下顺序寻找所有者：
+
+```text
+URL / Route
+→ Server data
+→ local component state
+→ lifted state
+→ Context
+→ global state library（只有真实需求后重新评估）
+```
+
+### 11.1 不复制事实来源
+
+当 URL 已经决定 locale、route 或当前页面时，不再把同一信息复制进 `useState`、localStorage 或 Context。一个事实只保留一个权威来源。
+
+### 11.2 State 保持最小
+
+不保存可以从现有 props 或 state 直接计算出的派生值。优先：
+
+```ts
+const isActive = currentPage === pageId
+```
+
+而不是再建立 `isActive` state 并用 effect 同步。State 只记录不能可靠地从当前输入计算出的变化。
+
+### 11.3 Context 边界
+
+Context 只用于稳定、跨组件树且具有明确语义的共享状态。不得建立 giant `AppContext`、全站万能 Provider，不把所有页面数据放入 Context，也不把任何 props drilling 都自动改成 Context。
+
+---
+
+## 12. `useEffect`
+
+`useEffect` 不是默认数据流工具。它只用于与 React 外部系统同步，例如：
+
+- browser lifecycle；
+- DOM integration；
+- event subscription；
+- timer 或 observer；
+- imperative third-party integration；
+- renderer lifecycle。
+
+不得用 Effect 处理：
+
+- props 到 state 的同步；
+- 可以直接计算的派生 state；
+- Server Component 可以完成的数据读取；
+- metadata；
+- 普通 event response；
+- 对错误组件边界的补丁。
+
+禁止形成以下同步链：
+
+```text
+prop
+→ state
+→ effect
+→ another state
+```
+
+Effect 涉及 listener、timer、observer、subscription 或 renderer 时，必须明确资源所有权和必要 cleanup。没有需要释放的资源时，不添加“以防万一”的 cleanup。
+
+---
+
+## 13. Props 与 Component Contract
+
+Props 应表达真实语义，例如 `pageId`、`locale`、`status`、`items`、`onClose`。避免 `data`、`config`、`options`、`stuff`、`extra` 或 `mode2` 这类不能说明职责的名称。
+
+### 13.1 避免 Boolean explosion
+
+不要用大量可任意组合的 `isDark`、`isCompact`、`isCentered`、`isSpecial`、`isProduct`、`isHero` 或 `isAlternative` 支撑一个万能组件。
+
+互斥状态优先使用明确 union：
+
+```ts
+type MenuState = 'closed' | 'opening' | 'open'
+```
+
+如果视觉或语义职责实际不同，应拆成两个清楚组件，而不是继续增加 boolean。
+
+### 13.2 只传递调用方需要的数据
+
+Content loader 应提供经过校验的结构。底层 UI 组件只接收自身职责需要的数据，不把巨大 YAML 页面对象逐层下传，也不让 primitive component 知道完整 page schema。
+
+Component 的 public contract 应保持小、稳定且能从调用处理解；不得为了“未来扩展”预留未使用 props。
+
+---
+
+## 14. TypeScript
+
+新站使用 TypeScript `strict`。基础规则：
+
+- 不允许无理由使用 `any`；
+- external 或尚未验证的数据先使用 `unknown`；
+- runtime boundary 必须 validate；
+- public contract 使用明确类型；
+- 类型靠近真正所有者；
+- 不重复定义同一 domain type；
+- 不建立巨型 global `types.ts`。
+
+### 14.1 `any`、`unknown` 与 runtime boundary
+
+只有第三方类型确实无法表达、使用范围被隔离且有具体原因时，才可临时使用 `any`。不得用 `any` 让 TypeScript 停止报错，也不得把 `const data: any` 或 `handle(value: any)` 当作默认写法。
+
+YAML、JSON、URL input、API response 等外部输入在验证前属于不可信数据。先以 `unknown` 接收并经过 runtime validation，再进入可信类型域。
+
+无证据的 `value as SomeType` 不能替代验证。Type assertion 只用于编译器缺少、但代码已经具有可证明事实的窄边界。
+
+### 14.2 类型所有权与命名
+
+类型放在最接近其职责的位置：
+
+- Home 专属类型归 Home feature；
+- Content schema 类型归 content boundary；
+- `Locale`、`PageId` 等稳定共享领域类型归其明确共享模块；
+- Resident visual props 归 resident module。
+
+优先使用 `PageId`、`Locale`、`PublicationState`、`ContentSource`、`ResidentPresenceProps` 等领域名称。避免 `Data`、`Info`、`ObjectData`、`CommonType`、`BaseType` 或 `GenericItem`。
+
+### 14.3 类型清晰度优先
+
+类型系统的职责是让错误更难发生、让代码更容易理解。没有真实收益时，不使用 deep conditional types、generic maze、mapped type layering、recursive type tricks，也不为两个对象建立复杂 generic framework。
+
+---
+
+## 15. 函数、命名与控制流
+
+函数应有单一清楚职责、名字表达意图、输入输出清楚、side effect 可辨认，并尽量靠近使用位置。不得建立“超过固定行数必须拆分”的机械规则；判断标准是能否快速理解函数正在解决什么问题。
+
+避免 `processData`、`handleStuff`、`doThing`、`helper`、`manager`、`util` 或 `func1`。
+
+事件 handler 可以使用 `handleMenuOpen`、`handleMenuClose`、`handleLanguageChange` 等明确名称。普通函数优先表达领域动作，例如 `getPairedRoute` 或 `validatePublishedContent`。
+
+优先清楚的 early return 和浅层控制流，避免多层嵌套、嵌套三元表达式或在一个函数中混入多组无关分支。但不要为了 early return 把简单逻辑拆得支离破碎。
+
+---
+
+## 16. 互斥状态与错误状态
+
+互斥状态优先考虑明确 status 或 discriminated union，而不是多个可能互相冲突的 boolean：
+
+```ts
+type LoadState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: Content }
+  | { status: 'error'; error: Error }
+```
+
+只有当这种建模确实改善正确性和调用方理解时才使用。不要把每个简单按钮或局部交互都扩建成完整状态机。
+
+---
+
+## 17. React / TypeScript Anti-patterns
+
+本批次明确禁止：
+
+- entire-page Client Component；
+- giant Context Provider；
+- giant `useEffect`；
+- prop → state → effect 同步链；
+- 无真实需求的 global state；
+- 一个组件依赖几十个 boolean；
+- 万能 `variant` / `config` UI；
+- 只为“组件化”把 JSX 拆成大量无意义文件；
+- Server 能完成却强行 client fetch；
+- 在 client effect 中设置 metadata；
+- duplicated domain type；
+- 把 `any` 当作逃生舱；
+- generic type gymnastics。
+
+这些禁令约束默认生成方式，不禁止有证据、边界清楚且更易维护的 React 模式。例外必须由当前真实需求证明，而不是由未来可能性证明。
+
+---
+
+## 18. 后续批次边界
+
+P4-B 不详细规定以下内容：
+
+- CSS Modules、design token、selector、responsive 与详细样式组织；
+- accessibility 与 SEO HTML 实现细则；
+- content YAML 的详细代码边界；
+- testing 与 exact ESLint rules；
+- dependency admission；
+- logging、security、performance 与完整 Anti-AI-code review；
+- ESLint / Prettier 具体配置；
 - Cursor code standards adapter。
 
-这些内容分别留给 P4-B、P4-C 与 P4-D。本文件完成后，P4 仍为 `IN_PROGRESS`；Node 10 仍为 `REVIEW_REQUIRED`，D1–D9 仍为 `NOT_STARTED`。
+这些内容留给 P4-C 与 P4-D。本文件完成后，P4 仍为 `IN_PROGRESS`；Node 10 仍为 `REVIEW_REQUIRED`，D1–D9 仍为 `NOT_STARTED`。
