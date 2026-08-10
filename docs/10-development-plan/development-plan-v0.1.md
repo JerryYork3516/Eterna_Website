@@ -4,7 +4,7 @@
 
 文档性质：`Eterna Website 1.0 Node 10 — 正式开发计划`
 
-状态：`REVIEW_REQUIRED`
+状态：`PASS / FROZEN`
 
 编制日期：`2026-08-09`（Asia/Shanghai）
 
@@ -43,10 +43,50 @@
 ### 阶段状态规则
 
 - D1–D9 是唯一正式开发阶段，不继续拆成新的正式节点；
-- 本计划审核通过前，D1–D9 均为 `NOT_STARTED`；
+- Node 10 冻结只批准本计划进入执行准备，不表示任何 D 阶段已经开始或通过；
 - 每阶段只有满足 Acceptance Criteria、Automated Checks、Human Review 与 Exit Gate 后才能完成；
 - 自动检查通过不等于人工视觉、内容或上线授权通过；
 - 阶段内 checklist、修复批次和浏览器迭代属于执行任务，不升级为新正式阶段。
+
+### Pre-D1 Development Baseline
+
+以下文件与 repo-local workflow 是 D1–D9 的正式开发前执行基线：
+
+| Boundary | Formal entry |
+|---|---|
+| AI working discipline | `AGENTS.md` |
+| Engineering | `docs/10-development-plan/engineering-standards-v0.1.md` |
+| Skills / tools | `docs/10-development-plan/tool-governance-v0.1.md` |
+| CORE Skill | `.agents/skills/website-behavior-preserving-simplification/SKILL.md` |
+| CORE Skill | `.agents/skills/website-design-in-browser-review/SKILL.md` |
+| Quality gates | `docs/10-development-plan/quality-gates-v0.1.md` |
+
+`skills-audit-v0.1.md` 与 `plugins-mcp-audit-v0.1.md` 保留 P5-A / P5-B 的审计证据；D1–D9 的最终 Skill、tool routing、权限和自动 Gate 以 Tool Governance 与 Quality Gates 为执行入口。
+
+P1–P6 文件中的 handoff state block 保留各自收口时点的历史快照；当前正式 Node / P / D 执行状态以本文件第 6 节的 P7 最终结论为准。
+
+这些基线服从 Eterna 上位事实与 Node 1–10，不得覆盖产品、内容、设计、技术或阶段冻结；开发实现、Agent workflow、工具调用和验证必须遵守这些基线。Skill 与工具不产生新事实、授权或 Human Gate PASS。
+
+### D1 entry conditions
+
+D1 只有同时满足以下条件才可由一个明确任务正式开始：
+
+- P1–P7 全部 `PASS`；
+- Node 10 = `PASS / FROZEN`；
+- current branch = `New`；
+- working tree clean；
+- unresolved `BLOCKER = NONE`；
+- unresolved `MAJOR = NONE`；
+- 当前任务明确授权执行 D1。
+
+P7 完成后的状态是：
+
+```text
+Pre-D1 = READY
+D1 = READY_TO_START / NOT_STARTED
+```
+
+`READY_TO_START` 只表示进入条件已经满足，不构成创建应用、安装依赖、配置 CI 或执行任何 D1 工作的授权。
 
 ---
 
@@ -774,14 +814,13 @@ D1 自动检查全部通过、工程边界完成人工审核，并形成可恢�
 每个 D 阶段完成并通过该阶段 Gate 后，执行：
 
 ```text
-git diff --check
-→ 适用的 lint / typecheck / tests / build
-→ git status
-→ 完成人工审核 Gate
-→ 只暂存该阶段已批准文件
-→ 创建清晰的阶段 commit
-→ push 当前开发分支到 origin
-→ 核对 local / upstream / remote SHA
+implement the authorized D-stage scope
+→ applicable machine gates, including diff / status checks
+→ required human gates
+→ scoped staging of approved files
+→ create scoped commit
+→ push current development branch
+→ local / upstream / remote SHA verification
 ```
 
 正式规则：
@@ -874,6 +913,30 @@ Aftelle Product North Star、正式公司公开身份、最终品牌资产和部
 - 未发现需要新增第十个开发阶段的真实阻塞职责；
 - 未发现需要重开产品定位、Sitemap、技术栈、内容源、部署、双语或 Design in Browser 路线的实质冲突；
 - 所有人工视觉、内容、RC 与 production Gate 均保留人工裁决；
-- 本轮只形成计划，没有开始 D1，没有修改 Legacy、分支、DNS 或 Deployment。
+- P1–P6 均已通过，Node 10 已接入 `AGENTS.md`、Engineering Standards、Tool Governance、两个 CORE Skills 与 Quality Gates；
+- 未发现 Node 10 与 P3–P6 的实质冲突，未发现 Node 8 / Node 9 regression，D1–D9 的实质规划保持不变；
+- D8 仍是唯一 Release Candidate 阶段，D9 只验证 RC continuity、release preflight 与 Production authorization；
+- Production authorization = `HUMAN_ONLY`；`New -> main` 与 GitHub default branch 变更只允许在 D9 reviewed promotion 中执行；
+- 本轮只冻结计划，没有开始 D1，没有修改 Legacy、应用、CI、工具、Plugin / MCP、GitHub 权限、DNS 或 Deployment。
 
-Node 10 当前状态：`REVIEW_REQUIRED`
+```text
+P1 = PASS
+P2 = PASS
+P3 = PASS
+P4 = FINAL PASS
+P5 = FINAL PASS
+P6 = FINAL PASS
+P7 = PASS
+
+BLOCKER = NONE
+MAJOR = NONE
+NEW_REGRESSION = NONE
+
+Node 10 plan = FROZEN
+Node 10 = PASS / FROZEN
+Pre-D1 = READY
+D1 = READY_TO_START / NOT_STARTED
+D2–D9 = NOT_STARTED
+```
+
+Node 10 最终状态：`PASS / FROZEN`
