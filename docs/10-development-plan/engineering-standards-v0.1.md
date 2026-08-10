@@ -8,7 +8,7 @@
 
 编制日期：`2026-08-10`（Asia/Shanghai）
 
-> 本文件定义 Eterna Website 1.0 的基础工程原则、目标目录职责、文件与模块边界，以及复用和抽象规则。
+> 本文件定义 Eterna Website 1.0 的基础工程原则、目标目录职责、文件与模块边界、复用和抽象规则，以及前端实现质量边界。
 > P4 是 Node 10 开发前的内部规范整理，不是新的正式 Node 或开发阶段；本文件不修改 Node 1–10 的裁决，不开始 D1，也不创建根 Next.js 应用。
 
 ---
@@ -545,17 +545,357 @@ type LoadState =
 
 ---
 
-## 18. 后续批次边界
+## 18. CSS / Styling 架构
 
-P4-B 不详细规定以下内容：
+### 18.1 冻结路线
 
-- CSS Modules、design token、selector、responsive 与详细样式组织；
-- accessibility 与 SEO HTML 实现细则；
-- content YAML 的详细代码边界；
-- testing 与 exact ESLint rules；
-- dependency admission；
-- logging、security、performance 与完整 Anti-AI-code review；
-- ESLint / Prettier 具体配置；
+Website 1.0 使用：
+
+```text
+CSS Custom Properties
++ CSS Modules
++ 少量必要 Global CSS
++ CSS motion first
+```
+
+P4-C 不重新选择 Tailwind、CSS-in-JS、UI Kit、styled-components 或 Sass architecture。未来只有经过正式重新评估，并证明新路线不会损害可读性、原创 Layout、设计迭代和渐进增强时，才可以改变当前选择。
+
+### 18.2 Global CSS
+
+Global CSS 只负责真正全局的样式基础：
+
+- reset / normalization；
+- document defaults；
+- `body` 与 Canvas；
+- base typography；
+- focus baseline；
+- shared semantic tokens；
+- reduced-motion baseline。
+
+不得重新形成一个巨大 `global.css` 控制所有页面、Section、组件、响应式和 Motion。页面与组件的具体样式应归其 feature 或 component 所有。
+
+### 18.3 CSS Modules 与样式所有权
+
+CSS Modules 负责：
+
+- component-local styles；
+- page Section styles；
+- local layout；
+- responsive behavior；
+- hover、focus、active 等局部状态。
+
+样式跟随组件或 feature 的真实所有权。不要为了表面 DRY 把不同页面的样式集中进 shared stylesheet，也不要仅因视觉相似就建立跨页面万能样式层。
+
+### 18.4 Selector
+
+优先使用清楚、局部的 class selector 和浅层结构。Selector 不应依赖具体 DOM 嵌套才能成立。
+
+避免：
+
+- 深层 descendant chain；
+- ID selector 承担视觉样式；
+- 大量 `!important`；
+- fragile `nth-child` hack；
+- 为局部问题建立全局 override。
+
+不强制 BEM 或其他命名方法论。Class 名只需清楚表达当前局部职责，不制造冗长机械命名。
+
+### 18.5 Inline style
+
+普通视觉样式不得默认写成 React inline object。只有真正由运行时产生的值才使用 inline style，例如 measured position、runtime geometry 或动态 CSS custom property。
+
+如果一个值本质上属于设计系统或组件状态，应回到 CSS，而不是通过 JSX 内联对象分散维护。
+
+---
+
+## 19. Design Token / CSS Custom Properties
+
+Token 使用语义职责命名，不使用页面偶然值、临时色号或组件序号命名。
+
+稳定的 Token 类别包括：
+
+- color / surface；
+- text；
+- spacing；
+- typography；
+- radius；
+- border；
+- motion；
+- layout。
+
+推荐：
+
+```css
+--text-primary
+--surface-canvas
+--space-page-inline
+--motion-duration-fast
+```
+
+避免：
+
+```css
+--gray4
+--home-gap-37
+--special-blue
+--card2-padding
+```
+
+P4-C 冻结的是 Token architecture，不是当前视觉数值。以下内容继续保持 `NOT_FROZEN`，由 Design in Browser 在真实页面中收敛：
+
+- 最终颜色与对比组合；
+- 最终字体、字号、字重与字距；
+- spacing unit 与具体间距；
+- breakpoint、Grid、列数、宽度与 gutter；
+- radius、border、shadow 与 transparency；
+- Hero、Resident 与最终 Motion 参数。
+
+具体实现值可以在浏览器设计期间调整，但不得被描述为 Node 7 / Node 8 已冻结的产品事实，也不得从 Legacy、第三方设计系统或参考站直接复制后冒充正式 Token。
+
+---
+
+## 20. Responsive
+
+核心原则是：
+
+```text
+一套语义结构
+→ 多尺寸自然适配
+```
+
+Desktop、Tablet 与 Mobile 应尽量保持相同语义 DOM、阅读顺序、内容优先级和核心行动。普通布局优先由 CSS Grid、Flexbox、container、`min()`、`max()`、`clamp()` 与 media query 处理。
+
+空间减少时不得删除核心内容、语言能力、内容状态、来源或产品边界。导航、CTA 和互动区域同时满足触控与键盘操作；中文和英文必须分别验证字号、行高、行长、换行、长度变化和内容完整性。
+
+不得默认：
+
+- 为 Desktop 与 Mobile 复制两套完整页面或 JSX；
+- 用 JavaScript 读取 viewport width 决定普通排版；
+- 使用设备名称判断 Layout；
+- 通过视觉重排反转 DOM、键盘或屏幕阅读器顺序；
+- 加载重型 Desktop visual 后只在 Mobile 使用 `display: none`；
+- 把 breakpoint 数值写成不可调整的产品事实。
+
+只有真实交互行为不同，且共享语义结构无法清楚表达时，才考虑局部结构差异。最终 breakpoint、菜单形态、列数、Header 高度与 Presence 切换条件继续由 Design in Browser 收敛。
+
+Resident 在空间不足时可以降低复杂度、静态化、移动位置或退出，但不得遮挡内容、破坏阅读顺序或成为继续浏览的前提。
+
+---
+
+## 21. Accessibility 基础规范
+
+Website 继续以 `WCAG 2.2 AA` 为目标。P4-C 只冻结代码级底线；最终测试工具、阈值与 Machine / Human Gate 留给 P4-D 和后续实现节点。
+
+### 21.1 Native semantics first
+
+优先使用原生语义元素：
+
+- `header`；
+- `nav`；
+- `main`；
+- `section`；
+- `article`；
+- `footer`；
+- `button`；
+- `a`。
+
+不得用 `div + onClick` 替代真实 button 或 link。原生语义已经足够时，不增加模拟语义的 role。
+
+### 21.2 Keyboard 与 Focus
+
+所有 pointer 可操作功能必须有合理 keyboard 路径，包括 Header、mobile navigation、language switch、button、link 和 interactive visual control。
+
+必须保留清楚可见的 focus。不得直接使用 `outline: none` 消灭焦点而不提供等价替代，也不得让 Header、Presence Zone 或视觉层遮挡 focus。
+
+### 21.3 Heading 与 Landmark
+
+- 每页只有一个明确的主要 H1；
+- heading level 表达内容结构，不用于选择视觉大小；
+- 页面主体使用 `main` landmark；
+- navigation 使用明确语义；
+- 视觉顺序与 DOM / 阅读顺序一致。
+
+不得为了 SEO 增加隐藏 H1 或无内容意义的 heading。
+
+文本、图标、Hairline、状态与 focus 必须在所在表面保持可读对比。Secondary text 不得因克制风格而失去可读性；hover、focus、disabled、error、success 等状态与行动不得只通过颜色、运动、图标或 Resident 变化表达。
+
+### 21.4 Images / Media
+
+Informative image 或 media 必须提供与其信息职责匹配的替代文本。Decorative visual 使用正确的 decorative semantics，避免重复屏幕阅读器噪声。
+
+禁止使用 `image`、`beautiful image`、文件名等无意义 alt。Resident 或视觉媒体如果承载信息，必须同时有可理解的文字等价表达。
+
+### 21.5 Reduced motion
+
+必须尊重 `prefers-reduced-motion`：
+
+- 重要内容不能依赖 Motion 才出现；
+- reduced-motion 下内容和功能保持等价；
+- 停止或显著减少非必要连续运动、视差和装饰 reveal；
+- 保留即时且必要的操作反馈；
+- Resident / advanced visual 不得成为获取信息的前提。
+
+Reduced-motion baseline 不应使用无差别规则消灭所有必要反馈，也不得通过减少 Motion 删除内容或改变功能。
+
+### 21.6 ARIA
+
+原则是：
+
+> No ARIA is better than bad ARIA.
+
+只有原生语义不足时才使用 ARIA。禁止给 `div` 堆 role 模拟 button、添加无意义 `aria-label`、让 accessible name 与可见文字冲突，或为了“看起来无障碍”机械添加大量 ARIA。
+
+---
+
+## 22. SEO 实现底线
+
+SEO 来自 server-rendered semantic HTML、Next metadata、正确 route、canonical、hreflang、sitemap 与 robots，而不是客户端补丁。
+
+### 22.1 Server-first metadata
+
+公开内容页默认使用 SSG / build-time prerender，正文与正式 metadata 由 Server Component / build-time 路径从已审核内容生成。只有出现构建时无法确定且已获批准的真实动态需求时，才使用 request-time SSR，并明确缓存、失败、SEO 与降级边界。
+
+禁止：
+
+- 使用 `useEffect` 修改 title；
+- 由 Client Component 管理 canonical；
+- 由 Client Component 管理 hreflang；
+- 让 metadata 与页面正文使用不同内容事实源。
+
+### 22.2 Canonical / hreflang / locale
+
+语言规则继续服从 Node 9：
+
+- Website 只使用 `/zh` 与 `/en`；
+- 根 `/` 确定性 redirect 到 `/zh`；
+- canonical 指向当前语言的唯一规范 URL；
+- 中文与 English 通过稳定 `pageId` 切换到同一页面的对应语言；
+- URL 是 locale 的唯一事实来源。
+
+不得使用 `Accept-Language`、IP detection、Cookie、localStorage 或 Client state 覆盖正式语言 URL。中文、英文和必要的 `x-default` alternate 必须来自同一受控 route mapping；在 `x-default` 的精确目标正式确定前，不得自行创造映射。
+
+### 22.3 Structured data
+
+Structured data 只能表达真实、有证据支持且获准公开的事实。Website 当前是 Eterna 的长期项目官网、品牌门户与公开产品体系总入口；如果公司、法律实体、团队或社会账号事实尚未正式确认，不得为了 SEO 自动生成虚假的：
+
+- `Organization`；
+- `Corporation`；
+- employee count；
+- address；
+- founder facts；
+- social profiles；
+- review / rating。
+
+### 22.4 禁止 SEO hack
+
+禁止 hidden keyword text、重复 invisible heading、keyword stuffing、doorway page、伪造 review / rating，以及任何无事实支持的自动 schema。SEO 不得破坏真实用户体验或内容治理。
+
+---
+
+## 23. Content / Code Boundary
+
+Website 1.0 使用：
+
+```text
+repository-managed YAML
+→ build-time schema validation
+→ publication / source / locale gates
+→ trusted rendering contract
+→ page / component
+```
+
+这里的 trusted 只表示内容已经通过当前渲染入口要求的校验与发布门禁，不表示 schema 可以证明事实为真。Website 内容仍必须服从上位来源、人工事实审核和 publication state。
+
+### 23.1 Content 的职责
+
+Content 文件是 Website 的可追溯发布内容记录，不是 React code、layout engine、arbitrary program 或 Eterna 上位事实源。
+
+页面只消费经过验证且具备发布资格的明确 contract，不随手 parse 任意 YAML object，也不使用无证据 type assertion 把 raw content 伪装成可信类型。YAML 必须通过安全解析入口，禁用危险类型转换，再进入严格 schema validation。
+
+### 23.2 正文所有权
+
+需要发布治理的中文或英文正文必须只有一个正式内容来源。不得在 YAML 保存一份正文，又在 JSX 手写另一份。
+
+少量纯 UI label 只有在未来明确内容所有权后才可放在相应实现边界；不得由此形成两套事实源。
+
+### 23.3 Content 不控制任意代码
+
+YAML 不得：
+
+- 指定任意 React component name；
+- 执行 JavaScript；
+- 注入 arbitrary props；
+- 构造万能 Layout；
+- 动态选择任意 Hero、Card 或页面组件；
+- 演化为隐式 Page Builder。
+
+禁止建立读取 `component: "WhateverComponent"` 后动态执行页面组件的架构。Node 9 已明确不做 Universal Section Builder 或拖拽 Page Builder。
+
+### 23.4 类型与 Schema 所有权
+
+`PageId`、`Locale`、`PublicationState`、`FactState` 等稳定共享领域可以形成清楚的共享 contract。页面专属 Section UI 由对应页面 feature 所有；其内容 schema、loader 与可信类型归对应 content domain 所有。
+
+不得预先创建一个覆盖六个页面的 `UniversalSectionSchema`。类型与 schema 应靠近真实所有者，只在稳定、同语义重复已经出现时上提。
+
+### 23.5 Failure boundary
+
+Production content 必须 fail closed。Schema、locale pair、publication state 或 required source 不满足时，不得静默降级成未知内容继续发布。
+
+具体 validator、错误格式与 build gate 实现留给 P6 / D1；P4-C 只冻结上述责任链和失败原则。
+
+---
+
+## 24. Motion / Degradation
+
+### 24.1 CSS motion first
+
+普通 hover、focus、reveal、transform、opacity 和 simple transition 优先使用 CSS。只有真实复杂编排需求同时通过 Visual Quality Gate 与浏览器审核，并证明 CSS / Web Platform 不能清楚解决时，才评估局部 runtime animation。
+
+不得为了让页面显得“更高级”而默认引入 GSAP、Three.js、OGL、large animation runtime、scroll-jacking 或 page-wide timeline。Motion for React 仍只是复杂局部编排候选，不是默认依赖或所有元素的 wrapper。
+
+### 24.2 内容与操作优先
+
+- 页面正文、标题和 CTA 不能等待 reveal 后才可用；
+- 页面没有 Motion 时仍必须完整、可读、可操作；
+- 持续 Motion 必须响应页面隐藏、reduced-motion 和模块退出；
+- Motion 不得掩盖加载、内容不足、错误或层级不清；
+- 不使用强制 scroll-snap、长时间 parallax 或装饰动画堆叠控制阅读。
+
+Sticky / pinned 只在服务明确空间或内容关系时使用，必须可以自然通过，并提供完整的 Mobile 与 reduced-motion 替代；不得以延长观看时间或展示技术为目的。
+
+页面转场不得延迟目标内容可用性；转场结束后，当前导航状态与 focus 位置必须清楚。
+
+### 24.3 Living Precision 的代码含义
+
+P4-C 不重新定义 Living Precision 的视觉方向，只冻结实现边界：
+
+- 页面没有 Resident 仍必须成立；
+- 页面没有 Motion 仍必须成立；
+- semantic structure 先于装饰效果；
+- 视觉完整性不能依赖大量 JavaScript；
+- Resident 不作为普通背景、Card、Avatar、重复装饰或唯一信息渠道；
+- 同一阅读语境原则上只保留一个主要 Resident 视觉重心；
+- Resident 的空间与运动峰值不得遮挡 Typography、导航、状态、CTA 或 focus；
+- Resident / advanced visual 使用 progressive enhancement；
+- optional visual failure 只能留在 Presence / Visual Zone，不能扩散成整页失败；
+- 降级后主要内容、导航、语言切换与真实 CTA 仍可用。
+
+Resident、Hero、最终视觉、动画参数与 advanced renderer 的具体形式继续留给 Design in Browser 与 D7，不在 P4-C 冻结。
+
+---
+
+## 25. 后续批次边界
+
+P4-D 负责以下内容，P4-C 不提前展开：
+
+- dependency 最终准入；
+- testing framework、测试类型、coverage 与完整 Gate；
+- logging；
+- security 完整规范与扫描；
+- performance 完整规范、bundle budget 与 Lighthouse threshold；
+- 完整 Anti-AI-code 审查；
+- Machine Gate / Human Gate 最终清单；
+- exact ESLint / Prettier / CI 配置；
 - Cursor code standards adapter。
 
-这些内容留给 P4-C 与 P4-D。本文件完成后，P4 仍为 `IN_PROGRESS`；Node 10 仍为 `REVIEW_REQUIRED`，D1–D9 仍为 `NOT_STARTED`。
+P4-C 完成后，P4 仍为 `IN_PROGRESS`；Node 10 仍为 `REVIEW_REQUIRED`；D1–D9 仍为 `NOT_STARTED`。本文件不创建应用代码、CSS、YAML、Component、依赖或新的正式 Node。
