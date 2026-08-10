@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+
+# Website Context Mode
+
+- Read the root `AGENTS.md` first on every task.
+- Treat `AGENTS.md` as the single working rule source for Codex / Cursor in this repo.
+- Read only the minimum extra Website docs needed for the current task.
+- Do not scan the whole docs tree just to understand context.
+- Expand the reading set only when the task genuinely requires it.
+- Modify only the files required by the task.
+- Do not touch `legacy/` unless the task explicitly authorizes migration or verification work.
+- Use existing implementations before introducing new ones.
+- Do not self-approve visual gates that require human review.
+- Keep changes small, direct, and verifiable.
