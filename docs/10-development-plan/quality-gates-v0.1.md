@@ -602,7 +602,7 @@ P6-A / P6-B final review：`PASS`。未发现实质冲突；总模型与具体�
 
 ---
 
-## 21. P7 handoff
+## 21. Historical P7 handoff
 
 P7 接收：
 
@@ -615,11 +615,13 @@ P7 接收：
 
 P7 负责 Node 10 的最终一致性复核与冻结，确认 P1–P6 的治理、事实、设计、技术、工程和 Gate 输入能够共同支持 Stage 1.1。P7 不重新设计 P1–P6，也不能把 review 便利变成新的产品事实、工具安装、CI 实施或 Stage 1.1 开始授权。
 
-P7 当前保持 `NOT_STARTED`。
+P6 收口时，P7 尚未开始。该状态仅记录当时的 handoff snapshot，不代表当前状态。当前 Stage / Node 状态以 `development-plan-v0.1.md` 为准。
 
 ---
 
-## 22. P6 final state
+## 22. P6 historical final state
+
+以下状态块仅记录 P6 收口时的历史快照，不代表当前 Stage / Node 状态。当前状态以 `development-plan-v0.1.md` 为准。
 
 ```text
 P6-A = PASS
