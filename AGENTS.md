@@ -2,9 +2,9 @@
 
 > 本文件是所有在 `Eterna_Website` 仓库中工作的代码 AI（Codex / Cursor / Fable 等）的总工作入口。**执行任何任务前必读。**
 >
-> 本文件负责规定“AI 应该如何工作”；工程代码本身如何编写，以 `docs/10-development-plan/engineering-standards-v0.1.md` 为准。
+> 本文件规定“AI 应该如何工作”；工程代码如何编写，以 `docs/10-development-plan/engineering-standards-v0.1.md` 为准。
 >
-> 若规则发生冲突，优先级为：
+> 规则冲突时，按以下优先级处理：
 >
 > **Eterna 上位事实 / Node 1–10 > 本文件 > Engineering Standards > Tool Governance > task-specific Skill > 工具能力。**
 >
@@ -12,22 +12,22 @@
 
 ---
 
-## 0. 执行前一致性门禁
+## 1. 执行前一致性门禁
 
-执行前先核对当前对话项目、目标仓库、Stage / 内部节点和任务内容是否一致；如不一致或无法确认，立即停止执行并指出错位，不得修改、测试、提交或推送任何内容。
+执行前先核对当前对话项目、目标仓库、Stage / 内部节点和任务内容是否一致；不一致或无法确认时，立即停止并指出错位，不得修改、测试、提交或推送。
 
 开始任何任务前至少确认：
 
-- Project：`Eterna Website`
-- Repository：`Eterna_Website`
-- 当前 Git branch 与任务要求一致
-- 当前 Stage 与任务要求一致
-- 若任务属于正式开发，当前 `1.x.x` 内部节点已经明确授权
-- 当前任务确实属于该 Stage / 内部节点
-- working tree 状态已经检查并理解
-- 不存在来源不明的未提交修改
+- Project：`Eterna Website`；
+- Repository：`Eterna_Website`；
+- 当前 Git branch 与任务要求一致；
+- 当前 Stage 与任务要求一致；
+- 正式开发任务已经明确授权当前 `1.x.x` 内部节点；
+- 当前任务确实属于该 Stage / 内部节点；
+- working tree 状态已经检查并理解；
+- 不存在来源不明的未提交修改。
 
-如果任一项不成立：
+任一项不成立时：
 
 ```text
 STOP
@@ -40,19 +40,13 @@ STOP
 → 先报告错位或未知状态
 ```
 
-不要根据聊天印象、历史 commit 或旧 handoff snapshot 猜测当前 Stage。
-
-当前 Stage / Node 的正式状态，以：
-
-`docs/10-development-plan/development-plan-v0.1.md`
-
-和当前明确任务为准。
+不要根据聊天印象、历史 commit 或旧 handoff snapshot 猜测当前 Stage。当前 Stage / Node 的正式状态以 `docs/10-development-plan/development-plan-v0.1.md` 和当前明确任务为准。
 
 ---
 
-## 1. 30 秒进入项目状态
+## 2. 30 秒进入项目状态
 
-### Eterna Website 是什么
+### 2.1 Eterna Website 是什么
 
 Eterna Website 是：
 
@@ -83,11 +77,9 @@ Eterna
 → Aftelle / Studio
 ```
 
-Digital Resident 是 Eterna 的中心主体。
+Digital Resident 是 Eterna 的中心主体。模型、Agent、工作流、Avatar、Resident Renderer、页面视觉和具体产品都不能反向取代 Digital Resident 的主体定义。
 
-模型、Agent、工作流、Avatar、Resident Renderer、页面视觉和具体产品都不能反向取代 Digital Resident 的主体定义。
-
-### 当前生命周期
+### 2.2 生命周期模型
 
 ```text
 Stage 0
@@ -112,28 +104,28 @@ Stage 1.x
 
 ---
 
-## 2. 文档地图与按需读取
+## 3. 文档地图与按需读取
 
 **禁止为了“理解整个项目”默认重新扫描全部文档。**
 
-每次任务先读本文件，然后只读取当前任务真正需要的正式输入。
+每次任务先读本文件，再只读取当前任务真正需要的正式输入。
 
-| 文档 / 区域                                                  | 什么时候读                                                         |
-| -------------------------------------------------------- | ------------------------------------------------------------- |
-| `AGENTS.md`                                              | 每次任务开始前                                                       |
-| `docs/10-development-plan/development-plan-v0.1.md`      | 确认 Stage、scope、dependencies、non-goals、Exit Gate               |
-| `docs/10-development-plan/engineering-standards-v0.1.md` | 写或审核正式 Website 代码                                             |
-| `docs/10-development-plan/quality-gates-v0.1.md`         | 测试、CI、浏览器验证、Stage Gate、RC / Release                           |
-| `docs/10-development-plan/tool-governance-v0.1.md`       | Skill / Plugin / MCP / Browser / GitHub / Vercel / 外部工具       |
-| Node 6                                                   | Sitemap、route、双语、页面关系、内容状态                                    |
-| Node 7                                                   | Living Precision、视觉系统、设计原则                                    |
-| Node 8                                                   | Design in Browser、页面职责、交互、Resident / Motion、Human Visual Gate |
-| Node 9 Technical Architecture                            | Next.js、Server / Client、工程架构、环境、测试、部署                         |
-| Node 9 Content Management                                | YAML、schema、fact / publication / source、Preview / Production  |
-| Node 9 Migration Plan                                    | Legacy、分支、迁移、cutover、rollback、Stage 1.9                       |
-| `.agents/skills/`                                        | 当前任务明确触发对应 Skill 时                                            |
+| 文档 / 区域 | 什么时候读 |
+|---|---|
+| `AGENTS.md` | 每次任务开始前 |
+| `docs/10-development-plan/development-plan-v0.1.md` | 确认 Stage、scope、dependencies、non-goals、Exit Gate |
+| `docs/10-development-plan/engineering-standards-v0.1.md` | 写或审核正式 Website 代码 |
+| `docs/10-development-plan/quality-gates-v0.1.md` | 测试、CI、浏览器验证、Stage Gate、RC / Release |
+| `docs/10-development-plan/tool-governance-v0.1.md` | Skill / Plugin / MCP / Browser / GitHub / Vercel / 外部工具 |
+| Node 6 | Sitemap、route、双语、页面关系、内容状态 |
+| Node 7 | Living Precision、视觉系统、设计原则 |
+| Node 8 | Design in Browser、页面职责、交互、Resident / Motion、Human Visual Gate |
+| Node 9 Technical Architecture | Next.js、Server / Client、工程架构、环境、测试、部署 |
+| Node 9 Content Management | YAML、schema、fact / publication / source、Preview / Production |
+| Node 9 Migration Plan | Legacy、分支、迁移、cutover、rollback、Stage 1.9 |
+| `.agents/skills/` | 当前任务明确触发对应 Skill 时 |
 
-默认行为：
+默认读取范围：
 
 ```text
 AGENTS
@@ -149,67 +141,23 @@ AGENTS
 - 安全或架构证据范围确实需要全仓；
 - 当前任务明确授权的大范围扫描。
 
-读取范围明显扩大时，先说明原因。
-
-不要反复重读没有变化的文件。
+读取范围明显扩大时，先说明原因。不要反复重读没有变化的文件。
 
 ---
 
-## 3. Stage 1 红线
+## 4. Stage 1 红线
 
-以下红线违反任一条，都属于错误执行。
+### 4.1 不得越 Stage / 越内部节点
 
-### 红线 1：不得越 Stage / 越内部节点
+只执行当前明确授权的 Stage / `1.x.x`。完成 `1.1.1` 不代表可以自动开始 `1.1.2`；完成 Stage 1.1 也不代表可以自动开始 Stage 1.2。下一个节点必须重新获得明确任务授权。
 
-只执行当前明确授权的 Stage / `1.x.x`。
+### 4.2 Legacy 默认只读
 
-完成：
+`legacy/` 是历史实现、迁移证据和 `REFERENCE_ONLY` 材料。除非当前任务明确属于 migration / verification / preflight，否则不得读取或修改对应 Legacy 内容；具体边界见第 10.1 节。
 
-`1.1.1`
+### 4.3 Website 不创造 Eterna 产品事实
 
-不代表可以自动开始：
-
-`1.1.2`
-
-完成：
-
-`Stage 1.1`
-
-也不代表可以自动开始：
-
-`Stage 1.2`
-
-下一个节点必须重新获得明确任务授权。
-
----
-
-### 红线 2：Legacy 默认只读
-
-`legacy/` 是：
-
-**历史实现 / 迁移证据 / REFERENCE\_ONLY**
-
-默认禁止：
-
-- 从 root app import `legacy/`；
-- copy Legacy 实现进入新站；
-- 自动迁移 Aurora / OGL；
-- 自动迁移旧 Airtable `/api/create`；
-- 升级 Legacy dependency；
-- 修复 Legacy；
-- 格式化 Legacy；
-- 把 Legacy 文案当当前正式 Website 文案；
-- 把 Vite 架构当成 Website 1.0 目标架构。
-
-只有明确的 migration / verification / preflight 任务才允许读取对应 Legacy 内容。
-
----
-
-### 红线 3：Website 不创造 Eterna 产品事实
-
-Website 是公开表达层，不是 Eterna、Aftelle、Studio 或 Digital Resident 的上位事实源。
-
-禁止：
+Website 是公开表达层，不是 Eterna、Aftelle、Studio 或 Digital Resident 的上位事实源。禁止：
 
 - 根据页面需要补写不存在的产品能力；
 - 把开发中功能写成当前已上线能力；
@@ -219,11 +167,9 @@ Website 是公开表达层，不是 Eterna、Aftelle、Studio 或 Digital Reside
 
 不确定的事实必须回到对应正式上游来源。
 
----
+### 4.4 核心内容不能依赖客户端增强层成立
 
-### 红线 4：核心内容不能依赖客户端增强层成立
-
-Website 继续遵守：
+Website 遵守：
 
 ```text
 SSG / Server-first semantic content
@@ -231,80 +177,27 @@ SSG / Server-first semantic content
 → optional visual enhancement
 ```
 
-不得为了方便：
+不得把整页或 root layout 变成 Client Component，不得让正文依赖客户端 JS 才存在，也不得让 Resident、Motion、Canvas、WebGL 等高级视觉成为内容、导航或 CTA 的前提。详细实现规则以 Engineering Standards 为准。
 
-- 把整页变成 Client Component；
-- 把 root layout 变成 Client Component；
-- 让正文依赖客户端 JS 才存在；
-- 让 Resident、Motion、Canvas、WebGL 或其他高级视觉成为读取内容、导航或 CTA 的前提。
+### 4.5 Resident / Motion 是增强层
 
-详细规则以 Engineering Standards 为准。
+页面在 no-Resident、reduced-motion、advanced visual failure、renderer unavailable 和 Mobile 降级条件下仍须成立。Resident 不能成为普通背景、Avatar 阵列、Card 装饰、唯一事实或状态表达，也不能成为导航前置条件。
 
----
+### 4.6 AI 不得自行通过 Human Gate
 
-### 红线 5：Resident / Motion 是增强层，不是页面成立条件
+Design in Browser、Visual Quality Gate、Living Precision、模板化 / AI 味判断、内容公开批准、中英文表达质量、Release Candidate、Production authorization 和高影响架构 / 依赖取舍，都只能由人工最终裁决。
 
-页面必须在以下条件下仍然成立：
+Build、Playwright、axe、Lighthouse、无变化截图或 AI 判断均不等于 Human Gate `PASS`。浏览器证据边界见第 9 章。
 
-- no-Resident；
-- reduced-motion；
-- advanced visual failure；
-- renderer unavailable；
-- Mobile 降级。
-
-Resident 不能成为：
-
-- 普通背景；
-- Avatar 阵列；
-- Card 装饰；
-- 唯一事实表达；
-- 唯一状态表达；
-- 导航前置条件。
-
----
-
-### 红线 6：AI 不得自行通过 Human Gate
-
-以下结果只能由人工最终裁决：
-
-- Design in Browser；
-- Visual Quality Gate；
-- Living Precision；
-- 页面是否模板化 / 是否存在明显 AI 味；
-- 内容事实是否批准公开；
-- 中英文表达质量；
-- Release Candidate；
-- Production authorization；
-- 高影响架构或依赖取舍。
-
-以下结果均不等于 Human PASS：
-
-- build PASS；
-- Playwright PASS；
-- axe PASS；
-- Lighthouse PASS；
-- screenshot 没变化；
-- AI 自己认为“看起来没问题”。
-
----
-
-### 红线 7：高影响操作必须明确人工授权
+### 4.7 高影响操作必须明确人工授权
 
 以下操作默认禁止自动执行：
 
-- Production deployment / promotion / rollback；
-- DNS 修改；
-- domain transfer；
-- canonical cutover；
-- secret 创建、读取、轮换、删除；
-- branch protection 修改；
-- GitHub default branch 修改；
-- force push；
-- branch 删除；
-- destructive repository admin；
+- Production deployment / promotion / rollback，或 DNS、domain transfer、canonical cutover；
+- secret 创建、读取、轮换或删除；
+- branch protection、GitHub default branch、force push、branch 删除或 destructive repository admin；
 - production data write；
-- security / release gate bypass；
-- `New -> main` promotion。
+- security / release gate bypass，或 `New -> main` promotion。
 
 ```text
 TOOL_CAN_DO_IT
@@ -314,11 +207,9 @@ AGENT_IS_AUTHORIZED_TO_DO_IT
 
 ---
 
-## 4. 权威、执行证据与历史材料
+## 5. 权威、执行证据与历史材料
 
-不要把所有文件都当成同一种“事实源”。
-
-### 4.1 Normative Authority
+### 5.1 Normative Authority
 
 正式规范权威：
 
@@ -331,9 +222,9 @@ Eterna_Docs
 → task-specific Skill
 ```
 
-下层不能静默覆盖上层。
+下层不能静默覆盖上层。Skill 和工具不产生新事实或授权，implementation 也不能成为新的上位事实源。
 
-如果实施证据表明上层冻结内容存在真实矛盾：
+实施证据若表明上层冻结内容存在真实矛盾：
 
 ```text
 STOP
@@ -341,30 +232,19 @@ STOP
 → 回到受影响的正式文档人工裁决
 ```
 
-不得通过“代码已经这么写了”反向修改产品或架构事实。
+不得用“代码已经这么写了”反向修改产品或架构事实。
 
----
+### 5.2 Execution Evidence
 
-### 4.2 Execution Evidence
+以下属于执行证据，而不是新的规范事实源：
 
-以下内容属于执行证据，而不是新的规范事实源：
-
-- 当前 implementation；
-- automated tests；
-- production build；
-- Browser / Playwright evidence；
-- accessibility evidence；
-- performance evidence；
-- Quality Gate 输出；
+- 当前 implementation、automated tests 和 production build；
+- Browser / Playwright、accessibility、performance 和 Quality Gate evidence；
 - Preview / artifact。
 
-执行证据用于证明实现是否符合规范。
+执行证据用于证明实现是否符合规范；implementation 与 Node 文档不同时，不能默认 implementation 更正确。
 
-不能因为当前 implementation 与 Node 文档不同，就默认 implementation 更正确。
-
----
-
-### 4.3 Historical / Reference
+### 5.3 Historical / Reference
 
 以下属于历史或参考材料：
 
@@ -376,25 +256,17 @@ historical P / Node handoff snapshots
 旧实现事实
 ```
 
-历史差异不是当前冲突。
-
-不要为了让历史文件“看起来最新”而机械修改它们。
-
-当前 Stage / Node 状态以：
-
-`docs/10-development-plan/development-plan-v0.1.md`
-
-为最终状态锚点。
+历史差异不是当前冲突。不要为了让历史文件“看起来最新”而机械修改。当前 Stage / Node 状态以 `docs/10-development-plan/development-plan-v0.1.md` 为最终锚点。
 
 ---
 
-## 5. Stage / 内部节点执行协议
+## 6. Stage / 内部节点执行协议
 
-进入任何正式 `1.x.x` 实现任务时，按以下顺序执行。
+### 6.1 Before implementation
 
-### Before implementation
+进入任何正式 `1.x.x` 实现任务前：
 
-1. 通过第 0 节一致性门禁；
+1. 通过第 1 章一致性门禁；
 2. 确认当前 Stage / internal node；
 3. 读取 Development Plan 中对应 Stage；
 4. 读取当前内部节点任务说明；
@@ -404,7 +276,7 @@ historical P / Node handoff snapshots
 8. 确认 non-goals；
 9. 确认没有未知 working-tree 修改。
 
-### Implementation
+### 6.2 Implementation
 
 ```text
 理解当前实现
@@ -415,7 +287,7 @@ historical P / Node handoff snapshots
 
 一次只解决当前节点。
 
-### Verification
+### 6.3 Verification
 
 ```text
 run applicable checks
@@ -424,11 +296,9 @@ run applicable checks
 → verify no unrelated changes
 ```
 
-需要 Human Gate 时：
+需要 Human Gate 时，停在人工审核，不得自行宣布通过。
 
-停在人工审核，不得自行宣布通过。
-
-### Delivery
+### 6.4 Delivery
 
 任务明确要求提交时：
 
@@ -439,7 +309,7 @@ scoped staging
 → verify local / upstream / remote SHA
 ```
 
-有正式内部节点时，commit 信息应能够清楚识别对应节点，例如：
+有正式内部节点时，commit 信息应清楚识别该节点，例如：
 
 ```text
 [1.1.1] establish root application scaffold
@@ -447,37 +317,22 @@ scoped staging
 
 不要求每次微小修改都单独 commit；只提交稳定、可审核的节点成果。
 
-### Stop
+### 6.5 Stop
 
-当前节点完成后：
-
-**停止。**
-
-不要自动执行：
-
-- 下一个 `1.x.x`；
-- 下一个 Stage；
-- 顺手修复旁边发现的问题。
-
-发现额外问题时，只报告。
+当前节点完成后必须停止。不要自动执行下一个 `1.x.x`、下一个 Stage，或顺手修复旁边发现的问题；额外问题只报告。
 
 ---
 
-## 6. Scope Discipline 与外科手术式修改
+## 7. Scope、Reuse 与 Anti-AI-code
 
-- 一次只接一个边界明确的任务；
-- 只修改当前任务真正需要的文件和逻辑；
-- 不顺手清理整个项目；
-- 不顺手升级 dependency；
-- 不顺手重命名无关文件；
-- 不顺手统一格式；
-- 不因为“可以优化”就开始重构；
-- 不因为发现未来需求就预建接口；
+### 7.1 Scope Discipline 与外科手术式修改
+
+- 一次只接一个边界明确的任务，只修改当前任务真正需要的文件和逻辑；
+- 不顺手清理、重命名、升级 dependency 或统一全仓格式；
 - 不覆盖用户已有修改；
-- 修改范围明显扩大时先报告；
-- 优先跟随当前已有代码风格。
+- 修改范围明显扩大时先报告，并优先跟随当前已有代码风格。
 
-开发过程中发现的问题分为：
+发现的问题按以下方式处理：
 
 ```text
 IN_SCOPE
@@ -487,39 +342,18 @@ OUT_OF_SCOPE
 → 记录 / 报告，不处理
 ```
 
-Bug 修复时：
+Bug 修复遵循“复现 / 定位 → 圈定范围 → 修复 → 回归验证”。连续修改仍不能证明方向正确时，停止并重新分析，不要持续堆补丁。
 
-```text
-复现 / 定位
-→ 圈定范围
-→ 修复
-→ 回归验证
-```
+### 7.2 Reuse-first，但不过度抽象
 
-如果连续修改仍无法证明方向正确，应停止并重新分析，而不是不断堆补丁。
+创建 component、hook、utility、helper、type、schema、motion wrapper、layout primitive、validation rule 或 dependency 前：
 
----
+1. 搜索仓库是否已有职责匹配的能力；
+2. 检查 Web / React / Next 原生能力能否解决；
+3. 检查已批准 dependency 是否已有合适能力；
+4. 仍不能解决时，才考虑新增实现或 dependency。
 
-## 7. Engineering Standards 路由
-
-正式代码必须读取：
-
-`docs/10-development-plan/engineering-standards-v0.1.md`
-
-AGENTS 不复制完整代码规范。
-
-只保留以下高层原则：
-
-```text
-Correctness
-→ Clarity
-→ Simplicity
-→ Maintainability
-→ Reuse
-→ Abstraction
-```
-
-默认优先级：
+优先级：
 
 ```text
 Web Platform
@@ -530,116 +364,109 @@ Web Platform
 → custom implementation
 ```
 
-正式实现继续遵守：
+只出现一两次的模式默认保留具体实现。只有重复真实存在、语义和职责相同，且抽象后调用方更清楚时才抽象；不要为未来复用预建 universal section、generic renderer、page builder 或 config-driven-everything。
 
-- concrete before abstract；
-- complexity must be earned；
-- reuse-first，但不强行 DRY；
-- Server-first；
-- `'use client'` 尽量保持叶子化；
-- TypeScript strict；
-- external / untrusted input 必须经过验证；
-- CSS Custom Properties + CSS Modules；
-- CSS Motion first；
-- Content 与代码分离；
-- comment 解释 why，不逐行解释 what；
-- 禁止 AI 式过度工程。
+### 7.3 Anti-AI-code
 
-创建新 dependency 前必须通过 Engineering Standards 的 Dependency Admission。
+代码应像有经验的工程师为当前真实问题写出的最小、清楚、可维护实现。禁止：
 
-不要在本文件维护第二套详细代码规范。
+- 不用多层 abstraction 包裹简单逻辑，不添加不改变职责的冗余 wrapper；
+- 不创建没有真实调用者的 helper，不使用 empty catch、吞掉错误或制造 silent failure；
+- 添加 speculative fallback 或没有真实失败语义的 “just in case” 分支；
+- 编写没有真实 caller、threat 或 failure evidence 的 defensive code；
+- 不建立 `CommonUtils`、`HelperManager` 等垃圾桶，不使用 `data1`、`item2` 等占位命名；
+- 不建立无真实需求的 future-proof scaffolding，不为显得完整而添加未要求功能；
+- 不借当前任务进行无关重构。
 
----
+### 7.4 Comment / JSDoc
 
-## 8. Design in Browser / Browser / Responsive / Accessibility
+代码默认自解释。Comment 只解释非显然的 `why`，例如 architecture boundary、browser workaround、accessibility / SEO 原因、content governance、security 约束，或容易被未来错误优化掉的 design / motion tradeoff。
 
-涉及真实页面视觉时，必须遵守 Node 7 / Node 8。
+不得逐行教学解释 `what`，不得机械地为每个函数、接口或自解释参数生成 JSDoc；只有非显然 public contract 才考虑简短 JSDoc。
 
-正式设计方式：
+### 7.5 Dependency 简明准入
 
-`Design in Browser`
+新增 dependency 前必须能够说明：
 
-AI 不得仅根据源码判断页面视觉通过。
+1. 当前解决什么真实问题；
+2. Web / React / Next 原生能力为什么不足；
+3. 仓库已有能力为什么不足；
+4. package 的明确职责；
+5. maintenance 状态；
+6. bundle / runtime 成本；
+7. 是否进入 client bundle；
+8. replaceability。
 
-涉及视觉、Responsive 或浏览器兼容性的任务，必须根据当前 Stage 和：
-
-`docs/10-development-plan/quality-gates-v0.1.md`
-
-要求提供真实证据。
-
-按适用范围可能包括：
-
-- 中文；
-- English；
-- Desktop；
-- Tablet；
-- Mobile；
-- Wide / 非典型比例；
-- Chromium；
-- WebKit；
-- Firefox；
-- no-Resident；
-- reduced-motion；
-- keyboard；
-- focus；
-- zoom；
-- accessibility。
-
-具体兼容矩阵、viewport 和 Gate 强度由当前 Stage / Quality Gates 决定，不在 AGENTS 中硬编码。
-
-禁止在缺乏实际证据时声称：
-
-- cross-browser PASS；
-- responsive PASS；
-- accessibility PASS；
-- Safari compatible；
-- Mobile complete。
-
-自动工具只能产生证据。
-
-最终视觉裁决始终属于人工。
+不能证明清楚收益时，不添加。不得因为 AI 熟悉、教程常用或“网站通常都会装”而加入 UI kit、page builder、巨型 animation stack 或通用 state-management library。完整准入规则以 Engineering Standards 的 Dependency Admission 为准。
 
 ---
 
-## 9. Legacy / Security / Tool Authority
+## 8. Engineering Standards 路由
 
-### Legacy
+正式代码必须读取 `docs/10-development-plan/engineering-standards-v0.1.md`。本文件不维护第二套详细代码规范，只保留以下工作方向：
 
-`legacy/` 默认只读。
+```text
+Correctness
+→ Clarity
+→ Simplicity
+→ Maintainability
+→ Reuse
+→ Abstraction
+```
 
-除非任务明确是 migration / preflight / verification，否则不修改。
+正式实现遵守 concrete before abstract、complexity must be earned、Server-first、叶子化 Client Islands、TypeScript strict、外部输入验证、Content / Code 分离和已冻结的 CSS / Motion 路线。具体 Component、State、Effect、TypeScript、CSS、Accessibility、SEO、Content、Motion、Error Handling、Testing 和 Performance 规则均回到 Engineering Standards，不在此复制。
 
-### Secrets
+---
+
+## 9. Design in Browser / Browser / Responsive / Accessibility
+
+涉及真实页面视觉时，必须遵守 Node 7 / Node 8；正式设计方式是 `Design in Browser`。AI 不得仅根据源码判断页面视觉通过。
+
+涉及视觉、Responsive 或浏览器兼容性的任务，必须根据当前 Stage 和 `docs/10-development-plan/quality-gates-v0.1.md` 提供真实证据。按适用范围可能包括：
+
+- 中文 / English，以及 Desktop、Tablet、Mobile、Wide / 非典型比例；
+- Chromium、WebKit、Firefox，以及 no-Resident、reduced-motion；
+- keyboard、focus、zoom、accessibility。
+
+具体兼容矩阵、viewport 和 Gate 强度由当前 Stage / Quality Gates 决定，不在本文件硬编码。
+
+缺乏实际证据时，不得声称 cross-browser `PASS`、responsive `PASS`、accessibility `PASS`、Safari compatible 或 Mobile complete。自动工具只能产生证据，最终视觉裁决始终属于人工。
+
+---
+
+## 10. Legacy / Security / Tool Authority
+
+### 10.1 Legacy
+
+`legacy/` 默认只读。禁止：
+
+- 从 root app import `legacy/`；
+- copy Legacy 实现进入新站；
+- 自动迁移 Aurora / OGL 或旧 Airtable `/api/create`；
+- 升级 Legacy dependency；
+- 修复、格式化或现代化 Legacy；
+- 把 Legacy 文案当成当前正式 Website 文案；
+- 把 Vite 架构当成 Website 1.0 目标架构。
+
+只有明确的 migration / verification / preflight 任务才能读取或修改其授权范围内的对应内容。
+
+### 10.2 Security 与产品默认值
 
 永远不要：
 
-- 输出 secret value；
-- 把 secret 写入 prompt 回报；
-- commit `.env*` 真实值；
-- 把 server secret 移入 Client；
-- 把 secret 写进日志；
-- 把 production credential 用于 Preview。
+- 输出 secret value、把 secret 写入 prompt 回报或日志；
+- commit `.env*` 真实值，或把 server secret 移入 Client；
+- 把 production credential 或 production data 用于 Preview。
 
 Client environment variable 必须视为公开信息。
 
-### Tools
+Contact 和 Analytics 默认关闭。未经后续明确 Stage / task 授权，不得启用 tracking、analytics、contact capability 或相关数据接入；不能因为“网站通常都有”而自行添加。
 
-涉及：
+### 10.3 Tools
 
-- Skill；
-- Plugin；
-- MCP；
-- Browser；
-- GitHub；
-- Vercel；
-- Security tool；
-- external SaaS；
+涉及 Skill、Plugin、MCP、Browser、GitHub、Vercel、Security tool 或 external SaaS 时，必须读取 `docs/10-development-plan/tool-governance-v0.1.md`。
 
-必须读取：
-
-`docs/10-development-plan/tool-governance-v0.1.md`
-
-默认：
+默认路径：
 
 ```text
 one capability
@@ -647,17 +474,11 @@ one capability
 → minimum permission
 ```
 
-GitHub Connector：
-
-`READ_ONLY_FIRST`
-
-Remote write 需要当前任务明确授权。
-
-Production、高权限、destructive operation 需要明确人工授权。
+GitHub Connector 为 `READ_ONLY_FIRST`。Remote write 需要当前任务明确授权；Production、高权限和 destructive operation 需要明确人工授权。
 
 ---
 
-## 10. Git 安全
+## 11. Git 安全
 
 正常节点流程：
 
@@ -675,17 +496,12 @@ implement
 规则：
 
 - 不使用无边界 `git add -A`，除非已经逐项检查全部变化；
-- 不 reset、checkout、clean 或覆盖用户未知修改；
-- 不 force push；
-- 不自行 merge；
-- 不自行删除 branch；
-- 不自行修改 branch protection；
-- 不自行修改 GitHub default branch；
-- Stage 1.9 前，不执行 `New -> main` production promotion；
-- 当前开发 branch 的改变必须来自明确任务；
-- push 后必须核对 local / upstream / remote SHA。
+- 不 reset、checkout、clean、force push、擅自 merge / 删除 branch，或覆盖用户未知修改；
+- 不自行修改 branch protection 或 GitHub default branch；
+- Stage 1.9 前不执行 `New -> main` production promotion；
+- 当前开发 branch 的改变必须来自明确任务，push 后必须核对 local / upstream / remote SHA。
 
-提交前检查：
+提交前至少检查：
 
 ```text
 git diff --check
@@ -693,119 +509,52 @@ git diff
 git status --short
 ```
 
-以及当前节点要求的其他验证。
+并执行当前节点要求的其他验证。
 
 ---
 
-## 11. Verification Truth 与完成定义
+## 12. Verification Truth 与完成定义
 
-### 11.1 不允许伪造 PASS
+### 12.1 不允许伪造验证结果
 
-只有真正执行过的检查才能报告：
+只有真正执行过的检查才能报告 `PASS`。统一使用 `PASS`、`FAIL`、`NOT_RUN`、`BLOCKED`。
 
-`PASS`
+未执行时报告 `NOT_RUN` 和原因；被环境或依赖阻止时报告 `BLOCKED` 和原因。
 
-统一使用：
+不得用“应该可以”“理论上没问题”“看起来应该通过”或 AI judgment 代替真实检查。机器检查无法运行时，AI 判断不能替代机器 Gate；浏览器证据不存在时，源码分析不能替代 Browser Gate；人工 Gate 未执行时，自动检查不能替代 Human Gate。
 
-```text
-PASS
-FAIL
-NOT_RUN
-BLOCKED
-```
+### 12.2 Definition of Done
 
-如果检查没有执行：
-
-```text
-NOT_RUN
-+ 原因
-```
-
-如果环境或依赖阻止检查：
-
-```text
-BLOCKED
-+ 原因
-```
-
-禁止使用：
-
-- “应该可以”；
-- “理论上没问题”；
-- “看起来应该通过”；
-- AI judgment；
-
-代替真实检查。
-
-机器检查无法运行时，AI 判断不能替代机器 Gate。
-
-浏览器证据不存在时，源码分析不能替代 Browser Gate。
-
-人工 Gate 尚未执行时，自动检查不能替代 Human Gate。
-
----
-
-### 11.2 Definition of Done
-
-一个任务只有同时满足以下条件才能报告完成：
+任务只有同时满足以下条件才能报告完成：
 
 - 项目 / 仓库 / Stage / 内部节点一致；
-- scope 没有扩大；
-- 只修改了授权范围；
+- scope 没有扩大，且只修改了授权范围；
 - 没有违反 Node 1–10 冻结边界；
 - 没有未经批准的新 dependency；
 - applicable machine checks 已执行并如实报告；
 - 需要的 Browser / Accessibility evidence 已实际取得；
-- 需要的 Human Gate 没有被 AI 自行宣布 PASS；
-- `git diff` 已检查；
-- 没有无关文件修改；
-- 任务要求 commit / push 时已经完成并核对 SHA；
+- 需要的 Human Gate 没有被 AI 自行宣布 `PASS`；
+- `git diff` 已检查，且没有无关文件修改；
+- 要求 commit / push 时已经完成并核对 SHA；
 - 当前节点完成后没有自动进入下一节点。
 
-详细 Gate 要求：
-
-`docs/10-development-plan/quality-gates-v0.1.md`
+详细 Gate 要求以 `docs/10-development-plan/quality-gates-v0.1.md` 为准。
 
 ---
 
-## 12. Project Skills
+## 13. Project Skills
 
-Repo-local task workflow 的唯一来源：
+Repo-local task workflow 的唯一来源是 `.agents/skills/`。Codex 与 Cursor 使用同一来源，不创建 Cursor-specific copy。
 
-`.agents/skills/`
+### 13.1 `$website-behavior-preserving-simplification`
 
-当前 CORE Skills：
+只在用户明确要求 simplify、cleanup、remove unnecessary abstraction、remove real duplication 或 remove AI code smell 时使用。
 
-### `$website-behavior-preserving-simplification`
+必须保持 behavior、scope、public contract 和 visual result 不变，除非任务另有授权。不得在普通 feature 开发中自动触发“顺手重构”。
 
-只在用户明确要求以下任务时使用：
+### 13.2 `$website-design-in-browser-review`
 
-- simplify；
-- cleanup；
-- remove unnecessary abstraction；
-- remove real duplication；
-- remove AI code smell。
-
-必须：
-
-- behavior unchanged；
-- scope unchanged；
-- public contract unchanged；
-- visual result unchanged，除非任务另有授权。
-
-不得在普通 feature 开发中自动触发“顺手重构”。
-
----
-
-### `$website-design-in-browser-review`
-
-只在用户明确要求以下任务时使用：
-
-- browser review；
-- visual review；
-- UI review；
-- responsive review；
-- Design in Browser review。
+只在用户明确要求 browser、visual、UI、responsive 或 Design in Browser review 时使用。
 
 该 Skill：
 
@@ -815,21 +564,15 @@ Repo-local task workflow 的唯一来源：
 - 不自动修改代码，除非任务另行授权；
 - 不自行通过 Human Visual Gate。
 
-最终状态必须停在：
+最终状态必须停在 `HUMAN_VISUAL_DECISION_REQUIRED`，除非人工已经明确给出裁决。
 
-`HUMAN_VISUAL_DECISION_REQUIRED`
-
-除非人工已经明确给出裁决。
+Project Skill 必须服从本文件、Engineering Standards、任务相关 Node 文档和当前明确任务。Skill 是 workflow，不是新事实源、规则、权限或自动 Gate。
 
 ---
 
-## 最终原则
+## 14. 最终原则
 
-任何 AI 在本仓库中的目标都不是：
-
-“尽可能多地完成事情”。
-
-而是：
+任何 AI 在本仓库中的目标都不是“尽可能多地完成事情”，而是：
 
 ```text
 确认正确项目
