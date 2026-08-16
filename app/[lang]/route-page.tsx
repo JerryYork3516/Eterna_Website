@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { loadPageContent } from "../../content/page-content";
 import { isLocale, type PageId } from "../site-routes";
 
 export type LocalePageProps = Readonly<{
@@ -18,9 +19,11 @@ export async function RoutePage({ pageId, params }: RoutePageProps) {
     notFound();
   }
 
+  const content = await loadPageContent(pageId, lang);
+
   return (
     <main data-locale={lang} data-page-id={pageId}>
-      <h1>Eterna Website</h1>
+      <h1>{content.title}</h1>
     </main>
   );
 }

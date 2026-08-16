@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "format:check": "prettier --check .github app tests eslint.config.mjs next.config.ts playwright.config.ts package.json package-lock.json tsconfig.json",
+    "format:check": "prettier --check .github app content tests eslint.config.mjs next.config.ts playwright.config.ts package.json package-lock.json tsconfig.json",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
@@ -21,7 +21,8 @@
   "dependencies": {
     "next": "16.3.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
