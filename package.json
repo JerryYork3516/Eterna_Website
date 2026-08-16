@@ -9,6 +9,9 @@
   },
   "scripts": {
     "dev": "next dev",
+    "format:check": "prettier --check app eslint.config.mjs next-env.d.ts package.json package-lock.json tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
     "build": "next build",
     "start": "next start"
   },
@@ -21,6 +24,10 @@
     "@types/node": "24.13.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "typescript": "7.0.2"
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.1",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3"
   }
 }
