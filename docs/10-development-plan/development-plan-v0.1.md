@@ -208,6 +208,17 @@ Stage 1.1 自动检查全部通过、工程边界完成人工审核，并形成�
 
 建立 12 个正式 URL 的真实信息结构、URL 驱动的双语关系，以及来源可追溯、production fail-closed 的 repository content 基础。
 
+### Stage-internal execution nodes
+
+1.2.1 — 路由与页面身份基线
+1.2.2 — 双语路由与语言切换
+1.2.3 — YAML 内容系统基础
+1.2.4 — 内容 Schema 与校验
+1.2.5 — 发布状态、来源与资产门禁
+1.2.6 — Preview / Production 内容边界
+1.2.7 — 12 个双语页面内容记录与契约回归
+1.2.8 — Stage 1.2 最终门禁
+
 ### Scope
 
 - `/zh`、`/en`、根 `/ -> /zh` 与非法 locale 404；
