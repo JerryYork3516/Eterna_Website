@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: about
 locale: zh
+pairedPageId: about
+route: /zh/about
+contentType: ABOUT_PROJECT
 title: 关于 Eterna

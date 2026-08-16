@@ -43,6 +43,10 @@ export function isLocale(value: string): value is Locale {
   return value === "zh" || value === "en";
 }
 
+export function isPageId(value: string): value is PageId {
+  return pageIds.some((pageId) => pageId === value);
+}
+
 export function getLanguageSwitchPathname(pathname: string) {
   const currentRoute = siteRoutes.find(
     (siteRoute) => siteRoute.pathname === pathname,

@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: digital-residents
 locale: zh
+pairedPageId: digital-residents
+route: /zh/digital-residents
+contentType: DIGITAL_RESIDENT
 title: 数字居民

@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: product-aftelle
 locale: zh
+pairedPageId: product-aftelle
+route: /zh/products/aftelle
+contentType: PRODUCT
 title: Aftelle

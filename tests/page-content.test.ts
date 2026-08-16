@@ -3,52 +3,110 @@ import { describe, expect, it } from "vitest";
 import { siteRoutes } from "../app/site-routes";
 import {
   loadPageContent,
+  pageContentTypes,
   parseYamlContent,
-  toPageContentFoundation,
+  validatePageContent,
 } from "../content/page-content";
 
-describe("YAML content foundation", () => {
-  it("loads one base record for every pageId and locale route", async () => {
-    for (const { locale, pageId } of siteRoutes) {
-      const content = await loadPageContent(pageId, locale);
+const validHomeContent = {
+  schemaVersion: 1,
+  pageId: "home",
+  locale: "zh",
+  pairedPageId: "home",
+  route: "/zh",
+  contentType: "ETERNA_ROOT_EXPRESSION",
+  title: "Eterna Website",
+};
 
-      expect(content).toMatchObject({ locale, pageId });
-      expect(content.title.trim()).not.toBe("");
+describe("YAML content schema", () => {
+  it("loads all twelve records into the trusted content contract", async () => {
+    for (const { locale, pageId, pathname } of siteRoutes) {
+      await expect(loadPageContent(pageId, locale)).resolves.toEqual({
+        schemaVersion: 1,
+        pageId,
+        locale,
+        pairedPageId: pageId,
+        route: pathname,
+        contentType: pageContentTypes[pageId],
+        title: expect.any(String),
+      });
     }
   });
 
-  it("rejects custom executable tags and aliases", () => {
+  it("validates a complete positive fixture", () => {
+    expect(validatePageContent(validHomeContent, "home", "zh")).toEqual(
+      validHomeContent,
+    );
+  });
+
+  it.each([
+    {
+      name: "missing required field",
+      content: {
+        schemaVersion: 1,
+        pageId: "home",
+        locale: "zh",
+        pairedPageId: "home",
+        route: "/zh",
+        contentType: "ETERNA_ROOT_EXPRESSION",
+      },
+    },
+    {
+      name: "unknown field",
+      content: { ...validHomeContent, component: "ArbitraryComponent" },
+    },
+    {
+      name: "unsupported schema version",
+      content: { ...validHomeContent, schemaVersion: 2 },
+    },
+    {
+      name: "unknown pageId",
+      content: { ...validHomeContent, pageId: "unknown" },
+    },
+    {
+      name: "unknown locale",
+      content: { ...validHomeContent, locale: "fr" },
+    },
+    {
+      name: "pageId file identity mismatch",
+      content: { ...validHomeContent, pageId: "about", pairedPageId: "about" },
+    },
+    {
+      name: "locale file identity mismatch",
+      content: { ...validHomeContent, locale: "en", route: "/en" },
+    },
+    {
+      name: "paired page identity mismatch",
+      content: { ...validHomeContent, pairedPageId: "about" },
+    },
+    {
+      name: "route mismatch",
+      content: { ...validHomeContent, route: "/zh/about" },
+    },
+    {
+      name: "unknown content type",
+      content: { ...validHomeContent, contentType: "UNKNOWN" },
+    },
+    {
+      name: "page content type mismatch",
+      content: { ...validHomeContent, contentType: "PRODUCT" },
+    },
+    {
+      name: "wrong title type",
+      content: { ...validHomeContent, title: 1 },
+    },
+  ])("fails closed for $name", ({ content }) => {
+    expect(() => validatePageContent(content, "home", "zh")).toThrow(
+      "Invalid page content for home/zh",
+    );
+  });
+
+  it("rejects custom executable tags and aliases before validation", () => {
     expect(() =>
       parseYamlContent('value: !!js/function "function () {}"'),
     ).toThrow("Invalid YAML content");
     expect(() =>
       parseYamlContent("value: &shared text\ncopy: *shared"),
     ).toThrow();
-  });
-
-  it("keeps component and layout directives outside the page contract", () => {
-    const rawContent = parseYamlContent(`
-pageId: home
-locale: zh
-title: Eterna Website
-component: ArbitraryComponent
-layout: arbitrary-layout
-`);
-
-    expect(toPageContentFoundation(rawContent, "home", "zh")).toEqual({
-      pageId: "home",
-      locale: "zh",
-      title: "Eterna Website",
-    });
-  });
-
-  it("rejects content whose identity does not match the requested route", () => {
-    expect(() =>
-      toPageContentFoundation(
-        { pageId: "about", locale: "zh", title: "About" },
-        "home",
-        "zh",
-      ),
-    ).toThrow("Invalid content foundation for home/zh");
   });
 });

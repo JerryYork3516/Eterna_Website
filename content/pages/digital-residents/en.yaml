@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: digital-residents
 locale: en
+pairedPageId: digital-residents
+route: /en/digital-residents
+contentType: DIGITAL_RESIDENT
 title: Digital Residents

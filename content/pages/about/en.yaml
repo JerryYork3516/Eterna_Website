@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: about
 locale: en
+pairedPageId: about
+route: /en/about
+contentType: ABOUT_PROJECT
 title: About Eterna

@@ -1,3 +1,7 @@
+schemaVersion: 1
 pageId: product-studio
 locale: zh
+pairedPageId: product-studio
+route: /zh/products/studio
+contentType: PRODUCT
 title: Studio
