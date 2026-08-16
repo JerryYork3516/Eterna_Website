@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
-type RootLayoutProps = Readonly<{
+type EntryLayoutProps = Readonly<{
   children: ReactNode;
 }>;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function EntryLayout({ children }: EntryLayoutProps) {
   return (
     <html lang="zh">
       <body>{children}</body>

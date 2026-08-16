@@ -7,6 +7,7 @@ for (const { locale, pageId, pathname } of siteRoutes) {
     const response = await page.goto(pathname);
 
     expect(response?.status()).toBe(200);
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.getByRole("main")).toHaveAttribute(
       "data-page-id",
       pageId,
