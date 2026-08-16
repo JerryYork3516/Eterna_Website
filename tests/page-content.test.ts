@@ -8,13 +8,28 @@ import {
   validatePageContent,
 } from "../content/page-content";
 
+const validSource = {
+  sourceId: "eterna-docs-node-6-information-architecture-v0.1",
+  repository: "Eterna_Docs",
+  document: "Node 6 Information Architecture v0.1",
+  revision: "25972b9a1c106710988a98961b77904ef2a1acc9",
+  scope: "Website 1.0 page identity, route, and title",
+  checkedAt: "2026-08-16",
+  publicAuthorization: "APPROVED",
+};
+
 const validHomeContent = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   pageId: "home",
   locale: "zh",
   pairedPageId: "home",
   route: "/zh",
   contentType: "ETERNA_ROOT_EXPRESSION",
+  factState: "CURRENT_VERIFIED",
+  publicationState: "PUBLISHED",
+  sources: [validSource],
+  ctaTarget: null,
+  assetRefs: [],
   title: "Eterna Website",
 };
 
@@ -22,12 +37,17 @@ describe("YAML content schema", () => {
   it("loads all twelve records into the trusted content contract", async () => {
     for (const { locale, pageId, pathname } of siteRoutes) {
       await expect(loadPageContent(pageId, locale)).resolves.toEqual({
-        schemaVersion: 1,
+        schemaVersion: 2,
         pageId,
         locale,
         pairedPageId: pageId,
         route: pathname,
         contentType: pageContentTypes[pageId],
+        factState: "CURRENT_VERIFIED",
+        publicationState: "PUBLISHED",
+        sources: [validSource],
+        ctaTarget: null,
+        assetRefs: [],
         title: expect.any(String),
       });
     }
@@ -39,16 +59,38 @@ describe("YAML content schema", () => {
     );
   });
 
+  it("accepts an enabled same-locale CTA target", () => {
+    const contentWithCta = {
+      ...validHomeContent,
+      ctaTarget: "/zh/digital-residents",
+    };
+
+    expect(validatePageContent(contentWithCta, "home", "zh")).toEqual(
+      contentWithCta,
+    );
+  });
+
+  it("accepts an empty asset reference list without inventing assets", () => {
+    expect(
+      validatePageContent(validHomeContent, "home", "zh").assetRefs,
+    ).toEqual([]);
+  });
+
   it.each([
     {
       name: "missing required field",
       content: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         pageId: "home",
         locale: "zh",
         pairedPageId: "home",
         route: "/zh",
         contentType: "ETERNA_ROOT_EXPRESSION",
+        factState: "CURRENT_VERIFIED",
+        publicationState: "PUBLISHED",
+        sources: [validSource],
+        ctaTarget: null,
+        assetRefs: [],
       },
     },
     {
@@ -57,7 +99,7 @@ describe("YAML content schema", () => {
     },
     {
       name: "unsupported schema version",
-      content: { ...validHomeContent, schemaVersion: 2 },
+      content: { ...validHomeContent, schemaVersion: 1 },
     },
     {
       name: "unknown pageId",
@@ -92,6 +134,62 @@ describe("YAML content schema", () => {
       content: { ...validHomeContent, contentType: "PRODUCT" },
     },
     {
+      name: "unknown fact state",
+      content: { ...validHomeContent, factState: "UNKNOWN" },
+    },
+    {
+      name: "unknown publication state",
+      content: { ...validHomeContent, publicationState: "UNKNOWN" },
+    },
+    {
+      name: "missing required source",
+      content: { ...validHomeContent, sources: [] },
+    },
+    {
+      name: "source missing revision",
+      content: {
+        ...validHomeContent,
+        sources: [{ ...validSource, revision: "" }],
+      },
+    },
+    {
+      name: "source with invalid checked date",
+      content: {
+        ...validHomeContent,
+        sources: [{ ...validSource, checkedAt: "2026-02-30" }],
+      },
+    },
+    {
+      name: "source without public authorization",
+      content: {
+        ...validHomeContent,
+        sources: [{ ...validSource, publicAuthorization: "REVIEW_REQUIRED" }],
+      },
+    },
+    {
+      name: "Website content used as its own source",
+      content: {
+        ...validHomeContent,
+        sources: [{ ...validSource, repository: "Eterna_Website" }],
+      },
+    },
+    {
+      name: "CTA target outside the route allowlist",
+      content: { ...validHomeContent, ctaTarget: "/zh/contact" },
+    },
+    {
+      name: "CTA target in the wrong locale",
+      content: { ...validHomeContent, ctaTarget: "/en/about" },
+    },
+    {
+      name: "unregistered asset reference",
+      content: { ...validHomeContent, assetRefs: ["unapproved-hero"] },
+    },
+    {
+      name: "invalid asset reference list",
+      content: { ...validHomeContent, assetRefs: "unapproved-hero" },
+    },
+    {
       name: "wrong title type",
       content: { ...validHomeContent, title: 1 },
     },
@@ -100,6 +198,19 @@ describe("YAML content schema", () => {
       "Invalid page content for home/zh",
     );
   });
+
+  it.each(["DRAFT", "REVIEW_REQUIRED", "WITHDRAWN"])(
+    "rejects %s content from the production contract",
+    (publicationState) => {
+      expect(() =>
+        validatePageContent(
+          { ...validHomeContent, publicationState },
+          "home",
+          "zh",
+        ),
+      ).toThrow("content is not published for production");
+    },
+  );
 
   it("rejects custom executable tags and aliases before validation", () => {
     expect(() =>

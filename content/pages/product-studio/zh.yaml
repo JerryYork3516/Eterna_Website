@@ -1,7 +1,19 @@
-schemaVersion: 1
+schemaVersion: 2
 pageId: product-studio
 locale: zh
 pairedPageId: product-studio
 route: /zh/products/studio
 contentType: PRODUCT
+factState: CURRENT_VERIFIED
+publicationState: PUBLISHED
+sources:
+  - sourceId: eterna-docs-node-6-information-architecture-v0.1
+    repository: Eterna_Docs
+    document: Node 6 Information Architecture v0.1
+    revision: 25972b9a1c106710988a98961b77904ef2a1acc9
+    scope: Website 1.0 page identity, route, and title
+    checkedAt: 2026-08-16
+    publicAuthorization: APPROVED
+ctaTarget: null
+assetRefs: []
 title: Studio
