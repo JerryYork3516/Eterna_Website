@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "format:check": "prettier --check app tests eslint.config.mjs next-env.d.ts package.json package-lock.json tsconfig.json",
+    "format:check": "prettier --check app tests eslint.config.mjs next.config.ts package.json package-lock.json tsconfig.json",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
