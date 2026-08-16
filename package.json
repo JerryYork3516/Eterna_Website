@@ -9,11 +9,12 @@
   },
   "scripts": {
     "dev": "next dev",
-    "format:check": "prettier --check app tests eslint.config.mjs next.config.ts playwright.config.ts package.json package-lock.json tsconfig.json",
+    "format:check": "prettier --check .github app tests eslint.config.mjs next.config.ts playwright.config.ts package.json package-lock.json tsconfig.json",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:browser": "playwright test",
+    "audit": "npm audit",
     "build": "next build",
     "start": "next start"
   },
