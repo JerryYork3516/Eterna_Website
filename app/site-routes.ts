@@ -42,3 +42,17 @@ export const siteRoutes = pageIds.flatMap((pageId) =>
 export function isLocale(value: string): value is Locale {
   return value === "zh" || value === "en";
 }
+
+export function getLanguageSwitchPathname(pathname: string) {
+  const currentRoute = siteRoutes.find(
+    (siteRoute) => siteRoute.pathname === pathname,
+  );
+
+  if (!currentRoute) {
+    return undefined;
+  }
+
+  const targetLocale = currentRoute.locale === "zh" ? "en" : "zh";
+
+  return pagePaths[currentRoute.pageId][targetLocale];
+}
