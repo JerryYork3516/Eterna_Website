@@ -119,6 +119,17 @@ Stage 1.2–1.9 = NOT_STARTED
 
 在仓库根建立可持续开发、可验证、可 Preview 的 Website 1.0 工程，同时保持新应用与 `legacy/` 完全隔离。
 
+### Stage-internal execution nodes
+
+1.1.1 — 根应用脚手架
+1.1.2 — 代码质量基线
+1.1.3 — 测试与 Legacy 边界基础
+1.1.4 — 浏览器与无障碍测试基线
+1.1.5 — CI 与确定性安全门禁
+1.1.6 — 本地 / Preview / 环境
+1.1.7 — 文档与运行准备
+1.1.8 — Stage 1.1 最终门禁
+
 ### Scope
 
 - 根目录 Next.js App Router 应用；
