@@ -1,11 +1,23 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+test("redirects the root deterministically to /zh", async ({ request }) => {
+  const response = await request.get("/", {
+    headers: { "Accept-Language": "en" },
+    maxRedirects: 0,
+  });
+
+  expect(response.status()).toBe(307);
+  expect(response.headers().location).toBe("/zh");
+});
+
 test("loads the root application with its core semantics", async ({ page }) => {
   const response = await page.goto("/");
 
   expect(response?.status()).toBe(200);
+  await expect(page).toHaveURL(/\/zh$/);
   await expect(page.getByRole("main")).toBeVisible();
+  await expect(page.getByRole("main")).toHaveAttribute("data-page-id", "home");
   await expect(
     page.getByRole("heading", { level: 1, name: "Eterna Website" }),
   ).toBeVisible();
